@@ -15,15 +15,15 @@ namespace SlicingPieAPI.Models
         {
         }
 
-        public virtual DbSet<Asset> Assets { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectDetail> ProjectDetails { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<SliceAsset> SliceAssets { get; set; }
         public virtual DbSet<StackHolder> StackHolders { get; set; }
         public virtual DbSet<StackHolerDetail> StackHolerDetails { get; set; }
         public virtual DbSet<Status> Status { get; set; }
-        public virtual DbSet<TermOfCompany> TermOfCompanies { get; set; }
+        public virtual DbSet<TermSlouse> TermSlice { get; set; }
         public virtual DbSet<TypeAsset> TypeAssets { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -37,66 +37,6 @@ namespace SlicingPieAPI.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
-
-            modelBuilder.Entity<Asset>(entity =>
-            {
-                entity.ToTable("Asset");
-
-                entity.Property(e => e.AssetId)
-                    .HasColumnName("AssetID")
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.AssetStatus)
-                    .HasMaxLength(1)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.EmployeeId)
-                    .HasColumnName("EmployeeID")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ProjectId)
-                    .HasColumnName("ProjectID")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.StackHolerId)
-                    .HasColumnName("StackHolerID")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.TermId).HasColumnName("TermID");
-
-                entity.Property(e => e.TimeAsset).HasColumnType("datetime");
-
-                entity.Property(e => e.TypeAssetId).HasColumnName("TypeAssetID");
-
-                entity.HasOne(d => d.Project)
-                    .WithMany(p => p.Assets)
-                    .HasForeignKey(d => d.ProjectId)
-                    .HasConstraintName("FK__Asset__ProjectID__5441852A");
-
-                entity.HasOne(d => d.StackHoler)
-                    .WithMany(p => p.Assets)
-                    .HasForeignKey(d => d.StackHolerId)
-                    .HasConstraintName("FK__Asset__CFID__534D60F1");
-
-                entity.HasOne(d => d.Term)
-                    .WithMany(p => p.Assets)
-                    .HasForeignKey(d => d.TermId)
-                    .HasConstraintName("FK__Asset__TermID__5629CD9C");
-
-                entity.HasOne(d => d.TypeAsset)
-                    .WithMany(p => p.Assets)
-                    .HasForeignKey(d => d.TypeAssetId)
-                    .HasConstraintName("FK__Asset__TypeAsset__5535A963");
-            });
 
             modelBuilder.Entity<Company>(entity =>
             {
@@ -192,6 +132,64 @@ namespace SlicingPieAPI.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<SliceAsset>(entity =>
+            {
+                entity.HasKey(e => e.AssetId)
+                    .HasName("PK__Asset__4349237288ED6B0F");
+
+                entity.ToTable("SliceAsset");
+
+                entity.Property(e => e.AssetId)
+                    .HasColumnName("AssetID")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.AssetStatus)
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.ProjectId)
+                    .HasColumnName("ProjectID")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StackHolerId)
+                    .HasColumnName("StackHolerID")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TermId).HasColumnName("TermID");
+
+                entity.Property(e => e.TimeAsset).HasColumnType("datetime");
+
+                entity.Property(e => e.TypeAssetId).HasColumnName("TypeAssetID");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.SliceAssets)
+                    .HasForeignKey(d => d.ProjectId)
+                    .HasConstraintName("FK__Asset__ProjectID__5441852A");
+
+                entity.HasOne(d => d.StackHoler)
+                    .WithMany(p => p.SliceAssets)
+                    .HasForeignKey(d => d.StackHolerId)
+                    .HasConstraintName("FK__Asset__CFID__534D60F1");
+
+                entity.HasOne(d => d.Term)
+                    .WithMany(p => p.SliceAssets)
+                    .HasForeignKey(d => d.TermId)
+                    .HasConstraintName("FK__Asset__TermID__5629CD9C");
+
+                entity.HasOne(d => d.TypeAsset)
+                    .WithMany(p => p.SliceAssets)
+                    .HasForeignKey(d => d.TypeAssetId)
+                    .HasConstraintName("FK__Asset__TypeAsset__5535A963");
+            });
+
             modelBuilder.Entity<StackHolder>(entity =>
             {
                 entity.HasKey(e => e.StackHolerId)
@@ -218,16 +216,6 @@ namespace SlicingPieAPI.Models
 
                 entity.Property(e => e.Shemail)
                     .HasColumnName("SHEmail")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Shname)
-                    .HasColumnName("SHName")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Shpassword)
-                    .HasColumnName("SHPassword")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -268,9 +256,9 @@ namespace SlicingPieAPI.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ShemailVerify)
-                    .HasColumnName("SHEmailVerify")
-                    .HasMaxLength(50)
+                entity.Property(e => e.Shdtstatus)
+                    .HasColumnName("SHDTStatus")
+                    .HasMaxLength(1)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Shimage)
@@ -297,6 +285,11 @@ namespace SlicingPieAPI.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Co_Founde__Compa__4CA06362");
 
+                entity.HasOne(d => d.ShdtstatusNavigation)
+                    .WithMany(p => p.StackHolerDetails)
+                    .HasForeignKey(d => d.Shdtstatus)
+                    .HasConstraintName("FK_StackHolerDetail_Status");
+
                 entity.HasOne(d => d.StackHoler)
                     .WithMany(p => p.StackHolerDetails)
                     .HasForeignKey(d => d.StackHolerId)
@@ -318,12 +311,10 @@ namespace SlicingPieAPI.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<TermOfCompany>(entity =>
+            modelBuilder.Entity<TermSlouse>(entity =>
             {
                 entity.HasKey(e => e.TermId)
                     .HasName("PK__TermOfCo__410A2E4581CF14F5");
-
-                entity.ToTable("TermOfCompany");
 
                 entity.Property(e => e.TermId).HasColumnName("TermID");
 
@@ -337,7 +328,7 @@ namespace SlicingPieAPI.Models
                 entity.Property(e => e.TermTimeTo).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Company)
-                    .WithMany(p => p.TermOfCompanies)
+                    .WithMany(p => p.TermSlice)
                     .HasForeignKey(d => d.CompanyId)
                     .HasConstraintName("FK__TermOfCom__Compa__4F7CD00D");
             });

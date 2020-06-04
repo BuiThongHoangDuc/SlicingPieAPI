@@ -12,9 +12,10 @@ namespace SlicingPieAPI.Models
         public string Shjob { get; set; }
         public string ShnameForCompany { get; set; }
         public string Shimage { get; set; }
-        public string ShemailVerify { get; set; }
+        public string Shdtstatus { get; set; }
 
         public virtual Company Company { get; set; }
+        public virtual Status ShdtstatusNavigation { get; set; }
         public virtual StackHolder StackHoler { get; set; }
     }
 }

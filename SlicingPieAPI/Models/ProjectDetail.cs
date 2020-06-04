@@ -9,6 +9,6 @@ namespace SlicingPieAPI.Models
         public string ProjectId { get; set; }
 
         public virtual Project Project { get; set; }
-        public virtual TermOfCompany Term { get; set; }
+        public virtual TermSlouse Term { get; set; }
     }
 }

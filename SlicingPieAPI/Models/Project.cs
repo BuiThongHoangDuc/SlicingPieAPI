@@ -7,8 +7,8 @@ namespace SlicingPieAPI.Models
     {
         public Project()
         {
-            Assets = new HashSet<Asset>();
             ProjectDetails = new HashSet<ProjectDetail>();
+            SliceAssets = new HashSet<SliceAsset>();
         }
 
         public string ProjectId { get; set; }
@@ -17,7 +17,7 @@ namespace SlicingPieAPI.Models
         public string CompanyId { get; set; }
 
         public virtual Company Company { get; set; }
-        public virtual ICollection<Asset> Assets { get; set; }
         public virtual ICollection<ProjectDetail> ProjectDetails { get; set; }
+        public virtual ICollection<SliceAsset> SliceAssets { get; set; }
     }
 }

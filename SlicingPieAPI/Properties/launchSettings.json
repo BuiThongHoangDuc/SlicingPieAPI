@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/StackHolders",
+      "launchUrl": "api/Login",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "SlicingPieAPI": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/StackHolders",
+      "launchUrl": "api/Login",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

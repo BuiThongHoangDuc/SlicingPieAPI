@@ -7,7 +7,7 @@ namespace SlicingPieAPI.Models
     {
         public TypeAsset()
         {
-            Assets = new HashSet<Asset>();
+            SliceAssets = new HashSet<SliceAsset>();
         }
 
         public int TypeAssetId { get; set; }
@@ -15,6 +15,6 @@ namespace SlicingPieAPI.Models
         public int Multiplier { get; set; }
         public string MultiplierType { get; set; }
 
-        public virtual ICollection<Asset> Assets { get; set; }
+        public virtual ICollection<SliceAsset> SliceAssets { get; set; }
     }
 }

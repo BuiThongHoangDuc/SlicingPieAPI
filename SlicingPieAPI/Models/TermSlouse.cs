@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace SlicingPieAPI.Models
 {
-    public partial class TermOfCompany
+    public partial class TermSlouse
     {
-        public TermOfCompany()
+        public TermSlouse()
         {
-            Assets = new HashSet<Asset>();
             ProjectDetails = new HashSet<ProjectDetail>();
+            SliceAssets = new HashSet<SliceAsset>();
         }
 
         public int TermId { get; set; }
@@ -17,7 +17,7 @@ namespace SlicingPieAPI.Models
         public string CompanyId { get; set; }
 
         public virtual Company Company { get; set; }
-        public virtual ICollection<Asset> Assets { get; set; }
         public virtual ICollection<ProjectDetail> ProjectDetails { get; set; }
+        public virtual ICollection<SliceAsset> SliceAssets { get; set; }
     }
 }

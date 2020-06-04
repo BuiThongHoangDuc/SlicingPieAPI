@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SlicingPieAPI.DTOs;
 using SlicingPieAPI.Models;
+using SlicingPieAPI.Repository;
 
 namespace SlicingPieAPI.Controllers
 {
@@ -14,86 +19,24 @@ namespace SlicingPieAPI.Controllers
     public class StackHoldersController : ControllerBase
     {
         private readonly SWD_SlicingPieProjectContext _context;
-
+        private StackHolderRepository _UserRepository;
         public StackHoldersController(SWD_SlicingPieProjectContext context)
         {
             _context = context;
+            _UserRepository = new StackHolderRepository(context);
         }
 
         // GET: api/StackHolders
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StackHolder>>> GetStackHolders()
+        public async Task<ActionResult<IEnumerable<UserLoginDto>>> GetStackHolders()
         {
-            return await _context.StackHolders.ToListAsync();
-        }
-
-        // GET: api/StackHolders/5
-        [HttpGet("GetStackHolderDetail/{id}")]
-        public async Task<ActionResult<StackHolder>> GetStackHolderDetail(string username,  string password)
-        {
-            //var stackHolder = _context.StackHolders
-            //                                    .Include(stholder => stholder.StackHolerDetails)
-            //                                        .ThenInclude(stholderdt => stholderdt.Company)
-            //                                    .Include(stholder => stholder.Assets)
-            //                                        .ThenInclude(asset => asset.TypeAsset)
-            //                                    .Where(stholder => stholder.StackHolerId == id)
-            //                                    .FirstOrDefault();
-            var stackHolder = _context.StackHolders.Where(stholder => stholder.StackHolerId == username).Select(stholder => new StackHolder
-            {
-                StackHolerId = stholder.StackHolerId,
-                Shname = stholder.Shname,
-                StatusId =stholder.StatusId,
-            });
-            if (stackHolder == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(stackHolder);
-        }
-
-        // GET: api/StackHolders/5
-        [HttpGet("PostStackHolderDetail/")]
-        public async Task<ActionResult<StackHolder>> PostStackHolderDetail()
-        {
-            var StackHolders = new StackHolder();
-            StackHolders.StackHolerId = "0";
-            StackHolders.Shaccount = "duc";
-            StackHolders.Shpassword = "1";
-            StackHolders.StatusId = "2";
-            StackHolders.RoleId = 2;
-
-            StackHolerDetail stdetail = new StackHolerDetail();
-            stdetail.StackHolerId = StackHolders.StackHolerId;
-            stdetail.CompanyId = "BS101";
-            stdetail.ShmarketSalary = 8000000;
-            stdetail.Shsalary = 4000000;
-
-            StackHolerDetail stdetail1 = new StackHolerDetail();
-            stdetail1.StackHolerId = StackHolders.StackHolerId;
-            stdetail1.CompanyId = "BS102";
-            stdetail1.ShmarketSalary = 8000000;
-            stdetail1.Shsalary = 5000000;
-
-            StackHolders.StackHolerDetails.Add(stdetail);
-            StackHolders.StackHolerDetails.Add(stdetail1);
-
-            _context.StackHolders.Add(StackHolders);
-            _context.SaveChanges();
-
-            var stackHolder = _context.StackHolders
-                                                .Include(stholder => stholder.StackHolerDetails)
-                                                    .ThenInclude(stholderdt => stholderdt.Company)
-                                                .Include(stholder => stholder.Assets)
-                                                    .ThenInclude(asset => asset.TypeAsset)
-                                                .Where(stholder => stholder.StackHolerId == StackHolders.StackHolerId)
-                                                .FirstOrDefault();
-            if (stackHolder == null)
-            {
-                return NotFound();
-            }
-
-            return stackHolder;
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+            var Role = Convert.ToInt32(claim[2].Value);
+            var CompanyID = claim[3].Value;
+            var UserInfo = _UserRepository.GetUserByCompany(CompanyID, Role);
+            return Ok(UserInfo);
         }
 
         // GET: api/StackHolders/5
@@ -110,41 +53,6 @@ namespace SlicingPieAPI.Controllers
             return stackHolder;
         }
 
-        //Login
-        // GET: api/StackHolders/5
-        [HttpGet("GetAccount")]
-        public async Task<ActionResult<StackHolder>> GetStackHolder(string username, string password)
-        {
-            //var stackHolder = await _context.StackHolders.Where(stholder => stholder.Shaccount == username && stholder.Shpassword == password)
-            //                            .Select(stholder => new StackHolder {
-            //                                Shname = stholder.Shname,
-            //                                ShphoneNo = stholder.ShphoneNo,
-            //                                StatusId = stholder.StatusId,
-            //                                RoleId = stholder.RoleId,
-            //                                Shemail = stholder.Shemail,
-            //                            })
-            //                            .FirstOrDefaultAsync();
-            //if (stackHolder == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //return stackHolder;
-
-            var stackHolder = from c in _context.StackHolders
-                              where (c.Shaccount == username && c.Shpassword == password)
-                              select new { Shname = c.Shname, ShphoneNo = c.ShphoneNo, StatusId = c.StatusId, RoleId = c.RoleId, Shemail = c.Shemail};
-            
-            await stackHolder.FirstOrDefaultAsync();
-
-            if (stackHolder == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(stackHolder);
-
-        }
 
         // PUT: api/StackHolders/5
         [HttpPut("{id}")]
