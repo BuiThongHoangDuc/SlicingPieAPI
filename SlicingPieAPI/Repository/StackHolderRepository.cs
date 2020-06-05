@@ -10,9 +10,9 @@ namespace SlicingPieAPI.Repository
 {
     public class StackHolderRepository : SlicingPieAPI.Repository.IStackHolderRepository
     {
-        private readonly SWD_SlicingPieProjectContext _context;
+        private readonly SWD_SlicingPieContext _context;
 
-        public StackHolderRepository(SWD_SlicingPieProjectContext context)
+        public StackHolderRepository(SWD_SlicingPieContext context)
         {
             _context = context;
         }

@@ -24,11 +24,11 @@ namespace SlicingPieAPI.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private readonly SWD_SlicingPieProjectContext _context;
+        private readonly SWD_SlicingPieContext _context;
         private IStackHolderRepository _userRepository;
         private IConfiguration _config;
 
-        public LoginController(SWD_SlicingPieProjectContext context, IConfiguration config)
+        public LoginController(SWD_SlicingPieContext context, IConfiguration config)
         {
             _context = context;
             _userRepository = new StackHolderRepository(context);

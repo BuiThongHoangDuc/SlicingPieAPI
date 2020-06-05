@@ -37,6 +37,11 @@ namespace SlicingPieAPI
                 Credential = GoogleCredential.FromFile("./swdslicingpie-59d47-firebase-adminsdk-6ifj3-4740981030.json"),
             });
 
+            services.AddSwaggerGen(gen =>
+            {
+                gen.SwaggerDoc("v1.0", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "SlicingPie API", Version = "v1.0" });
+            });
+
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -52,7 +57,7 @@ namespace SlicingPieAPI
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                     };
                 });
-            services.AddDbContext<SWD_SlicingPieProjectContext>(opt => 
+            services.AddDbContext<SWD_SlicingPieContext>(opt => 
                 opt.UseSqlServer(Configuration.GetConnectionString("SWD_SlicingPieDB")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
         }
@@ -65,6 +70,11 @@ namespace SlicingPieAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(UI =>
+            {
+                UI.SwaggerEndpoint("/swagger/v1.0/swagger.json", "V1.0");
+            });
             app.UseAuthentication();
 
             app.UseMvc();

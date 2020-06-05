@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace SlicingPieAPI.Models
 {
-    public partial class SWD_SlicingPieProjectContext : DbContext
+    public partial class SWD_SlicingPieContext : DbContext
     {
-        public SWD_SlicingPieProjectContext()
+        public SWD_SlicingPieContext()
         {
         }
 
-        public SWD_SlicingPieProjectContext(DbContextOptions<SWD_SlicingPieProjectContext> options)
+        public SWD_SlicingPieContext(DbContextOptions<SWD_SlicingPieContext> options)
             : base(options)
         {
         }
@@ -43,7 +43,7 @@ namespace SlicingPieAPI.Models
                 entity.ToTable("Company");
 
                 entity.HasIndex(e => e.CompanyName)
-                    .HasName("UQ__Company__9BCE05DC797E2AAA")
+                    .HasName("UQ__Company__9BCE05DC38A2856E")
                     .IsUnique();
 
                 entity.Property(e => e.CompanyId)
@@ -88,13 +88,13 @@ namespace SlicingPieAPI.Models
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.Projects)
                     .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK__Project__Company__3A81B327");
+                    .HasConstraintName("FK__Project__Company__5CD6CB2B");
             });
 
             modelBuilder.Entity<ProjectDetail>(entity =>
             {
                 entity.HasKey(e => new { e.TermId, e.ProjectId })
-                    .HasName("PK__ProjectD__566B85A81F019CFE");
+                    .HasName("PK__ProjectD__566B85A857C3176A");
 
                 entity.ToTable("ProjectDetail");
 
@@ -109,13 +109,13 @@ namespace SlicingPieAPI.Models
                     .WithMany(p => p.ProjectDetails)
                     .HasForeignKey(d => d.ProjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProjectDe__Proje__59FA5E80");
+                    .HasConstraintName("FK__ProjectDe__Proje__5DCAEF64");
 
                 entity.HasOne(d => d.Term)
                     .WithMany(p => p.ProjectDetails)
                     .HasForeignKey(d => d.TermId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProjectDe__TermI__59063A47");
+                    .HasConstraintName("FK__ProjectDe__TermI__5EBF139D");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -193,12 +193,12 @@ namespace SlicingPieAPI.Models
             modelBuilder.Entity<StackHolder>(entity =>
             {
                 entity.HasKey(e => e.StackHolerId)
-                    .HasName("PK__Co_Found__F54E0D5C57ADFFE7");
+                    .HasName("PK__StackHol__9069B99F92F9D3A3");
 
                 entity.ToTable("StackHolder");
 
                 entity.HasIndex(e => e.Shaccount)
-                    .HasName("UQ__Co_Found__4C1236C94D8A4E4B")
+                    .HasName("UQ__StackHol__55E5D2B87CBA9E52")
                     .IsUnique();
 
                 entity.Property(e => e.StackHolerId)
@@ -231,18 +231,18 @@ namespace SlicingPieAPI.Models
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.StackHolders)
                     .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK__Co_Founde__RoleI__44FF419A");
+                    .HasConstraintName("FK__StackHold__RoleI__6383C8BA");
 
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.StackHolders)
                     .HasForeignKey(d => d.StatusId)
-                    .HasConstraintName("FK__Co_Founde__Statu__440B1D61");
+                    .HasConstraintName("FK__StackHold__Statu__6477ECF3");
             });
 
             modelBuilder.Entity<StackHolerDetail>(entity =>
             {
                 entity.HasKey(e => new { e.StackHolerId, e.CompanyId })
-                    .HasName("PK__Co_Found__27977C98767D55BC");
+                    .HasName("PK__StackHol__42B0C85BF69BEC18");
 
                 entity.ToTable("StackHolerDetail");
 
@@ -283,7 +283,7 @@ namespace SlicingPieAPI.Models
                     .WithMany(p => p.StackHolerDetails)
                     .HasForeignKey(d => d.CompanyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Co_Founde__Compa__4CA06362");
+                    .HasConstraintName("FK__StackHole__Compa__656C112C");
 
                 entity.HasOne(d => d.ShdtstatusNavigation)
                     .WithMany(p => p.StackHolerDetails)
@@ -294,7 +294,7 @@ namespace SlicingPieAPI.Models
                     .WithMany(p => p.StackHolerDetails)
                     .HasForeignKey(d => d.StackHolerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Co_Founder__CFID__4BAC3F29");
+                    .HasConstraintName("FK__StackHole__Stack__66603565");
             });
 
             modelBuilder.Entity<Status>(entity =>
@@ -314,7 +314,7 @@ namespace SlicingPieAPI.Models
             modelBuilder.Entity<TermSlouse>(entity =>
             {
                 entity.HasKey(e => e.TermId)
-                    .HasName("PK__TermOfCo__410A2E4581CF14F5");
+                    .HasName("PK__TermSlic__410A2E45C7B9E7BC");
 
                 entity.Property(e => e.TermId).HasColumnName("TermID");
 
@@ -330,7 +330,7 @@ namespace SlicingPieAPI.Models
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.TermSlice)
                     .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK__TermOfCom__Compa__4F7CD00D");
+                    .HasConstraintName("FK__TermSlice__Compa__693CA210");
             });
 
             modelBuilder.Entity<TypeAsset>(entity =>

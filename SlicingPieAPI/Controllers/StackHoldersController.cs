@@ -18,9 +18,9 @@ namespace SlicingPieAPI.Controllers
     [ApiController]
     public class StackHoldersController : ControllerBase
     {
-        private readonly SWD_SlicingPieProjectContext _context;
+        private readonly SWD_SlicingPieContext _context;
         private StackHolderRepository _UserRepository;
-        public StackHoldersController(SWD_SlicingPieProjectContext context)
+        public StackHoldersController(SWD_SlicingPieContext context)
         {
             _context = context;
             _UserRepository = new StackHolderRepository(context);
