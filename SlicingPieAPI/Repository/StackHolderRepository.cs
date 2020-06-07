@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SlicingPieAPI.DTOs;
 using SlicingPieAPI.Models;
 using System;
@@ -19,6 +20,7 @@ namespace SlicingPieAPI.Repository
 
         public UserLoginDto GetUserInfo(string email)
         {
+            
             var stackHoler = _context.StackHolders
                                                 .Where(stHoler => stHoler.Shemail == email)
                                                 .Select(stHolder => new UserLoginDto
@@ -26,40 +28,55 @@ namespace SlicingPieAPI.Repository
                                                     StackHolderID = stHolder.StackHolerId,
                                                     StatusID = stHolder.StatusId,
                                                     RoleID = stHolder.RoleId,
-                                                    CompanyID = stHolder.StackHolerDetails.Select(stDt => stDt.CompanyId).FirstOrDefault()
+                                                    CompanyID = stHolder.StackHolerDetails.Where(stDt => stDt.Shdtstatus == "1").Select(stDt => stDt.CompanyId).FirstOrDefault()
                                                 }).FirstOrDefault();
             return stackHoler;
         }
 
-        
-        public IEnumerable<MainDto> GetUserByCompany(string companyId, int role)
+        public async Task<IEnumerable<MainDto>> GetUserByCompany(string companyId)
         {
-            if (role == 2)
-            {
-                var MainUserInfo = _context.StackHolerDetails
+
+                var ListMainUserInfo = await _context.StackHolerDetails
                                                         .Where(stInfo => stInfo.CompanyId == companyId)
                                                         .Select(stInfo => new MainDto
                                                         {
+                                                            SHID = stInfo.StackHolerId,
                                                             SHName = stInfo.ShnameForCompany,
                                                             SHImage = stInfo.Shimage,
                                                             SHJob = stInfo.Shjob,
                                                             CompanyID = stInfo.CompanyId,
-                                                            SliceAssets = stInfo.StackHoler.SliceAssets.Select(asset => asset.AssetSlice ).Sum()
+                                                            SliceAssets = stInfo.StackHoler.SliceAssets
+                                                                                                    .Where(asset => asset.CompanyId == companyId)
+                                                                                                    .Select(asset => asset.AssetSlice).Sum()
                                                         })
-                                                        .ToList();
-                return MainUserInfo;
-            }
-            else if (role == 3)
-            {
-                return null;
-            }
-            else return null;
+                                                        .ToListAsync();
+                return ListMainUserInfo;
+        }
+
+        public MainDto getUserByIDCompany(string companyId, string userId)
+        {
+            var MainUserInfo = _context.StackHolerDetails
+                                                        .Where(stInfo => stInfo.CompanyId == companyId && stInfo.StackHolerId == userId)
+                                                        .Select(stInfo => new MainDto
+                                                        {
+                                                            SHID = stInfo.StackHolerId,
+                                                            SHName = stInfo.ShnameForCompany,
+                                                            SHImage = stInfo.Shimage,
+                                                            SHJob = stInfo.Shjob,
+                                                            CompanyID = stInfo.CompanyId,
+                                                            SliceAssets = stInfo.StackHoler.SliceAssets
+                                                                                                    .Where(asset => asset.CompanyId == companyId)
+                                                                                                    .Select(asset => asset.AssetSlice).Sum()
+                                                        })
+                                                        .FirstOrDefault();
+            return MainUserInfo;
         }
     }
 
     public interface IStackHolderRepository
     {
-        IEnumerable<MainDto> GetUserByCompany(string companyId, int role);
-        UserLoginDto GetUserInfo(string email);   
+        Task<IEnumerable<MainDto>> GetUserByCompany(string companyId);
+        UserLoginDto GetUserInfo(string email);
+        MainDto getUserByIDCompany(string companyId, string userId);
     }
 }

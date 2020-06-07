@@ -8,6 +8,7 @@ namespace SlicingPieAPI.DTOs
 {
     public class MainDto
     {
+        public string SHID { get; set; }
         public string SHName { get; set; }
         public string SHJob { get; set; }
         public string SHImage { get; set; }

@@ -25,13 +25,15 @@ namespace SlicingPieAPI.Controllers
     public class LoginController : ControllerBase
     {
         private readonly SWD_SlicingPieContext _context;
-        private IStackHolderRepository _userRepository;
+        private readonly IStackHolderRepository _userRepository;
+        private readonly ICompanyRepository _companyRepository;
         private IConfiguration _config;
 
         public LoginController(SWD_SlicingPieContext context, IConfiguration config)
         {
             _context = context;
             _userRepository = new StackHolderRepository(context);
+            _companyRepository = new CompanyRepository(context);
             _config = config;
         }
 
@@ -49,13 +51,24 @@ namespace SlicingPieAPI.Controllers
             UserRecord userRecord = await FirebaseAuth.DefaultInstance.GetUserAsync(uid);
             var user = userRecord.Email;
 
-            if(user != null)
+            if (user != null)
             {
                 var info = _userRepository.GetUserInfo(user);
-                var tokenString = GenerateJSONWebToken(info);
 
-                response = Ok(new { token = tokenString });
+                string companyId = _companyRepository.GetCompany(info.StackHolderID).Result;
 
+                if (companyId == null)
+                {
+
+                    response = Unauthorized();
+                }
+                else
+                {
+                    info.CompanyID = companyId.ToString();
+                    var tokenString = GenerateJSONWebToken(info);
+
+                    response = Ok(new { token = tokenString });
+                }
             }
             return response;
         }

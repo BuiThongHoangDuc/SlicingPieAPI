@@ -149,6 +149,11 @@ namespace SlicingPieAPI.Models
                     .HasMaxLength(1)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CompanyId)
+                    .HasColumnName("CompanyID")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(255);
@@ -168,6 +173,11 @@ namespace SlicingPieAPI.Models
                 entity.Property(e => e.TimeAsset).HasColumnType("datetime");
 
                 entity.Property(e => e.TypeAssetId).HasColumnName("TypeAssetID");
+
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.SliceAssets)
+                    .HasForeignKey(d => d.CompanyId)
+                    .HasConstraintName("FK_SliceAsset_Company");
 
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.SliceAssets)

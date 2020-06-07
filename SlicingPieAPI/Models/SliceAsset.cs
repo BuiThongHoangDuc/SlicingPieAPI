@@ -16,7 +16,9 @@ namespace SlicingPieAPI.Models
         public int? TermId { get; set; }
         public string AssetStatus { get; set; }
         public double? AssetSlice { get; set; }
+        public string CompanyId { get; set; }
 
+        public virtual Company Company { get; set; }
         public virtual Project Project { get; set; }
         public virtual StackHolder StackHoler { get; set; }
         public virtual TermSlouse Term { get; set; }

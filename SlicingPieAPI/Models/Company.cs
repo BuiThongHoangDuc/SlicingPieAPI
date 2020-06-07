@@ -8,6 +8,7 @@ namespace SlicingPieAPI.Models
         public Company()
         {
             Projects = new HashSet<Project>();
+            SliceAssets = new HashSet<SliceAsset>();
             StackHolerDetails = new HashSet<StackHolerDetail>();
             TermSlice = new HashSet<TermSlouse>();
         }
@@ -17,6 +18,7 @@ namespace SlicingPieAPI.Models
         public string ComapnyIcon { get; set; }
 
         public virtual ICollection<Project> Projects { get; set; }
+        public virtual ICollection<SliceAsset> SliceAssets { get; set; }
         public virtual ICollection<StackHolerDetail> StackHolerDetails { get; set; }
         public virtual ICollection<TermSlouse> TermSlice { get; set; }
     }
