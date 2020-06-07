@@ -73,7 +73,7 @@ namespace SlicingPieAPI
             app.UseSwagger();
             app.UseSwaggerUI(UI =>
             {
-                UI.SwaggerEndpoint("/swagger/v1.0/swagger.json", "V1.1");
+                UI.SwaggerEndpoint("/swagger/v1.0/swagger.json", "V1.0");
             });
             app.UseAuthentication();
 
