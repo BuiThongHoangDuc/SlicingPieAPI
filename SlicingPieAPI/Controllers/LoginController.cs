@@ -64,7 +64,7 @@ namespace SlicingPieAPI.Controllers
                 }
                 else
                 {
-                    info.CompanyID = companyId.ToString();
+                    info.CompanyID = companyId;
                     var tokenString = GenerateJSONWebToken(info);
 
                     response = Ok(new { token = tokenString });

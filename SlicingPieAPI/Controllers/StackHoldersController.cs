@@ -29,16 +29,17 @@ namespace SlicingPieAPI.Controllers
         // GET: api/StackHolders
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
-        public async Task<IActionResult> GetStackHolders()
+        public IActionResult GetStackHolders()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IList<Claim> claim = identity.Claims.ToList();
             var Role = Convert.ToInt32(claim[2].Value);
             var CompanyID = claim[3].Value;
             var UserID = claim[0].Value;
+            //return Ok(new { role = Role, companyid = CompanyID, userid = UserID });
             if (Role == 2)
             {
-                var UserInfo = _UserRepository.GetUserByCompany(CompanyID);
+                var UserInfo = _UserRepository.GetUserByCompany(CompanyID).Result;
                 return Ok(UserInfo);
             }
             else if(Role == 3)
