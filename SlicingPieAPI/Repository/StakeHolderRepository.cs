@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SlicingPieAPI.DTOs;
+using SlicingPieAPI.Enums;
 using SlicingPieAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,7 @@ namespace SlicingPieAPI.Repository
 {
     public class StakeHolderRepository : IStakeHolderRepository
     {
-        private readonly string ACTIVE = "1";
-        private readonly String INACTIVE = "2";
-        private readonly String OUTCOMPANY = "3";
-
+        
         private readonly SWD_SlicingPieContext _context;
 
         public StakeHolderRepository(SWD_SlicingPieContext context)
@@ -34,7 +32,7 @@ namespace SlicingPieAPI.Repository
         public async Task<StakeHolderDto> getSHLoginInfoByID(string id)
         {
             var shInfo = await _context.StakeHolders
-                                    .Where(sh => sh.AccountId == id && sh.Shstatus == ACTIVE)
+                                    .Where(sh => sh.AccountId == id && sh.Shstatus == Status.ACTIVE)
                                     .Select(sh => new StakeHolderDto { 
                                         SHID = sh.AccountId,
                                         CompanyID = sh.CompanyId,
