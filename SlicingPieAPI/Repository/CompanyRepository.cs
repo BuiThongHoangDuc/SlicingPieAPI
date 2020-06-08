@@ -17,9 +17,9 @@ namespace SlicingPieAPI.Repository
 
         public async Task<String> GetCompany(string userID)
         {
-            string company = await _context.StackHolerDetails
-                                            .Where(stDt => stDt.StackHolerId == userID)
-                                            .Select(stDt => stDt.CompanyId).FirstOrDefaultAsync();
+            string company = await _context.StakeHolders
+                                            .Where(sh => sh.AccountId == userID)
+                                            .Select(sh => sh.CompanyId).FirstOrDefaultAsync();
             return company;
         }
     }

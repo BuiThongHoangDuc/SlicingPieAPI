@@ -20,7 +20,7 @@ namespace SlicingPieAPI.Models
 
         public virtual Company Company { get; set; }
         public virtual Project Project { get; set; }
-        public virtual StackHolder StackHoler { get; set; }
+        public virtual Account StackHoler { get; set; }
         public virtual TermSlouse Term { get; set; }
         public virtual TypeAsset TypeAsset { get; set; }
     }

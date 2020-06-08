@@ -9,7 +9,7 @@ namespace SlicingPieAPI.Models
         {
             Projects = new HashSet<Project>();
             SliceAssets = new HashSet<SliceAsset>();
-            StackHolerDetails = new HashSet<StackHolerDetail>();
+            StakeHolders = new HashSet<StakeHolder>();
             TermSlice = new HashSet<TermSlouse>();
         }
 
@@ -19,7 +19,7 @@ namespace SlicingPieAPI.Models
 
         public virtual ICollection<Project> Projects { get; set; }
         public virtual ICollection<SliceAsset> SliceAssets { get; set; }
-        public virtual ICollection<StackHolerDetail> StackHolerDetails { get; set; }
+        public virtual ICollection<StakeHolder> StakeHolders { get; set; }
         public virtual ICollection<TermSlouse> TermSlice { get; set; }
     }
 }

@@ -15,14 +15,12 @@ namespace SlicingPieAPI.Models
         {
         }
 
+        public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectDetail> ProjectDetails { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SliceAsset> SliceAssets { get; set; }
-        public virtual DbSet<StackHolder> StackHolders { get; set; }
-        public virtual DbSet<StackHolerDetail> StackHolerDetails { get; set; }
-        public virtual DbSet<Status> Status { get; set; }
+        public virtual DbSet<StakeHolder> StakeHolders { get; set; }
         public virtual DbSet<TermSlouse> TermSlice { get; set; }
         public virtual DbSet<TypeAsset> TypeAssets { get; set; }
 
@@ -37,6 +35,38 @@ namespace SlicingPieAPI.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+
+            modelBuilder.Entity<Account>(entity =>
+            {
+                entity.ToTable("Account");
+
+                entity.HasIndex(e => e.NameAccount)
+                    .HasName("UQ__StackHol__55E5D2B87CBA9E52")
+                    .IsUnique();
+
+                entity.Property(e => e.AccountId)
+                    .HasColumnName("AccountID")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.EmailAccount)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NameAccount)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PhoneAccount).HasColumnType("decimal(10, 0)");
+
+                entity.Property(e => e.RoleId).HasColumnName("RoleID");
+
+                entity.Property(e => e.StatusId)
+                    .HasColumnName("StatusID")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+            });
 
             modelBuilder.Entity<Company>(entity =>
             {
@@ -118,20 +148,6 @@ namespace SlicingPieAPI.Models
                     .HasConstraintName("FK__ProjectDe__TermI__5EBF139D");
             });
 
-            modelBuilder.Entity<Role>(entity =>
-            {
-                entity.ToTable("Role");
-
-                entity.Property(e => e.RoleId)
-                    .HasColumnName("RoleID")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.NameRole)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
             modelBuilder.Entity<SliceAsset>(entity =>
             {
                 entity.HasKey(e => e.AssetId)
@@ -200,75 +216,21 @@ namespace SlicingPieAPI.Models
                     .HasConstraintName("FK__Asset__TypeAsset__5535A963");
             });
 
-            modelBuilder.Entity<StackHolder>(entity =>
+            modelBuilder.Entity<StakeHolder>(entity =>
             {
-                entity.HasKey(e => e.StackHolerId)
-                    .HasName("PK__StackHol__9069B99F92F9D3A3");
-
-                entity.ToTable("StackHolder");
-
-                entity.HasIndex(e => e.Shaccount)
-                    .HasName("UQ__StackHol__55E5D2B87CBA9E52")
-                    .IsUnique();
-
-                entity.Property(e => e.StackHolerId)
-                    .HasColumnName("StackHolerID")
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.RoleId).HasColumnName("RoleID");
-
-                entity.Property(e => e.Shaccount)
-                    .HasColumnName("SHAccount")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Shemail)
-                    .HasColumnName("SHEmail")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ShphoneNo)
-                    .HasColumnName("SHPhoneNo")
-                    .HasColumnType("decimal(10, 0)");
-
-                entity.Property(e => e.StatusId)
-                    .HasColumnName("StatusID")
-                    .HasMaxLength(1)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.StackHolders)
-                    .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK__StackHold__RoleI__6383C8BA");
-
-                entity.HasOne(d => d.Status)
-                    .WithMany(p => p.StackHolders)
-                    .HasForeignKey(d => d.StatusId)
-                    .HasConstraintName("FK__StackHold__Statu__6477ECF3");
-            });
-
-            modelBuilder.Entity<StackHolerDetail>(entity =>
-            {
-                entity.HasKey(e => new { e.StackHolerId, e.CompanyId })
+                entity.HasKey(e => new { e.AccountId, e.CompanyId })
                     .HasName("PK__StackHol__42B0C85BF69BEC18");
 
-                entity.ToTable("StackHolerDetail");
+                entity.ToTable("StakeHolder");
 
-                entity.Property(e => e.StackHolerId)
-                    .HasColumnName("StackHolerID")
+                entity.Property(e => e.AccountId)
+                    .HasColumnName("AccountID")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.CompanyId)
                     .HasColumnName("CompanyID")
                     .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Shdtstatus)
-                    .HasColumnName("SHDTStatus")
-                    .HasMaxLength(1)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Shimage)
@@ -287,38 +249,26 @@ namespace SlicingPieAPI.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Shrole).HasColumnName("SHRole");
+
                 entity.Property(e => e.Shsalary).HasColumnName("SHSalary");
 
+                entity.Property(e => e.Shstatus)
+                    .HasColumnName("SHStatus")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Account)
+                    .WithMany(p => p.StakeHolders)
+                    .HasForeignKey(d => d.AccountId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__StackHole__Stack__66603565");
+
                 entity.HasOne(d => d.Company)
-                    .WithMany(p => p.StackHolerDetails)
+                    .WithMany(p => p.StakeHolders)
                     .HasForeignKey(d => d.CompanyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__StackHole__Compa__656C112C");
-
-                entity.HasOne(d => d.ShdtstatusNavigation)
-                    .WithMany(p => p.StackHolerDetails)
-                    .HasForeignKey(d => d.Shdtstatus)
-                    .HasConstraintName("FK_StackHolerDetail_Status");
-
-                entity.HasOne(d => d.StackHoler)
-                    .WithMany(p => p.StackHolerDetails)
-                    .HasForeignKey(d => d.StackHolerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__StackHole__Stack__66603565");
-            });
-
-            modelBuilder.Entity<Status>(entity =>
-            {
-                entity.Property(e => e.StatusId)
-                    .HasColumnName("StatusID")
-                    .HasMaxLength(1)
-                    .IsUnicode(false)
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.StatusName)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<TermSlouse>(entity =>

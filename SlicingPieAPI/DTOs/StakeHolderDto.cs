@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 
 namespace SlicingPieAPI.DTOs
 {
-    public class UserLoginDto
+    public class StakeHolderDto
     {
-        public string AccountID { get; set; }
+        public string SHID { get; set; }
+        public string CompanyID { get; set; }
         public int? RoleID { get; set; }
+
     }
 }

@@ -16,7 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using SlicingPieAPI.DTOs;
 using SlicingPieAPI.Models;
-using SlicingPieAPI.Repository;
+using SlicingPieAPI.Services;
 
 namespace SlicingPieAPI.Controllers
 {   
@@ -24,16 +24,17 @@ namespace SlicingPieAPI.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private readonly SWD_SlicingPieContext _context;
-        private readonly IStackHolderRepository _userRepository;
-        private readonly ICompanyRepository _companyRepository;
+        private readonly int ADMIN = 1;
+        private readonly int USER = 2;
+
+        private readonly IAccountService _accountService;
+        private readonly IStakeHolderService _shService;
         private IConfiguration _config;
 
-        public LoginController(SWD_SlicingPieContext context, IConfiguration config)
+        public LoginController(IAccountService accountService, IStakeHolderService shService, IConfiguration config)
         {
-            _context = context;
-            _userRepository = new StackHolderRepository(context);
-            _companyRepository = new CompanyRepository(context);
+            _accountService = accountService;
+            _shService = shService;
             _config = config;
         }
 
@@ -53,36 +54,44 @@ namespace SlicingPieAPI.Controllers
 
             if (user != null)
             {
-                var info = _userRepository.GetUserInfo(user);
-
-                string companyId = _companyRepository.GetCompany(info.StackHolderID).Result;
-
-                if (companyId == null)
-                {
-
-                    response = Unauthorized();
-                }
+                var info = _accountService.getAccountInfo(user);
+                if (info.Result == null) return Unauthorized();
                 else
                 {
-                    info.CompanyID = companyId;
-                    var tokenString = GenerateJSONWebToken(info);
+                    if (info.Result.RoleID.Equals(ADMIN))
+                    {
+                        return Unauthorized();
+                    }
+                    else
+                    {
+                        string companyId = _shService.getStakeHolderCompanyID(info.Result.AccountID).Result;
 
-                    response = Ok(new { token = tokenString });
+                        if (companyId == null)
+                        {
+                            response = Unauthorized();
+                        }
+                        else
+                        {
+                            var shInfo = _shService.getStakeHolderLoginInoByID(info.Result.AccountID);
+                            var tokenString = GenerateJSONWebToken(shInfo.Result);
+
+                            response = Ok(new { token = tokenString });
+                        }
+                    }
                 }
             }
             return response;
         }
 
-        private string GenerateJSONWebToken(UserLoginDto userInfo)
+        private string GenerateJSONWebToken(StakeHolderDto userInfo)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[] {
-                new Claim(JwtRegisteredClaimNames.Sub, userInfo.StackHolderID),
-                new Claim("Status", userInfo.StatusID),
+                new Claim(JwtRegisteredClaimNames.Sub, userInfo.SHID),
                 new Claim("RoleID", userInfo.RoleID + ""),
-                new Claim("CompanyID", userInfo.CompanyID)
+                new Claim("CompanyID", userInfo.CompanyID),
             };
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Issuer"], claims, expires: DateTime.Now.AddMinutes(120), signingCredentials: credentials);

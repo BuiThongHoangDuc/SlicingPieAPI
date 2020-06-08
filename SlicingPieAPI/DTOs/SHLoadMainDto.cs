@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SlicingPieAPI.DTOs
 {
-    public class MainDto
+    public class SHLoadMainDto
     {
         public string SHID { get; set; }
         public string SHName { get; set; }

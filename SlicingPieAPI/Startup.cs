@@ -17,6 +17,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using SlicingPieAPI.Models;
+using SlicingPieAPI.Repository;
+using SlicingPieAPI.Services;
 
 namespace SlicingPieAPI
 {
@@ -60,6 +62,14 @@ namespace SlicingPieAPI
             services.AddDbContext<SWD_SlicingPieContext>(opt => 
                 opt.UseSqlServer(Configuration.GetConnectionString("SWD_SlicingPieDB")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+            services.AddScoped<IStakeHolderRepository, StakeHolderRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IStakeHolderService, StakeHolderService>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
