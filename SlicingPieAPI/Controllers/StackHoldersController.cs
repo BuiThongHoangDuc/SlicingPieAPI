@@ -20,37 +20,85 @@ namespace SlicingPieAPI.Controllers
     {
         private readonly int MANAGER = 1;
         private readonly int EMPLOYEE = 2;
-
+        private const int ITEM_PER_PAGE = 2;
+        private readonly SWD_SlicingPieContext _context;
         private readonly IStakeHolderService _shService;
-        public StackHoldersController(IStakeHolderService shService)
+        public StackHoldersController(IStakeHolderService shService, SWD_SlicingPieContext context)
         {
             _shService = shService;
+            _context = context;
+
         }
 
-        // GET: api/StackHolders
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+       // //GET: api/StackHolders
+       //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+       //[HttpGet]
+       // public IActionResult GetStackHolders()
+       // {
+       //     var identity = HttpContext.User.Identity as ClaimsIdentity;
+       //     IList<Claim> claim = identity.Claims.ToList();
+
+       //     var shID = claim[0].Value;
+       //     var Role = Convert.ToInt32(claim[1].Value);
+       //     var CompanyID = claim[2].Value;
+
+
+       //     if (Role == MANAGER)
+       //     {
+       //         var UserInfo = _shService.getListSHByCompany(CompanyID).Result;
+       //         return Ok(UserInfo);
+       //     }
+       //     else if (Role == EMPLOYEE)
+       //     {
+       //         var UserInfo = _shService.getSHByCompany(CompanyID, shID).Result;
+       //         return Ok(UserInfo);
+       //     }
+       //     return NotFound();
+       // }
         [HttpGet]
-        public IActionResult GetStackHolders()
+        public IActionResult FindByID(string id = "",
+            string name="",
+            string email="",
+            int page_index=-1,
+            string sort_type="aid",
+            string field_selected="")
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            IList<Claim> claim = identity.Claims.ToList();
+            // "aid" asc id "did" des id
+            // "aname" asc , "dname" des name
+            var info = _context.Accounts.Where(p => p.NameAccount.Contains(name));
+            if(!string.IsNullOrEmpty(id))
+                info =  info.Where(p => p.AccountId.Equals(id));
+            if (!string.IsNullOrEmpty(email))
+                info =  info.Where(p => p.EmailAccount.Equals(email));
 
-            var shID = claim[0].Value;
-            var Role = Convert.ToInt32(claim[1].Value);
-            var CompanyID = claim[2].Value;
+            //PAGING
+            if (page_index != -1)
+            {
+                info = info.Skip(page_index * ITEM_PER_PAGE).Take(ITEM_PER_PAGE);
+            }
+            // SORT
+            switch (sort_type)
+            {
+                case "aid": info = info.OrderBy(p => p.AccountId); break;
+                case "did": info = info.OrderByDescending(p => p.AccountId); break;
+            }
 
+            var list_query = info.ToList();
+            //if (list_query.Count <= 0) return NotFound();
+            // SELECT FILED
             
-            if (Role == MANAGER)
+            if (!string.IsNullOrEmpty(field_selected))
             {
-                var UserInfo = _shService.getListSHByCompany(CompanyID).Result;
-                return Ok(UserInfo);
+                List<Object> list_return = new List<Object>();
+                SupportSelectField supportSelectField = new SupportSelectField();
+                foreach(var item in list_query)
+                {
+                    var temp = supportSelectField.getByField(item, field_selected);
+                    list_return.Add(temp);
+                }
+                return Ok(list_return);
             }
-            else if (Role == EMPLOYEE)
-            {
-                var UserInfo = _shService.getSHByCompany(CompanyID, shID).Result;
-                return Ok(UserInfo);
-            }
-            return NotFound();
+            return Ok(list_query);
         }
 
         //// GET: api/StackHolders/5
