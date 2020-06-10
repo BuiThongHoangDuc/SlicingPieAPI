@@ -11,4 +11,5 @@ namespace SlicingPieAPI.Enums
         public static readonly String INACTIVE = "2";
         public static readonly String OUTCOMPANY = "3";
     }
+
 }

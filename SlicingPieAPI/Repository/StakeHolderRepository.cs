@@ -89,7 +89,7 @@ namespace SlicingPieAPI.Repository
 
         public IQueryable<StakeHolder> Paging(IQueryable<StakeHolder> stakeHolder, int page_index, int ITEM_PER_PAGE)
         {
-            if (page_index != 0)
+            if (page_index != -1)
             {
                 stakeHolder = stakeHolder.Skip(page_index * ITEM_PER_PAGE).Take(ITEM_PER_PAGE);
 

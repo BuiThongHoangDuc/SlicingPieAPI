@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SlicingPieAPI.DTOs;
+using SlicingPieAPI.Enums;
 using SlicingPieAPI.Models;
 using SlicingPieAPI.Services;
 
@@ -18,8 +19,7 @@ namespace SlicingPieAPI.Controllers
     [ApiController]
     public class StackHoldersController : ControllerBase
     {
-        private readonly int MANAGER = 1;
-        private readonly int EMPLOYEE = 2;
+
         private const int ITEM_PER_PAGE = 5;
         private readonly SWD_SlicingPieContext _context;
         private readonly IStakeHolderService _shService;
@@ -39,15 +39,15 @@ namespace SlicingPieAPI.Controllers
             IList<Claim> claim = identity.Claims.ToList();
 
             var shID = claim[0].Value;
-            var Role = Convert.ToInt32(claim[1].Value);
+            var role = Convert.ToInt32(claim[1].Value);
             var CompanyID = claim[2].Value;
 
-            if (Role == MANAGER)
+            if (role == Role.MANAGER)
             {
                 var UserInfo = _shService.getListSHByCompany(CompanyID).Result;
                 return Ok(UserInfo);
             }
-            else if (Role == EMPLOYEE)
+            else if (role == Role.EMPLOYEE)
             {
                 var UserInfo = _shService.getSHByCompany(CompanyID, shID).Result;
                 return Ok(UserInfo);
@@ -59,7 +59,7 @@ namespace SlicingPieAPI.Controllers
         [HttpGet]
         public IActionResult getStakeHolder(
             string name = "",
-            int page_index = 0,
+            int page_index = -1,
             string sort_type = "",
             string field_selected = "")
         {
