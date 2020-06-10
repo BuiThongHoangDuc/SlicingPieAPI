@@ -35,7 +35,14 @@ namespace SlicingPieAPI.Services
             return await _stakeHolder.getStakeHolderCompany(id);
         }
 
-        
+        public List<Object> getStakeHolder(string name, int page_Index, int itemPerPage ,string sort_Type, string field_Selected)
+        {
+            var stakeHolder = _stakeHolder.Search(name);
+            stakeHolder = _stakeHolder.Paging(stakeHolder, page_Index, itemPerPage);
+            stakeHolder = _stakeHolder.Sort(stakeHolder, sort_Type);
+            List<Object> list = _stakeHolder.Filter(stakeHolder, field_Selected);
+            return list;
+        }
     }
 
     public interface IStakeHolderService
@@ -44,5 +51,7 @@ namespace SlicingPieAPI.Services
         Task<StakeHolderDto> getStakeHolderLoginInoByID(string id);
         Task<IEnumerable<SHLoadMainDto>> getListSHByCompany(string companyId);
         Task<SHLoadMainDto> getSHByCompany(string companyId, string shId);
+
+        List<Object> getStakeHolder(string name, int page_Index, int itemPerPage, string sort_Type, string field_Selected);
     }
 }

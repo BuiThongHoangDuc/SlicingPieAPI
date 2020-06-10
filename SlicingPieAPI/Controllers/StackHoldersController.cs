@@ -20,7 +20,7 @@ namespace SlicingPieAPI.Controllers
     {
         private readonly int MANAGER = 1;
         private readonly int EMPLOYEE = 2;
-        private const int ITEM_PER_PAGE = 2;
+        private const int ITEM_PER_PAGE = 5;
         private readonly SWD_SlicingPieContext _context;
         private readonly IStakeHolderService _shService;
         public StackHoldersController(IStakeHolderService shService, SWD_SlicingPieContext context)
@@ -30,77 +30,51 @@ namespace SlicingPieAPI.Controllers
 
         }
 
-       // //GET: api/StackHolders
-       //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-       //[HttpGet]
-       // public IActionResult GetStackHolders()
-       // {
-       //     var identity = HttpContext.User.Identity as ClaimsIdentity;
-       //     IList<Claim> claim = identity.Claims.ToList();
-
-       //     var shID = claim[0].Value;
-       //     var Role = Convert.ToInt32(claim[1].Value);
-       //     var CompanyID = claim[2].Value;
-
-
-       //     if (Role == MANAGER)
-       //     {
-       //         var UserInfo = _shService.getListSHByCompany(CompanyID).Result;
-       //         return Ok(UserInfo);
-       //     }
-       //     else if (Role == EMPLOYEE)
-       //     {
-       //         var UserInfo = _shService.getSHByCompany(CompanyID, shID).Result;
-       //         return Ok(UserInfo);
-       //     }
-       //     return NotFound();
-       // }
-        [HttpGet]
-        public IActionResult FindByID(string id = "",
-            string name="",
-            string email="",
-            int page_index=-1,
-            string sort_type="aid",
-            string field_selected="")
+        //GET: api/StackHolders
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet("list-company-stake-holder")]
+        public IActionResult GetStackHolders()
         {
-            // "aid" asc id "did" des id
-            // "aname" asc , "dname" des name
-            var info = _context.Accounts.Where(p => p.NameAccount.Contains(name));
-            if(!string.IsNullOrEmpty(id))
-                info =  info.Where(p => p.AccountId.Equals(id));
-            if (!string.IsNullOrEmpty(email))
-                info =  info.Where(p => p.EmailAccount.Equals(email));
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
 
-            //PAGING
-            if (page_index != -1)
-            {
-                info = info.Skip(page_index * ITEM_PER_PAGE).Take(ITEM_PER_PAGE);
-            }
-            // SORT
-            switch (sort_type)
-            {
-                case "aid": info = info.OrderBy(p => p.AccountId); break;
-                case "did": info = info.OrderByDescending(p => p.AccountId); break;
-            }
+            var shID = claim[0].Value;
+            var Role = Convert.ToInt32(claim[1].Value);
+            var CompanyID = claim[2].Value;
 
-            var list_query = info.ToList();
-            //if (list_query.Count <= 0) return NotFound();
-            // SELECT FILED
-            
-            if (!string.IsNullOrEmpty(field_selected))
+            if (Role == MANAGER)
             {
-                List<Object> list_return = new List<Object>();
-                SupportSelectField supportSelectField = new SupportSelectField();
-                foreach(var item in list_query)
-                {
-                    var temp = supportSelectField.getByField(item, field_selected);
-                    list_return.Add(temp);
-                }
-                return Ok(list_return);
+                var UserInfo = _shService.getListSHByCompany(CompanyID).Result;
+                return Ok(UserInfo);
             }
-            return Ok(list_query);
+            else if (Role == EMPLOYEE)
+            {
+                var UserInfo = _shService.getSHByCompany(CompanyID, shID).Result;
+                return Ok(UserInfo);
+            }
+            return NotFound();
         }
 
+
+        [HttpGet]
+        public IActionResult getStakeHolder(
+            string name = "",
+            int page_index = 0,
+            string sort_type = "",
+            string field_selected = "")
+        {
+
+            if (string.IsNullOrEmpty(sort_type)) sort_type = "asc";
+            if (string.IsNullOrEmpty(field_selected)) field_selected = "AccountId, ShnameForCompany, ShmarketSalary, Shsalary, Shjob, Shimage, Companyid";
+
+            var list = _shService.getStakeHolder(name, page_index, ITEM_PER_PAGE, sort_type, field_selected);
+            if (list.Count == 0) { return NotFound(); }
+            else return Ok(list);
+
+        }
+
+
+        
         //// GET: api/StackHolders/5
         //[HttpGet("{id}")]
         //public async Task<ActionResult<StackHolder>> GetStackHolder(string id)
