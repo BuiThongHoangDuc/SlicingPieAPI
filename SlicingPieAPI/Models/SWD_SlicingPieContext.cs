@@ -82,12 +82,16 @@ namespace SlicingPieAPI.Models
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
+                entity.Property(e => e.CashMultiplier).HasDefaultValueSql("((4))");
+
                 entity.Property(e => e.ComapnyIcon).IsUnicode(false);
 
                 entity.Property(e => e.CompanyName)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.NonCashMultiplier).HasDefaultValueSql("((2))");
             });
 
             modelBuilder.Entity<Project>(entity =>

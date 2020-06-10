@@ -12,7 +12,6 @@ namespace SlicingPieAPI.Models
 
         public int TypeAssetId { get; set; }
         public string NameAsset { get; set; }
-        public int Multiplier { get; set; }
         public string MultiplierType { get; set; }
 
         public virtual ICollection<SliceAsset> SliceAssets { get; set; }

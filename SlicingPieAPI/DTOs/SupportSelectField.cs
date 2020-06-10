@@ -10,7 +10,7 @@ namespace SlicingPieAPI.DTOs
 {
     public class SupportSelectField
     {
-        public Object getByField(Object cur_object,string select_field_str)
+        public Object getByField(Object cur_object, string select_field_str)
         {
             var allPropertiesContract = new SelectiveSerializer(select_field_str);
 
@@ -21,13 +21,6 @@ namespace SlicingPieAPI.DTOs
             var a = JsonConvert.DeserializeObject(allJson);
             return a;
         }
-
-
-
-
-
-
-
 
         public class SelectiveSerializer : DefaultContractResolver
         {
@@ -41,6 +34,7 @@ namespace SlicingPieAPI.DTOs
 
             protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
             {
+                
                 var property = base.CreateProperty(member, memberSerialization);
                 property.ShouldSerialize = o => _fields.Contains(member.Name.ToLower());
 
