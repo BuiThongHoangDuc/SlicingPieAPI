@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SlicingPieAPI.DTOs;
 using SlicingPieAPI.Models;
 using SlicingPieAPI.Services;
 
@@ -14,6 +15,7 @@ namespace SlicingPieAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CompaniesController : ControllerBase
     {
         private readonly ICompanyService _company;
@@ -25,33 +27,28 @@ namespace SlicingPieAPI.Controllers
 
         // GET: api/Companies
         [HttpGet]
-        public async Task<ActionResult> GetCompanies(
+        public ActionResult GetCompanies(
             string name = "",
             int page_index = -1,
             string sort_type = "",
             string field_selected = "")
         {
             if (string.IsNullOrEmpty(sort_type)) sort_type = "asc";
-            if (string.IsNullOrEmpty(field_selected)) field_selected = "CompanyID, CompanyName, CompanyIcon, NonCashMultiplier, CashMultiplier";
+            if (string.IsNullOrEmpty(field_selected)) field_selected = "CompanyID, CompanyName, Comapnyicon, NonCashMultiplier, CashMultiplier";
 
             var list = _company.getListCompany(name, page_index, ITEM_PER_PAGE, sort_type, field_selected);
             if (list.Count == 0) { return NotFound(); }
             else return Ok(list);
         }
 
-        //// GET: api/Companies/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Company>> GetCompany(string id)
-        //{
-        //    var company = await _context.Companies.FindAsync(id);
-
-        //    if (company == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return company;
-        //}
+        // GET: api/Companies/5
+        [HttpGet("{id}/stake-holder")]
+        public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> GetCompany(string id)
+        {
+            var info = await _company.getListSHComapny(id);
+            if (info.ToList().Count == 0) return NotFound();
+            return Ok(info.ToList());
+        }
 
         //// PUT: api/Companies/5
         //[HttpPut("{id}")]

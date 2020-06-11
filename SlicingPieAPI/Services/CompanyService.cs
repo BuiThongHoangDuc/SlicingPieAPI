@@ -1,4 +1,5 @@
-﻿using SlicingPieAPI.Repository;
+﻿using SlicingPieAPI.DTOs;
+using SlicingPieAPI.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,11 @@ namespace SlicingPieAPI.Services
     public class CompanyService : ICompanyService
     {
         private readonly ICompanyRepository _company;
-        public CompanyService(ICompanyRepository company)
+        private readonly IStakeHolderRepository _stakeHolder;
+        public CompanyService(ICompanyRepository company, IStakeHolderRepository stakeHolder)
         {
             _company = company;
+            _stakeHolder = stakeHolder;
         }
 
         public List<object> getListCompany(string name, int page_Index, int itemPerPage, string sort_Type, string field_Selected)
@@ -22,11 +25,18 @@ namespace SlicingPieAPI.Services
             List<Object> list = _company.Filter(companies, field_Selected);
             return list;
         }
+
+        public async Task<IEnumerable<SHLoadMainDto>> getListSHComapny(string companyID)
+        {
+            var info = await _stakeHolder.getListShByCompany(companyID);
+            return info;
+        }
+
     }
 
     public interface ICompanyService
     {
-
+        Task<IEnumerable<SHLoadMainDto>> getListSHComapny(string companyID);
         List<Object> getListCompany(string name, int page_Index, int itemPerPage, string sort_Type, string field_Selected);
     }
 }

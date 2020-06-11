@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using SlicingPieAPI.DTOs;
 using SlicingPieAPI.Enums;
 using SlicingPieAPI.Models;
@@ -35,6 +36,8 @@ namespace SlicingPieAPI.Controllers
         [HttpGet("list-company-stake-holder")]
         public IActionResult GetStackHolders()
         {
+            var _bearer_token = Request.Headers[HeaderNames.Authorization];
+            
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IList<Claim> claim = identity.Claims.ToList();
 
@@ -45,7 +48,7 @@ namespace SlicingPieAPI.Controllers
             if (role == Role.MANAGER)
             {
                 var UserInfo = _shService.getListSHByCompany(CompanyID).Result;
-                return Ok(UserInfo);
+                return Ok(new { token = _bearer_token, UserInfo =  UserInfo });
             }
             else if (role == Role.EMPLOYEE)
             {
