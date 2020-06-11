@@ -54,6 +54,9 @@ namespace SlicingPieAPI.Repository
                                                         SHImage = stInfo.Shimage,
                                                         SHJob = stInfo.Shjob,
                                                         CompanyID = stInfo.CompanyId,
+                                                        SliceAssets = stInfo.Account.SliceAssets
+                                                                                                .Where(asset => asset.CompanyId == companyId)
+                                                                                                .Select(asset => asset.AssetSlice).Sum()
                                                     })
                                                     .ToListAsync();
             return ListMainUserInfo;

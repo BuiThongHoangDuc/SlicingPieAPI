@@ -32,11 +32,22 @@ namespace SlicingPieAPI.Services
             return info;
         }
 
+        public async Task<CompanyDetailDto> getDetailCompany(string companyID) {
+            var companyDetail = await _company.getDetailCompany(companyID);
+            return companyDetail;
+        }
+
+        public async Task<SHLoadMainDto> getSHByCompany(string companyId, string shId)
+        {
+            return await _stakeHolder.getShByIDCompany(companyId, shId);
+        }
     }
 
     public interface ICompanyService
     {
         Task<IEnumerable<SHLoadMainDto>> getListSHComapny(string companyID);
+        Task<SHLoadMainDto> getSHByCompany(string companyId, string shId);
+        Task<CompanyDetailDto> getDetailCompany(string companyID);
         List<Object> getListCompany(string name, int page_Index, int itemPerPage, string sort_Type, string field_Selected);
     }
 }

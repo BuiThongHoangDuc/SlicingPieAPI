@@ -38,10 +38,6 @@ namespace SlicingPieAPI.Repository
             return company;
         }
 
-        public async Task<IEnumerable<SHLoadMainDto>> getListStakeHolder(string companyID)
-        {
-            return null;
-        }
 
         public IQueryable<Company> Paging(IQueryable<Company> companies, int pageIndex, int itemPerPage)
         {
@@ -67,12 +63,27 @@ namespace SlicingPieAPI.Repository
             }
             return companies;
         }
+
+        public async Task<CompanyDetailDto> getDetailCompany(string companyId) {
+            var companyInfo = await _context.Companies
+                                        .Where(company => company.CompanyId == companyId)
+                                        .Select(company => new CompanyDetailDto
+                                        {
+                                            CompanyName = company.CompanyName,
+                                            ComapnyIcon = company.ComapnyIcon,
+                                            CashMultiplier = company.CashMultiplier,
+                                            NonCashMultiplier = company.NonCashMultiplier,
+                                        }).FirstOrDefaultAsync();
+            return companyInfo;
+        }
     }
 
     public interface ICompanyRepository
     {
         Task<string> GetCompany(string email);
-        Task<IEnumerable<SHLoadMainDto>> getListStakeHolder(string companyID);
+
+
+        Task<CompanyDetailDto> getDetailCompany(string companyId);
         IQueryable<Company> Search(string search);
 
         IQueryable<Company> Paging(IQueryable<Company> companies, int pageIndex, int itemPerPage);

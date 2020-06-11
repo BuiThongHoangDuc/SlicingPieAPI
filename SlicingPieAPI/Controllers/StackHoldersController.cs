@@ -31,34 +31,6 @@ namespace SlicingPieAPI.Controllers
 
         }
 
-        //GET: api/StackHolders
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet("list-company-stake-holder")]
-        public IActionResult GetStackHolders()
-        {
-            var _bearer_token = Request.Headers[HeaderNames.Authorization];
-            
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            IList<Claim> claim = identity.Claims.ToList();
-
-            var shID = claim[0].Value;
-            var role = Convert.ToInt32(claim[1].Value);
-            var CompanyID = claim[2].Value;
-
-            if (role == Role.MANAGER)
-            {
-                var UserInfo = _shService.getListSHByCompany(CompanyID).Result;
-                return Ok(new { token = _bearer_token, UserInfo =  UserInfo });
-            }
-            else if (role == Role.EMPLOYEE)
-            {
-                var UserInfo = _shService.getSHByCompany(CompanyID, shID).Result;
-                return Ok(UserInfo);
-            }
-            return NotFound();
-        }
-
-
         [HttpGet]
         public IActionResult getStakeHolder(
             string name = "",
@@ -73,7 +45,6 @@ namespace SlicingPieAPI.Controllers
             var list = _shService.getStakeHolder(name, page_index, ITEM_PER_PAGE, sort_type, field_selected);
             if (list.Count == 0) { return NotFound(); }
             else return Ok(list);
-
         }
 
 

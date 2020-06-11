@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SlicingPieAPI.DTOs;
+using SlicingPieAPI.Enums;
 using SlicingPieAPI.Models;
 using SlicingPieAPI.Services;
 
@@ -41,14 +43,54 @@ namespace SlicingPieAPI.Controllers
             else return Ok(list);
         }
 
-        // GET: api/Companies/5
+        // GET: api/Companies/5/List Stake holder
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("{id}/stake-holder")]
-        public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> GetCompany(string id)
+        public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> GetListSHCompany(string id)
         {
-            var info = await _company.getListSHComapny(id);
-            if (info.ToList().Count == 0) return NotFound();
-            return Ok(info.ToList());
+            
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+
+            var shID = claim[0].Value;
+            var role = Convert.ToInt32(claim[1].Value);
+
+            if (role == Role.MANAGER)
+            {
+                var info = await _company.getListSHComapny(id);
+                if (info.ToList().Count == 0) return NotFound();
+                return Ok(info.ToList());
+            }
+            else if (role == Role.EMPLOYEE)
+            {
+                var UserInfo = _company.getSHByCompany(id, shID).Result;
+                return Ok(UserInfo);
+            }
+            return NotFound();
         }
+
+        // GET: api/Companies/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CompanyDetailDto>> GetCompany(string id)
+        {
+            var companyDetail = await _company.getDetailCompany(id);
+            return companyDetail;
+        }
+
+
+        //// GET: api/Accounts/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Account>> GetAccount(string id)
+        //{
+        //    var account = await _context.Accounts.FindAsync(id);
+
+        //    if (account == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return account;
+        //}
 
         //// PUT: api/Companies/5
         //[HttpPut("{id}")]
