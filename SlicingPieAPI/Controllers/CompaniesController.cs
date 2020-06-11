@@ -59,12 +59,13 @@ namespace SlicingPieAPI.Controllers
             {
                 var info = await _company.getListSHComapny(id);
                 if (info.ToList().Count == 0) return NotFound();
-                return Ok(info.ToList());
+                else return Ok(info.ToList());
             }
             else if (role == Role.EMPLOYEE)
             {
                 var UserInfo = _company.getSHByCompany(id, shID).Result;
-                return Ok(UserInfo);
+                if (UserInfo == null) return NotFound();
+                else return Ok(UserInfo);
             }
             return NotFound();
         }

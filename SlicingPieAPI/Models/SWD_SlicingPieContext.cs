@@ -287,6 +287,8 @@ namespace SlicingPieAPI.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.TermName).HasMaxLength(50);
+
                 entity.Property(e => e.TermTimeFrom).HasColumnType("datetime");
 
                 entity.Property(e => e.TermTimeTo).HasColumnType("datetime");

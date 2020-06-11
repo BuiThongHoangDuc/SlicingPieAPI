@@ -25,7 +25,7 @@ namespace SlicingPieAPI.Controllers
 
         // GET: api/Accounts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts(string name = "",
+        public ActionResult<Account> GetAccounts(string name = "",
             int page_index = -1,
             string sort_type = "",
             string field_selected = "")

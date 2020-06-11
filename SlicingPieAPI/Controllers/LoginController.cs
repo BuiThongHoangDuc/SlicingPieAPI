@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using SlicingPieAPI.DTOs;
+using SlicingPieAPI.Enums;
 using SlicingPieAPI.Models;
 using SlicingPieAPI.Services;
 
@@ -24,9 +25,6 @@ namespace SlicingPieAPI.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private readonly int ADMIN = 1;
-        private readonly int USER = 2;
-
         private readonly IAccountService _accountService;
         private readonly IStakeHolderService _shService;
         private IConfiguration _config;
@@ -58,11 +56,11 @@ namespace SlicingPieAPI.Controllers
                 if (info.Result == null) return Unauthorized();
                 else
                 {
-                    if (info.Result.RoleID.Equals(ADMIN))
+                    if (info.Result.RoleID.Equals(Role.ADMIN))
                     {
                         return Unauthorized();
                     }
-                    else
+                    else if(info.Result.RoleID.Equals(Role.USER))
                     {
                         string companyId = _shService.getStakeHolderCompanyID(info.Result.AccountID).Result;
 
@@ -75,7 +73,7 @@ namespace SlicingPieAPI.Controllers
                             var shInfo = _shService.getStakeHolderLoginInoByID(info.Result.AccountID);
                             var tokenString = GenerateJSONWebToken(shInfo.Result);
 
-                            response = Ok(new { token = tokenString });
+                            response = Ok(new { token = tokenString , StakeHolderID = shInfo.Result.SHID, CompanyId = shInfo.Result.CompanyID, Role = shInfo.Result.RoleID});
                         }
                     }
                 }
