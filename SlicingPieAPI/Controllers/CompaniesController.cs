@@ -44,7 +44,6 @@ namespace SlicingPieAPI.Controllers
         }
 
         // GET: api/Companies/5/List Stake holder
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("{id}/stake-holder")]
         public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> GetListSHCompany(string id)
         {

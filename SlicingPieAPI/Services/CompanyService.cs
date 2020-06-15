@@ -11,10 +11,12 @@ namespace SlicingPieAPI.Services
     {
         private readonly ICompanyRepository _company;
         private readonly IStakeHolderRepository _stakeHolder;
-        public CompanyService(ICompanyRepository company, IStakeHolderRepository stakeHolder)
+        private readonly ISliceAssetRepository _sliceRepository;
+        public CompanyService(ICompanyRepository company, IStakeHolderRepository stakeHolder, ISliceAssetRepository sliceRepository)
         {
             _company = company;
             _stakeHolder = stakeHolder;
+            _sliceRepository = sliceRepository;
         }
 
         public List<object> getListCompany(string name, int page_Index, int itemPerPage, string sort_Type, string field_Selected)
