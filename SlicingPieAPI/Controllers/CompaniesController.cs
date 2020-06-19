@@ -87,7 +87,7 @@ namespace SlicingPieAPI.Controllers
                 return BadRequest();
             }
             return Ok();
-        
+            
             //_context.Entry(company).State = EntityState.Modified;
 
             //try
