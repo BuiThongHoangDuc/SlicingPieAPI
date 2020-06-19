@@ -30,11 +30,11 @@ namespace SlicingPieAPI.Services
             return await _stakeHolder.getStakeHolderCompany(id);
         }
 
-        public List<Object> getStakeHolder(string name, int page_Index, int itemPerPage ,string sort_Type, string field_Selected)
+        public List<Object> getStakeHolder(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected)
         {
             var stakeHolder = _stakeHolder.Search(name);
-            stakeHolder = _stakeHolder.Paging(stakeHolder, page_Index, itemPerPage);
             stakeHolder = _stakeHolder.Sort(stakeHolder, sort_Type);
+            stakeHolder = _stakeHolder.Paging(stakeHolder, page_Index, itemPerPage);
             List<Object> list = _stakeHolder.Filter(stakeHolder, field_Selected);
             return list;
         }
@@ -46,6 +46,6 @@ namespace SlicingPieAPI.Services
         Task<StakeHolderDto> getStakeHolderLoginInoByID(string id);
         Task<SHLoadMainDto> getSHByCompany(string companyId, string shId);
 
-        List<Object> getStakeHolder(string name, int page_Index, int itemPerPage, string sort_Type, string field_Selected);
+        List<Object> getStakeHolder(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected);
     }
 }

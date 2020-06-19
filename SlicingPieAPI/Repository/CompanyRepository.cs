@@ -69,6 +69,7 @@ namespace SlicingPieAPI.Repository
                                         .Where(company => company.CompanyId == companyId)
                                         .Select(company => new CompanyDetailDto
                                         {
+                                            CompanyId = company.CompanyId,
                                             CompanyName = company.CompanyName,
                                             ComapnyIcon = company.ComapnyIcon,
                                             CashMultiplier = company.CashMultiplier,

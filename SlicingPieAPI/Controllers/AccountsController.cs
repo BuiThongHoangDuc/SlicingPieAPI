@@ -26,14 +26,14 @@ namespace SlicingPieAPI.Controllers
         // GET: api/Accounts
         [HttpGet]
         public ActionResult<Account> GetAccounts(string name = "",
-            int page_index = -1,
             string sort_type = "",
+            int page_index = -1,
             string field_selected = "")
         {
             if (string.IsNullOrEmpty(sort_type)) sort_type = "asc";
             if (string.IsNullOrEmpty(field_selected)) field_selected = "AccountId, NameAccount, EmailAccount, PhoneAccount, StatusId, RoleId";
 
-            var list = _accountService.getAccount(name, page_index, ITEM_PER_PAGE, sort_type, field_selected);
+            var list = _accountService.getAccount(name, sort_type, page_index, ITEM_PER_PAGE, field_selected);
             if (list.Count == 0) { return NotFound(); }
             else return Ok(list);
         }

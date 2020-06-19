@@ -16,11 +16,11 @@ namespace SlicingPieAPI.Services
             _account = account;
         }
 
-        public List<object> getAccount(string name, int page_Index, int itemPerPage, string sort_Type, string field_Selected)
+        public List<object> getAccount(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected)
         {
             var accounts = _account.Search(name);
-            accounts = _account.Paging(accounts, page_Index, itemPerPage);
             accounts = _account.Sort(accounts, sort_Type);
+            accounts = _account.Paging(accounts, page_Index, itemPerPage);
             List<Object> list = _account.Filter(accounts, field_Selected);
             return list;
         }
@@ -37,6 +37,6 @@ namespace SlicingPieAPI.Services
     {
         Task<UserLoginDto> getAccountInfo(string email);
 
-        List<Object> getAccount(string name, int page_Index, int itemPerPage, string sort_Type, string field_Selected);
+        List<Object> getAccount(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected);
     }
 }

@@ -35,15 +35,15 @@ namespace SlicingPieAPI.Controllers
         [HttpGet]
         public IActionResult getStakeHolder(
             string name = "",
-            int page_index = -1,
             string sort_type = "",
+            int page_index = -1,
             string field_selected = "")
         {
 
             if (string.IsNullOrEmpty(sort_type)) sort_type = "asc";
             if (string.IsNullOrEmpty(field_selected)) field_selected = "AccountId, ShnameForCompany, ShmarketSalary, Shsalary, Shjob, Shimage, Companyid";
 
-            var list = _shService.getStakeHolder(name, page_index, ITEM_PER_PAGE, sort_type, field_selected);
+            var list = _shService.getStakeHolder(name, sort_type, page_index, ITEM_PER_PAGE, field_selected);
             if (list.Count == 0) { return NotFound(); }
             else return Ok(list);
         }

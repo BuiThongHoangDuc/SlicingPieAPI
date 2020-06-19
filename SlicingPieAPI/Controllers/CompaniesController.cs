@@ -31,14 +31,14 @@ namespace SlicingPieAPI.Controllers
         [HttpGet]
         public ActionResult GetCompanies(
             string name = "",
-            int page_index = -1,
             string sort_type = "",
+            int page_index = -1,
             string field_selected = "")
         {
             if (string.IsNullOrEmpty(sort_type)) sort_type = "asc";
             if (string.IsNullOrEmpty(field_selected)) field_selected = "CompanyID, CompanyName, Comapnyicon, NonCashMultiplier, CashMultiplier";
 
-            var list = _company.getListCompany(name, page_index, ITEM_PER_PAGE, sort_type, field_selected);
+            var list = _company.getListCompany(name, sort_type, page_index, ITEM_PER_PAGE, field_selected);
             if (list.Count == 0) { return NotFound(); }
             else return Ok(list);
         }
@@ -78,93 +78,94 @@ namespace SlicingPieAPI.Controllers
         }
 
 
-        //// GET: api/Accounts/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Account>> GetAccount(string id)
-        //{
-        //    var account = await _context.Accounts.FindAsync(id);
+        // PUT: api/Companies/5
+        [HttpPut("{id}")]
+        public ActionResult EditCompany(string id, CompanyDetailDto company)
+        {
+            if (id != company.CompanyId)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        
+            //_context.Entry(company).State = EntityState.Modified;
 
-        //    if (account == null)
-        //    {
-        //        return NotFound();
-        //    }
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!CompanyExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+        }
+            //// GET: api/Accounts/5
+            //[HttpGet("{id}")]
+            //public async Task<ActionResult<Account>> GetAccount(string id)
+            //{
+            //    var account = await _context.Accounts.FindAsync(id);
 
-        //    return account;
-        //}
+            //    if (account == null)
+            //    {
+            //        return NotFound();
+            //    }
 
-        //// PUT: api/Companies/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutCompany(string id, Company company)
-        //{
-        //    if (id != company.CompanyId)
-        //    {
-        //        return BadRequest();
-        //    }
+            //    return account;
+            //}
 
-        //    _context.Entry(company).State = EntityState.Modified;
+            //    return NoContent();
+            //}
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!CompanyExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            //// POST: api/Companies
+            //[HttpPost]
+            //public async Task<ActionResult<Company>> PostCompany(Company company)
+            //{
+            //    _context.Companies.Add(company);
+            //    try
+            //    {
+            //        await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateException)
+            //    {
+            //        if (CompanyExists(company.CompanyId))
+            //        {
+            //            return Conflict();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
 
-        //    return NoContent();
-        //}
+            //    return CreatedAtAction("GetCompany", new { id = company.CompanyId }, company);
+            //}
 
-        //// POST: api/Companies
-        //[HttpPost]
-        //public async Task<ActionResult<Company>> PostCompany(Company company)
-        //{
-        //    _context.Companies.Add(company);
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        if (CompanyExists(company.CompanyId))
-        //        {
-        //            return Conflict();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            //// DELETE: api/Companies/5
+            //[HttpDelete("{id}")]
+            //public async Task<ActionResult<Company>> DeleteCompany(string id)
+            //{
+            //    var company = await _context.Companies.FindAsync(id);
+            //    if (company == null)
+            //    {
+            //        return NotFound();
+            //    }
 
-        //    return CreatedAtAction("GetCompany", new { id = company.CompanyId }, company);
-        //}
+            //    _context.Companies.Remove(company);
+            //    await _context.SaveChangesAsync();
 
-        //// DELETE: api/Companies/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Company>> DeleteCompany(string id)
-        //{
-        //    var company = await _context.Companies.FindAsync(id);
-        //    if (company == null)
-        //    {
-        //        return NotFound();
-        //    }
+            //    return company;
+            //}
 
-        //    _context.Companies.Remove(company);
-        //    await _context.SaveChangesAsync();
-
-        //    return company;
-        //}
-
-        //private bool CompanyExists(string id)
-        //{
-        //    return _context.Companies.Any(e => e.CompanyId == id);
-        //}
-    }
+            //private bool CompanyExists(string id)
+            //{
+            //    return _context.Companies.Any(e => e.CompanyId == id);
+            //}
+        }
 }

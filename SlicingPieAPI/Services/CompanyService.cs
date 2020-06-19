@@ -19,11 +19,11 @@ namespace SlicingPieAPI.Services
             _sliceRepository = sliceRepository;
         }
 
-        public List<object> getListCompany(string name, int page_Index, int itemPerPage, string sort_Type, string field_Selected)
+        public List<object> getListCompany(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected)
         {
             var companies = _company.Search(name);
-            companies = _company.Paging(companies, page_Index, itemPerPage);
             companies = _company.Sort(companies, sort_Type);
+            companies = _company.Paging(companies, page_Index, itemPerPage);
             List<Object> list = _company.Filter(companies, field_Selected);
             return list;
         }
@@ -50,6 +50,6 @@ namespace SlicingPieAPI.Services
         Task<IEnumerable<SHLoadMainDto>> getListSHComapny(string companyID);
         Task<SHLoadMainDto> getSHByCompany(string companyId, string shId);
         Task<CompanyDetailDto> getDetailCompany(string companyID);
-        List<Object> getListCompany(string name, int page_Index, int itemPerPage, string sort_Type, string field_Selected);
+        List<Object> getListCompany(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected);
     }
 }

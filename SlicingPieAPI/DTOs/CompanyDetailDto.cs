@@ -7,6 +7,7 @@ namespace SlicingPieAPI.DTOs
 {
     public class CompanyDetailDto
     {
+        public string CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string ComapnyIcon { get; set; }
         public int? NonCashMultiplier { get; set; }
