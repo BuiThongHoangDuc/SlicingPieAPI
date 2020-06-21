@@ -1,8 +1,10 @@
-﻿using SlicingPieAPI.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using SlicingPieAPI.DTOs;
 using SlicingPieAPI.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SlicingPieAPI.Services
@@ -43,6 +45,36 @@ namespace SlicingPieAPI.Services
         {
             return await _stakeHolder.getShByIDCompany(companyId, shId);
         }
+
+        public async Task<string> updateCompany(string id, CompanyDetailDto company)
+        {
+            return await _company.UpdateCompany(id, company);
+        }
+
+        public Task<CompanyDetailDto> CreateCompany(CompanyDetailDto company)
+        {
+            string lastCompanyID = _company.getLastIDCompany();
+            Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
+            Match result = re.Match(lastCompanyID);
+
+            string alphaPart = result.Groups[1].Value;
+            string numberPart = result.Groups[2].Value;
+            int numberCompany = Int32.Parse(numberPart)+1;
+            company.CompanyId = alphaPart + numberCompany;
+
+            if (company.NonCashMultiplier == null) company.NonCashMultiplier = 2;
+            if (company.CashMultiplier == null) company.CashMultiplier = 4;
+
+            try
+            {
+                var companyInfo = _company.CreateCompany(company); 
+                return companyInfo;
+            }
+            catch(DbUpdateException)
+            {
+                throw;
+            }
+        }
     }
 
     public interface ICompanyService
@@ -51,5 +83,7 @@ namespace SlicingPieAPI.Services
         Task<SHLoadMainDto> getSHByCompany(string companyId, string shId);
         Task<CompanyDetailDto> getDetailCompany(string companyID);
         List<Object> getListCompany(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected);
+        Task<string> updateCompany(string id, CompanyDetailDto company);
+        Task<CompanyDetailDto> CreateCompany(CompanyDetailDto company);
     }
 }

@@ -80,92 +80,70 @@ namespace SlicingPieAPI.Controllers
 
         // PUT: api/Companies/5
         [HttpPut("{id}")]
-        public ActionResult EditCompany(string id, CompanyDetailDto company)
+        public async Task<ActionResult> EditCompany(string id, CompanyDetailDto company)
         {
             if (id != company.CompanyId)
             {
                 return BadRequest();
             }
-            return Ok();
-            
-            //_context.Entry(company).State = EntityState.Modified;
-
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!CompanyExists(id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
+            else
+            {
+                var companyId = await _company.updateCompany(id, company);
+                return Ok(new { CompanyId = companyId });
+            }
         }
-            //// GET: api/Accounts/5
-            //[HttpGet("{id}")]
-            //public async Task<ActionResult<Account>> GetAccount(string id)
-            //{
-            //    var account = await _context.Accounts.FindAsync(id);
 
-            //    if (account == null)
-            //    {
-            //        return NotFound();
-            //    }
-
-            //    return account;
-            //}
-
-            //    return NoContent();
-            //}
-
-            //// POST: api/Companies
-            //[HttpPost]
-            //public async Task<ActionResult<Company>> PostCompany(Company company)
-            //{
-            //    _context.Companies.Add(company);
-            //    try
-            //    {
-            //        await _context.SaveChangesAsync();
-            //    }
-            //    catch (DbUpdateException)
-            //    {
-            //        if (CompanyExists(company.CompanyId))
-            //        {
-            //            return Conflict();
-            //        }
-            //        else
-            //        {
-            //            throw;
-            //        }
-            //    }
-
-            //    return CreatedAtAction("GetCompany", new { id = company.CompanyId }, company);
-            //}
-
-            //// DELETE: api/Companies/5
-            //[HttpDelete("{id}")]
-            //public async Task<ActionResult<Company>> DeleteCompany(string id)
-            //{
-            //    var company = await _context.Companies.FindAsync(id);
-            //    if (company == null)
-            //    {
-            //        return NotFound();
-            //    }
-
-            //    _context.Companies.Remove(company);
-            //    await _context.SaveChangesAsync();
-
-            //    return company;
-            //}
-
-            //private bool CompanyExists(string id)
-            //{
-            //    return _context.Companies.Any(e => e.CompanyId == id);
-            //}
+        // POST: api/Companies
+        [HttpPost]
+        public async Task<ActionResult<CompanyDetailDto>> PostCompany(CompanyDetailDto company)
+        {
+            try
+            {
+                var companyinfo = await _company.CreateCompany(company);
+                return CreatedAtAction("GetCompany", new { id = companyinfo.CompanyId }, company);
+            }
+            catch (DbUpdateException)
+            {
+                return Conflict();
+            }
         }
+
+        //// GET: api/Accounts/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Account>> GetAccount(string id)
+        //{
+        //    var account = await _context.Accounts.FindAsync(id);
+
+        //    if (account == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return account;
+        //}
+
+        //    return NoContent();
+        //}
+
+        //// DELETE: api/Companies/5
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult<Company>> DeleteCompany(string id)
+        //{
+        //    var company = await _context.Companies.FindAsync(id);
+        //    if (company == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _context.Companies.Remove(company);
+        //    await _context.SaveChangesAsync();
+
+        //    return company;
+        //}
+
+        //private bool CompanyExists(string id)
+        //{
+        //    return _context.Companies.Any(e => e.CompanyId == id);
+        //}
+    }
 }
