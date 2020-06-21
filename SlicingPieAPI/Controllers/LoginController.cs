@@ -58,7 +58,8 @@ namespace SlicingPieAPI.Controllers
                 {
                     if (info.Result.RoleID.Equals(Role.ADMIN))
                     {
-                        return Unauthorized();
+                        var tokenString = GenerateJSONWebTokenAdmin(info.Result);
+                        return Ok(new { token = tokenString, Name = info.Result.NameAccount});
                     }
                     else if(info.Result.RoleID.Equals(Role.USER))
                     {
@@ -90,6 +91,20 @@ namespace SlicingPieAPI.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, userInfo.SHID),
                 new Claim("RoleID", userInfo.RoleID + ""),
                 new Claim("CompanyID", userInfo.CompanyID),
+            };
+
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Issuer"], claims, expires: DateTime.Now.AddMinutes(120), signingCredentials: credentials);
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private string GenerateJSONWebTokenAdmin(UserLoginDto userInfo)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[] {
+                new Claim(JwtRegisteredClaimNames.Sub, userInfo.AccountID),
+                new Claim("RoleID", userInfo.RoleID + ""),
             };
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Issuer"], claims, expires: DateTime.Now.AddMinutes(120), signingCredentials: credentials);

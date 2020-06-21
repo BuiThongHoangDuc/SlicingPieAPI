@@ -8,6 +8,7 @@ namespace SlicingPieAPI.DTOs
     public class UserLoginDto
     {
         public string AccountID { get; set; }
+        public string NameAccount { get; set; }
         public int? RoleID { get; set; }
     }
 }

@@ -38,6 +38,7 @@ namespace SlicingPieAPI.Repository
                                                 .Select(ac => new UserLoginDto
                                                 {
                                                     AccountID = ac.AccountId,
+                                                    NameAccount = ac.NameAccount,
                                                     RoleID = ac.RoleId
                                                 }).FirstOrDefaultAsync();
             return loginInfo;
