@@ -91,6 +91,18 @@ namespace SlicingPieAPI
                 opt.UseSqlServer(Configuration.GetConnectionString("SWD_SlicingPieDB")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
+            services.AddCors(Options =>
+            {
+                Options.AddPolicy(
+                    name: "CorsPolicy",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+            });
+
             services.AddScoped<IStakeHolderRepository, StakeHolderRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
@@ -115,6 +127,7 @@ namespace SlicingPieAPI
             {
                 UI.SwaggerEndpoint("/swagger/v1.0/swagger.json", "V1.1");
             });
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
 
             app.UseMvc();
