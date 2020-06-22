@@ -165,6 +165,11 @@ namespace SlicingPieAPI.Models
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
+                entity.Property(e => e.AccountId)
+                    .HasColumnName("AccountID")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.AssetStatus)
                     .HasMaxLength(1)
                     .IsUnicode(false);
@@ -183,16 +188,16 @@ namespace SlicingPieAPI.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.StackHolerId)
-                    .HasColumnName("StackHolerID")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.TermId).HasColumnName("TermID");
 
                 entity.Property(e => e.TimeAsset).HasColumnType("datetime");
 
                 entity.Property(e => e.TypeAssetId).HasColumnName("TypeAssetID");
+
+                entity.HasOne(d => d.Account)
+                    .WithMany(p => p.SliceAssets)
+                    .HasForeignKey(d => d.AccountId)
+                    .HasConstraintName("FK__Asset__CFID__534D60F1");
 
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.SliceAssets)
@@ -203,11 +208,6 @@ namespace SlicingPieAPI.Models
                     .WithMany(p => p.SliceAssets)
                     .HasForeignKey(d => d.ProjectId)
                     .HasConstraintName("FK__Asset__ProjectID__5441852A");
-
-                entity.HasOne(d => d.StackHoler)
-                    .WithMany(p => p.SliceAssets)
-                    .HasForeignKey(d => d.StackHolerId)
-                    .HasConstraintName("FK__Asset__CFID__534D60F1");
 
                 entity.HasOne(d => d.Term)
                     .WithMany(p => p.SliceAssets)
@@ -286,6 +286,8 @@ namespace SlicingPieAPI.Models
                     .HasColumnName("CompanyID")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.TermName).HasMaxLength(50);
 
                 entity.Property(e => e.TermTimeFrom).HasColumnType("datetime");
 

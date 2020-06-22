@@ -80,6 +80,47 @@ namespace SlicingPieAPI.Repository
                                                         .FirstOrDefaultAsync();
             return MainUserInfo;
         }
+
+        public IQueryable<StakeHolder> Search(string search)
+        {
+          IQueryable<StakeHolder> stakeHolders = _context.StakeHolders.Where(q => q.ShnameForCompany.Contains(search));
+            return stakeHolders;
+        }
+
+        public IQueryable<StakeHolder> Paging(IQueryable<StakeHolder> stakeHolder, int page_index, int ITEM_PER_PAGE)
+        {
+            if (page_index != -1)
+            {
+                stakeHolder = stakeHolder.Skip(page_index * ITEM_PER_PAGE).Take(ITEM_PER_PAGE);
+
+            }
+
+            return stakeHolder;
+        }
+
+        public IQueryable<StakeHolder> Sort(IQueryable<StakeHolder> stakeHolder, string typeOfSort)
+        {
+            switch (typeOfSort)
+            {
+                case "asc": stakeHolder = stakeHolder.OrderBy(p => p.AccountId); break;
+                case "des": stakeHolder = stakeHolder.OrderByDescending(p => p.AccountId); break;
+            }
+            return stakeHolder;
+        }
+
+        public List<Object> Filter(IQueryable<StakeHolder> stakeHolders, string selectedField)
+        {
+            var list_query = stakeHolders.ToList();
+
+            List<Object> list_return = new List<Object>();
+            SupportSelectField supportSelectField = new SupportSelectField();
+            foreach (var item in list_query)
+            {
+                var temp = supportSelectField.getByField(item, selectedField);
+                list_return.Add(temp);
+            }
+            return list_return;
+        }
     }
 
     public interface IStakeHolderRepository
@@ -88,5 +129,14 @@ namespace SlicingPieAPI.Repository
         Task<string> getStakeHolderCompany(string id);
         Task<IEnumerable<SHLoadMainDto>> getListShByCompany(string companyId);
         Task<SHLoadMainDto> getShByIDCompany(string companyId, string userId);
+
+        IQueryable<StakeHolder> Search(string search);
+
+        IQueryable<StakeHolder> Paging(IQueryable<StakeHolder> stakeHolder, int pageIndex, int itemPerPage);
+
+        IQueryable<StakeHolder> Sort(IQueryable<StakeHolder> stakeHolder, string typeOfSort);
+
+        List<Object> Filter(IQueryable<StakeHolder> stakeHolders, string selectedField);
+            
     }
 }

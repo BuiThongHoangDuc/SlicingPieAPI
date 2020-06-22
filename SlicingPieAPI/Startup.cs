@@ -15,10 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using SlicingPieAPI.Models;
 using SlicingPieAPI.Repository;
 using SlicingPieAPI.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace SlicingPieAPI
 {
@@ -42,6 +44,32 @@ namespace SlicingPieAPI
             services.AddSwaggerGen(gen =>
             {
                 gen.SwaggerDoc("v1.0", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "SlicingPie API", Version = "v1.0" });
+
+                gen.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description ="JWT Authorization header using the Bearer scheme.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                gen.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] {}
+
+                    }
+                });
+
             });
 
             services
@@ -63,11 +91,25 @@ namespace SlicingPieAPI
                 opt.UseSqlServer(Configuration.GetConnectionString("SWD_SlicingPieDB")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
+            services.AddCors(Options =>
+            {
+                Options.AddPolicy(
+                    name: "CorsPolicy",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+            });
+
             services.AddScoped<IStakeHolderRepository, StakeHolderRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<ISliceAssetRepository, SliceAssetRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IStakeHolderService, StakeHolderService>();
             
         }
@@ -83,8 +125,9 @@ namespace SlicingPieAPI
             app.UseSwagger();
             app.UseSwaggerUI(UI =>
             {
-                UI.SwaggerEndpoint("/swagger/v1.0/swagger.json", "V1.0");
+                UI.SwaggerEndpoint("/swagger/v1.0/swagger.json", "V1.1");
             });
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
 
             app.UseMvc();

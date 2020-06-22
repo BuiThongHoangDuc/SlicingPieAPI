@@ -15,11 +15,6 @@ namespace SlicingPieAPI.Services
             _stakeHolder = stakeHolder;
         }
 
-        public async Task<IEnumerable<SHLoadMainDto>> getListSHByCompany(string companyId)
-        {
-            return await _stakeHolder.getListShByCompany(companyId);
-        }
-
         public async Task<SHLoadMainDto> getSHByCompany(string companyId, string shId)
         {
             return await _stakeHolder.getShByIDCompany(companyId, shId);
@@ -35,14 +30,22 @@ namespace SlicingPieAPI.Services
             return await _stakeHolder.getStakeHolderCompany(id);
         }
 
-        
+        public List<Object> getStakeHolder(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected)
+        {
+            var stakeHolder = _stakeHolder.Search(name);
+            stakeHolder = _stakeHolder.Sort(stakeHolder, sort_Type);
+            stakeHolder = _stakeHolder.Paging(stakeHolder, page_Index, itemPerPage);
+            List<Object> list = _stakeHolder.Filter(stakeHolder, field_Selected);
+            return list;
+        }
     }
 
     public interface IStakeHolderService
     {
         Task<string> getStakeHolderCompanyID(string id);
         Task<StakeHolderDto> getStakeHolderLoginInoByID(string id);
-        Task<IEnumerable<SHLoadMainDto>> getListSHByCompany(string companyId);
         Task<SHLoadMainDto> getSHByCompany(string companyId, string shId);
+
+        List<Object> getStakeHolder(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected);
     }
 }
