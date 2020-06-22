@@ -18,6 +18,7 @@ namespace SlicingPieAPI.Models
         public string ComapnyIcon { get; set; }
         public int? NonCashMultiplier { get; set; }
         public int? CashMultiplier { get; set; }
+        public string Status { get; set; }
 
         public virtual ICollection<Project> Projects { get; set; }
         public virtual ICollection<SliceAsset> SliceAssets { get; set; }

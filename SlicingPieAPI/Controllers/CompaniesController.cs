@@ -97,6 +97,13 @@ namespace SlicingPieAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<CompanyDetailDto>> PostCompany(CompanyDetailDto company)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+
+            var role = Convert.ToInt32(claim[1].Value);
+            if (role.Equals(Role.EMPLOYEE)) return Forbid();
+            else
+            { 
             try
             {
                 var companyinfo = await _company.CreateCompany(company);
@@ -106,6 +113,15 @@ namespace SlicingPieAPI.Controllers
             {
                 return Conflict();
             }
+            }
+        }
+
+        [HttpPut("Delete/{id}")]
+        public ActionResult DeleteCompany(string id)
+        {
+            var isDelete = _company.deleteCompany(id);
+            if (isDelete == true) return NoContent();
+            else return NotFound();
         }
 
         //// GET: api/Accounts/5

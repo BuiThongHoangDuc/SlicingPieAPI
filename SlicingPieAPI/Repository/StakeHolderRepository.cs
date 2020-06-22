@@ -23,7 +23,7 @@ namespace SlicingPieAPI.Repository
         public async Task<string> getStakeHolderCompany(string id)
         {
             var companyID = await _context.StakeHolders
-                                            .Where(sh => sh.AccountId == id)
+                                            .Where(sh => sh.AccountId == id && sh.Company.Status == Status.ACTIVE)
                                             .Select(sh => sh.CompanyId)
                                             .FirstOrDefaultAsync();
             return companyID;
