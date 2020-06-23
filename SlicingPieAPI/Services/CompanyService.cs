@@ -14,11 +14,13 @@ namespace SlicingPieAPI.Services
         private readonly ICompanyRepository _company;
         private readonly IStakeHolderRepository _stakeHolder;
         private readonly ISliceAssetRepository _sliceRepository;
-        public CompanyService(ICompanyRepository company, IStakeHolderRepository stakeHolder, ISliceAssetRepository sliceRepository)
+        private readonly IProjectRepository _projectRepository;
+        public CompanyService(ICompanyRepository company, IStakeHolderRepository stakeHolder, ISliceAssetRepository sliceRepository, IProjectRepository projectRepository)
         {
             _company = company;
             _stakeHolder = stakeHolder;
             _sliceRepository = sliceRepository;
+            _projectRepository = projectRepository;
         }
 
         public List<object> getListCompany(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected)
@@ -67,10 +69,10 @@ namespace SlicingPieAPI.Services
 
             try
             {
-                var companyInfo = _company.CreateCompany(company); 
+                var companyInfo = _company.CreateCompany(company);
                 return companyInfo;
             }
-            catch(DbUpdateException)
+            catch (DbUpdateException)
             {
                 throw;
             }
@@ -78,6 +80,11 @@ namespace SlicingPieAPI.Services
         public bool deleteCompany(string id)
         {
             return _company.deleteCompany(id);
+        }
+
+        public IQueryable<ProjectDto> getListProject(string companyId)
+        {
+            return _projectRepository.getProjectList(companyId);
         }
     }
 
@@ -90,5 +97,6 @@ namespace SlicingPieAPI.Services
         Task<string> updateCompany(string id, CompanyDetailDto company);
         Task<CompanyDetailDto> CreateCompany(CompanyDetailDto company);
         bool deleteCompany(string id);
+        IQueryable<ProjectDto> getListProject(string companyId);
     }
 }

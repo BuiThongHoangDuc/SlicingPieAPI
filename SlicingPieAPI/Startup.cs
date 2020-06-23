@@ -107,6 +107,7 @@ namespace SlicingPieAPI
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ISliceAssetRepository, SliceAssetRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ICompanyService, CompanyService>();
