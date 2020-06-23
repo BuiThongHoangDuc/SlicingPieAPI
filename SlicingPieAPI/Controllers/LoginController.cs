@@ -59,7 +59,7 @@ namespace SlicingPieAPI.Controllers
                     if (info.Result.RoleID.Equals(Role.ADMIN))
                     {
                         var tokenString = GenerateJSONWebTokenAdmin(info.Result);
-                        return Ok(new { token = tokenString, Name = info.Result.NameAccount});
+                        return Ok(new { token = tokenString, Name = info.Result.NameAccount, Role = info.Result.RoleID});
                     }
                     else if(info.Result.RoleID.Equals(Role.USER))
                     {
