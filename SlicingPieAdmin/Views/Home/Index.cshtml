@@ -1,8 +1,195 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿
+@{
+    Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Test -->
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+
+
+    <title>Bootstrap Simple Login Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
+
+    <style type="text/css">
+        .login-form {
+            width: 340px;
+            margin: 50px auto;
+        }
+
+            .login-form form {
+                margin-bottom: 15px;
+                background: #f7f7f7;
+                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+                padding: 30px;
+            }
+
+            .login-form h2 {
+                margin: 0 0 15px;
+            }
+
+        .form-control, .btn {
+            min-height: 38px;
+            border-radius: 2px;
+        }
+
+        .btn {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .center {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        body {
+            background-image: url("img/slicingpie.jpg");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    @*<div class="login-form">
+            <form method="get" asp-controller="Login" asp-action="Login">
+                <h2 class="text-center">Log in</h2>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Username" required="required">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Password" required="required">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Log in</button>
+                </div>
+                <div class="clearfix">
+                    <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
+                    <a href="#" class="pull-right">Forgot Password?</a>
+                </div>
+            </form>
+            <p class="text-center"><a href="#">Create an Account</a></p>
+        </div>*@
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.3/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.3/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-auth.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyAK2LGTJBlGvLvPAH9vz0XRGZOL71O0oQk",
+            authDomain: "swdslicingpie-59d47.firebaseapp.com",
+            databaseURL: "https://swdslicingpie-59d47.firebaseio.com",
+            projectId: "swdslicingpie-59d47",
+            storageBucket: "swdslicingpie-59d47.appspot.com",
+            messagingSenderId: "665095419689",
+            appId: "1:665095419689:web:6d2c5c9d40031d15506938",
+            measurementId: "G-56J7SY2Y3S"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        var uiConfig = {
+            callbacks: {
+                signInSuccessWithAuthResult: function (authResult, redirectUrl) {
+                    // User successfully signed in.
+                    // Return type determines whether we continue the redirect automatically
+                    // or whether we leave that to developer to handle.
+                    var token = firebase.auth().currentUser.getIdToken();
+                    console.log(token);
+
+
+                    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+                        // Send token to your backend via HTTPS
+                        // ...
+                        console.log(idToken);
+                        window.location.href = "/Login?token=" + idToken;
+
+                        //const myHeaders = new Headers();
+                        //myHeaders.append('Content-Type', 'application/json');
+                        //myHeaders.append('Authorization', idToken);
+
+                        // fetch('https://slicingpieproject.azurewebsites.net/api/Login', {
+                        //    method: 'POST',
+                        //    headers: myHeaders,
+                        //})
+                        //    .then(response => { return response.json() })
+                        //     .then(data => {
+                        //         console.log(data),
+                        //             localStorage.setItem("data", data.token);
+                        //             window.location.href = "/Login"
+                        //        });
+
+
+
+                    }).catch(function (error) {
+                        // Handle error
+                        console.log(error);
+                    });
+
+
+                    return false;
+                },
+                uiShown: function () {
+                    // The widget is rendered.
+                    // Hide the loader.
+                    document.getElementById('loader').style.display = 'none';
+                }
+            },
+            // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+            signInFlow: 'popup',
+            signInSuccessUrl: 'index.cshtml',
+            signInOptions: [
+                // Leave the lines as is for the providers you want to offer your users.
+                firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+
+            ],
+
+        };
+
+        ui.start('#firebaseui-auth-container', uiConfig);
+
+
+
+    </script>
+
+    <div class="center">
+        <div id="firebaseui-auth-container"></div>
+        <div id="loader">Loading...</div>
+    </div>
+
+
+
+
+
+
+
+
+</body>
+</html>                                		
