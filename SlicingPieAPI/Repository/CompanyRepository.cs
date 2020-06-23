@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SlicingPieAPI.DTOs;
+using SlicingPieAPI.Enums;
 using SlicingPieAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,7 @@ namespace SlicingPieAPI.Repository
 
         public IQueryable<Company> Search(string search)
         {
-            IQueryable<Company> companies = _context.Companies.Where(q => q.CompanyName.Contains(search));
+            IQueryable<Company> companies = _context.Companies.Where(q => q.CompanyName.Contains(search) && q.Status == Status.ACTIVE);
             return companies;
         }
 
@@ -78,7 +79,7 @@ namespace SlicingPieAPI.Repository
             return companyInfo;
         }
 
-        public async Task<string> UpdateCompany(string id,CompanyDetailDto company)
+        public async Task<string> UpdateCompany(string id, CompanyDetailDto company)
         {
 
             Company dto = await _context.Companies.FindAsync(id);
@@ -100,6 +101,7 @@ namespace SlicingPieAPI.Repository
             companyModel.ComapnyIcon = company.ComapnyIcon;
             companyModel.NonCashMultiplier = company.NonCashMultiplier;
             companyModel.CashMultiplier = company.CashMultiplier;
+            companyModel.Status = Status.ACTIVE;
 
             _context.Companies.Add(companyModel);
             try
@@ -115,26 +117,20 @@ namespace SlicingPieAPI.Repository
 
         public string getLastIDCompany()
         {
-            return _context.Companies.Select(company => company.CompanyId).LastOrDefault();
+            return _context.Companies.OrderByDescending(company => company.CompanyId).Select(company => company.CompanyId).FirstOrDefault();
         }
-//        _context.Companies.Add(company);
-//            try
-//            {
-//                await _context.SaveChangesAsync();
-//    }
-//            catch (DbUpdateException)
-//            {
-//                if (CompanyExists(company.CompanyId))
-//                {
-//                    return Conflict();
-//}
-//                else
-//                {
-//                    throw;
-//                }
-//            }
 
-//            return CreatedAtAction("GetCompany", new { id = company.CompanyId }, company);
+        public bool deleteCompany(string id)
+        {
+            var company = _context.Companies.Find(id);
+            if (company == null) return false;
+            else
+            {
+                company.Status = Status.INACTIVE;
+                _context.SaveChanges();
+                return true;
+            }
+        }
     }
 
     public interface ICompanyRepository
@@ -155,5 +151,6 @@ namespace SlicingPieAPI.Repository
 
         Task<CompanyDetailDto> CreateCompany(CompanyDetailDto company);
         string getLastIDCompany();
+        bool deleteCompany(string id);
     }
 }

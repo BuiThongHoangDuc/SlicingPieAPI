@@ -59,7 +59,7 @@ namespace SlicingPieAPI.Services
 
             string alphaPart = result.Groups[1].Value;
             string numberPart = result.Groups[2].Value;
-            int numberCompany = Int32.Parse(numberPart)+1;
+            int numberCompany = Int32.Parse(numberPart) + 1;
             company.CompanyId = alphaPart + numberCompany;
 
             if (company.NonCashMultiplier == null) company.NonCashMultiplier = 2;
@@ -75,6 +75,10 @@ namespace SlicingPieAPI.Services
                 throw;
             }
         }
+        public bool deleteCompany(string id)
+        {
+            return _company.deleteCompany(id);
+        }
     }
 
     public interface ICompanyService
@@ -85,5 +89,6 @@ namespace SlicingPieAPI.Services
         List<Object> getListCompany(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected);
         Task<string> updateCompany(string id, CompanyDetailDto company);
         Task<CompanyDetailDto> CreateCompany(CompanyDetailDto company);
+        bool deleteCompany(string id);
     }
 }
