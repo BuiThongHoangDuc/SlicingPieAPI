@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="~/css/style.css" />
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 
 </head>
 <body>
@@ -18,8 +23,9 @@
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar">
             <div class="p-4 pt-5">
-                <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/logo.jpg);"></a>
+                <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(img/slicingpie.jpg);"></a>
                 <ul class="list-unstyled components mb-5">
+
                     <li class="active">
                         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
@@ -38,10 +44,13 @@
                         <a href="/Accounts">Accounts</a>
                     </li>
                     <li>
-                        <a href="#">Companies</a>
+                        <a href="/Companies">Companies</a>
                     </li>
                     <li>
-                        <a href="#">Stake Holders</a>
+                        <a href="/StakeHolders">Stake Holders</a>
+                    </li>
+                    <li>
+                        <a href="/LogOut">Log Out</a>
                     </li>
                 </ul>
 
@@ -69,13 +78,13 @@
                                 <a class="nav-link" href="#">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Accounts</a>
+                                <a class="nav-link" href="/Accounts">Accounts</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Companies</a>
+                                <a class="nav-link" href="/Companies">Companies</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Stake Holders</a>
+                                <a class="nav-link" href="/StakeHolders">Stake Holders</a>
                             </li>
                         </ul>
                     </div>
@@ -92,6 +101,9 @@
     <script src="~/js/popper.js"></script>
     <script src="~/js/bootstrap.min.js"></script>
     <script src="~/js/main.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+
 
 </body>
 </html>

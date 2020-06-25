@@ -10,10 +10,10 @@ namespace SlicingPieAdmin.Models
     {
         [JsonProperty("token")]
         public string Token { get; set; }
-        [JsonProperty("stakeHolderID")]
-        public string StakeHolderID { get; set; }
-        [JsonProperty("companyId")]
-        public string CompanyId { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
         [JsonProperty("role")]
         public int Role { get; set; }
     }

@@ -11,21 +11,21 @@ using SlicingPieAdmin.Models;
 
 namespace SlicingPieAdmin.Controllers
 {
-  
-    public class AccountController : Controller
+    public class StakeHolderController : Controller
     {
         SlicingPieApi _api = new SlicingPieApi();
-        [Route("Accounts")]
-        public async Task<IActionResult> GetAccount()
+        [Route("StakeHolders")]
+        public async Task<IActionResult> GetStakeHolder()
         {
+
             String token = HttpContext.Session.GetString("token");
             String action = "Error";
             HttpClient client = _api.Initial();
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-            HttpResponseMessage res = await client.GetAsync("api/Accounts");
+            HttpResponseMessage res = await client.GetAsync("api/StackHolders");
             if (res.IsSuccessStatusCode)
             {
-                 ViewData["Accounts"] = JsonConvert.DeserializeObject<List<AccountViewModel>>(res.Content.ReadAsStringAsync().Result);
+                ViewData["StakeHolders"] = JsonConvert.DeserializeObject<List<StakeHolderViewModel>>(res.Content.ReadAsStringAsync().Result);
             }
             else
             {

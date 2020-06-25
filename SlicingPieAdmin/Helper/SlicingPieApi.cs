@@ -11,7 +11,7 @@ namespace SlicingPieAdmin.Helper
         public HttpClient Initial()
         {
             var client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:51779");
+            client.BaseAddress = new Uri("https://slicingpieproject.azurewebsites.net");
             return client;
         }
     }

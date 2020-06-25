@@ -23,16 +23,6 @@ namespace SlicingPieAdmin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            HttpClient client = _api.Initial();
-            ViewData["data"] = "Data is null";
-            HttpResponseMessage res = await client.GetAsync("api/Companies");
-
-            if(res.IsSuccessStatusCode)
-            {
- 
-                ViewData["data"] = res.Content.ReadAsStringAsync().Result;
-            }
-
             return View();
 
         }

@@ -5,27 +5,28 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using SlicingPieAdmin.Helper;
 using SlicingPieAdmin.Models;
 
 namespace SlicingPieAdmin.Controllers
 {
-  
-    public class AccountController : Controller
+
+    public class CompanyController : Controller
     {
         SlicingPieApi _api = new SlicingPieApi();
-        [Route("Accounts")]
-        public async Task<IActionResult> GetAccount()
+        [Route("Companies")]
+        public async Task<IActionResult> GetCompanies()
         {
             String token = HttpContext.Session.GetString("token");
             String action = "Error";
             HttpClient client = _api.Initial();
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-            HttpResponseMessage res = await client.GetAsync("api/Accounts");
+            HttpResponseMessage res = await client.GetAsync("api/Companies");
             if (res.IsSuccessStatusCode)
             {
-                 ViewData["Accounts"] = JsonConvert.DeserializeObject<List<AccountViewModel>>(res.Content.ReadAsStringAsync().Result);
+                ViewData["Companies"] = JsonConvert.DeserializeObject<List<Company>>(res.Content.ReadAsStringAsync().Result);
             }
             else
             {
