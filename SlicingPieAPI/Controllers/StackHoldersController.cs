@@ -25,11 +25,13 @@ namespace SlicingPieAPI.Controllers
         private const int ITEM_PER_PAGE = 5;
         private readonly SWD_SlicingPieContext _context;
         private readonly IStakeHolderService _shService;
-        public StackHoldersController(IStakeHolderService shService, SWD_SlicingPieContext context)
+        private readonly ISliceAssetService _sliceService;
+
+        public StackHoldersController(IStakeHolderService shService, SWD_SlicingPieContext context, ISliceAssetService sliceService)
         {
             _shService = shService;
             _context = context;
-
+            _sliceService = sliceService;
         }
 
         [HttpGet]
@@ -48,8 +50,13 @@ namespace SlicingPieAPI.Controllers
             else return Ok(list);
         }
 
+        [HttpGet("list")]
+        public IActionResult getType(String companyid, int typeid)
+        {
+            return Ok(_sliceService.getType(companyid, typeid));
+        }
 
-        
+
         //// GET: api/StackHolders/5
         //[HttpGet("{id}")]
         //public async Task<ActionResult<StackHolder>> GetStackHolder(string id)

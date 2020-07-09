@@ -121,6 +121,23 @@ namespace SlicingPieAPI.Repository
             }
             return list_return;
         }
+
+        public IQueryable<StakeHolerDetailDto> getStakeHolerDetail(string SHId)
+        {
+            return null;
+        }
+
+        public async Task<SalaryGapDto> GetSalaryGap(string userID, String companyID)
+        {
+            var salary = await _context.StakeHolders
+                                    .Where(us => us.AccountId == userID && us.CompanyId == companyID && us.Shstatus == Status.ACTIVE)
+                                    .Select(us => new SalaryGapDto{
+                                        ShmarketSalary = us.ShmarketSalary,
+                                        Shsalary = us.ShmarketSalary,
+                                    })
+                                    .FirstOrDefaultAsync();
+            return salary;
+        }
     }
 
     public interface IStakeHolderRepository
@@ -137,6 +154,8 @@ namespace SlicingPieAPI.Repository
         IQueryable<StakeHolder> Sort(IQueryable<StakeHolder> stakeHolder, string typeOfSort);
 
         List<Object> Filter(IQueryable<StakeHolder> stakeHolders, string selectedField);
-            
+        IQueryable<StakeHolerDetailDto> getStakeHolerDetail(String SHId);
+
+        Task<SalaryGapDto> GetSalaryGap(String userID,String companyID);
     }
 }

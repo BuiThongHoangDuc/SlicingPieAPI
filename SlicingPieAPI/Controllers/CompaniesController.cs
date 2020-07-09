@@ -47,7 +47,7 @@ namespace SlicingPieAPI.Controllers
         [HttpGet("{id}/stake-holder")]
         public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> GetListSHCompany(string id)
         {
-            
+
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IList<Claim> claim = identity.Claims.ToList();
 
@@ -103,27 +103,27 @@ namespace SlicingPieAPI.Controllers
             var role = Convert.ToInt32(claim[1].Value);
             if (role.Equals(Role.EMPLOYEE)) return Forbid();
             else
-            { 
-            try
             {
-                var companyinfo = await _company.CreateCompany(company);
-                return CreatedAtAction("GetCompany", new { id = companyinfo.CompanyId }, company);
-            }
-            catch (DbUpdateException)
-            {
-                return Conflict();
-            }
+                try
+                {
+                    var companyinfo = await _company.CreateCompany(company);
+                    return CreatedAtAction("GetCompany", new { id = companyinfo.CompanyId }, company);
+                }
+                catch (DbUpdateException)
+                {
+                    return Conflict();
+                }
             }
         }
 
-        [HttpPut("Delete/{id}")]
+        [HttpDelete("{id}")]
         public ActionResult DeleteCompany(string id)
         {
             var isDelete = _company.deleteCompany(id);
             if (isDelete == true) return NoContent();
             else return NotFound();
         }
-        
+
         [HttpGet("{id}/project")]
         public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjectCompany(string id)
         {
@@ -131,7 +131,60 @@ namespace SlicingPieAPI.Controllers
             if (listProject == null) return NotFound();
             else return Ok(listProject);
         }
-        
+
+        [HttpPost("{id}/project")]
+        public async Task<ActionResult> CreateProject(String id,ProjectDto project)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+
+            var role = Convert.ToInt32(claim[1].Value);
+            if (role.Equals(Role.EMPLOYEE)) return Forbid();
+            else
+            {
+                try
+                {
+                    await _company.AddProjectSV(id, project);
+                    return NoContent();
+                }
+                catch (DbUpdateException)
+                {
+                    return Conflict();
+                }
+            }
+        }
+
+        [HttpPut("{id}/project/{projectid}")]
+        public async Task<ActionResult<CompanyDetailDto>> UpdateProject(String id, ProjectDto project, String projectid )
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+
+            var role = Convert.ToInt32(claim[1].Value);
+            if (role.Equals(Role.EMPLOYEE)) return Forbid();
+            else
+            {
+                if (id != project.CompanyId) return BadRequest();
+                else if (projectid != project.ProjectId)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    var Id = await _company.udpateProjectSV(projectid, project);
+                    return Ok(Id);
+                }
+            }
+        }
+
+        [HttpDelete("{id}/project/{projectid}")]
+        public IActionResult DeleteProject(String id, String projectid)
+        {
+            var isDelete = _company.deleteProjectSV(projectid);
+            if (isDelete == true) return Ok(id);
+            else return NotFound();
+        }
+
         //// GET: api/Accounts/5
         //[HttpGet("{id}")]
         //public async Task<ActionResult<Account>> GetAccount(string id)

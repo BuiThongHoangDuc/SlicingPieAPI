@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace SlicingPieAPI.DTOs
 {
-    public class ProjectDto
+    public class TypeAssetCompanyDto
     {
-        public string ProjectId { get; set; }
-        public string ProjectName { get; set; }
-        public string ProjectStatus { get; set; }
+        public int TypeAssetId { get; set; }
         public string CompanyId { get; set; }
     }
 }
