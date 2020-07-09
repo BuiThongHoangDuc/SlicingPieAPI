@@ -123,7 +123,15 @@ namespace SlicingPieAPI.Controllers
             if (isDelete == true) return NoContent();
             else return NotFound();
         }
-
+        
+        [HttpGet("{id}/project")]
+        public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjectCompany(string id)
+        {
+            var listProject = await _company.getListProject(id).ToListAsync();
+            if (listProject == null) return NotFound();
+            else return Ok(listProject);
+        }
+        
         //// GET: api/Accounts/5
         //[HttpGet("{id}")]
         //public async Task<ActionResult<Account>> GetAccount(string id)
