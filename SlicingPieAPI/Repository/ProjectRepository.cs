@@ -11,8 +11,8 @@ namespace SlicingPieAPI.Repository
 {
     public class ProjectRepository : IProjectRepository
     {
-        private readonly SWD_SlicingPieContext _context;
-        public ProjectRepository(SWD_SlicingPieContext context)
+        private readonly SWDSlicingPieContext _context;
+        public ProjectRepository(SWDSlicingPieContext context)
         {
             _context = context;
         }

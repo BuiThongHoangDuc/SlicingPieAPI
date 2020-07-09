@@ -13,9 +13,9 @@ namespace SlicingPieAPI.Repository
     public class StakeHolderRepository : IStakeHolderRepository
     {
         
-        private readonly SWD_SlicingPieContext _context;
+        private readonly SWDSlicingPieContext _context;
 
-        public StakeHolderRepository(SWD_SlicingPieContext context)
+        public StakeHolderRepository(SWDSlicingPieContext context)
         {
             _context = context;
         }

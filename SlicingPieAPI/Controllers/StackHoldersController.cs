@@ -23,11 +23,11 @@ namespace SlicingPieAPI.Controllers
     {
 
         private const int ITEM_PER_PAGE = 5;
-        private readonly SWD_SlicingPieContext _context;
+        private readonly SWDSlicingPieContext _context;
         private readonly IStakeHolderService _shService;
         private readonly ISliceAssetService _sliceService;
 
-        public StackHoldersController(IStakeHolderService shService, SWD_SlicingPieContext context, ISliceAssetService sliceService)
+        public StackHoldersController(IStakeHolderService shService, SWDSlicingPieContext context, ISliceAssetService sliceService)
         {
             _shService = shService;
             _context = context;

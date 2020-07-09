@@ -11,9 +11,9 @@ namespace SlicingPieAPI.Repository
 {
     public class SliceAssetRepository : ISliceAssetRepository
     {
-        private readonly SWD_SlicingPieContext _context;
+        private readonly SWDSlicingPieContext _context;
 
-        public SliceAssetRepository(SWD_SlicingPieContext context)
+        public SliceAssetRepository(SWDSlicingPieContext context)
         {
             _context = context;
         }
