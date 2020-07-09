@@ -21,10 +21,14 @@ namespace SlicingPieAPI.Controllers
     public class CompaniesController : ControllerBase
     {
         private readonly ICompanyService _company;
+        private readonly ISliceAssetService _slice;
+
         private const int ITEM_PER_PAGE = 5;
-        public CompaniesController(ICompanyService company)
+        
+        public CompaniesController(ICompanyService company, ISliceAssetService slice)
         {
             _company = company;
+            _slice = slice;
         }
 
         // GET: api/Companies
@@ -133,7 +137,7 @@ namespace SlicingPieAPI.Controllers
         }
 
         [HttpPost("{id}/project")]
-        public async Task<ActionResult> CreateProject(String id,ProjectDto project)
+        public async Task<ActionResult> CreateProject(String id, ProjectDto project)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IList<Claim> claim = identity.Claims.ToList();
@@ -155,7 +159,7 @@ namespace SlicingPieAPI.Controllers
         }
 
         [HttpPut("{id}/project/{projectid}")]
-        public async Task<ActionResult<CompanyDetailDto>> UpdateProject(String id, ProjectDto project, String projectid )
+        public async Task<ActionResult<CompanyDetailDto>> UpdateProject(String id, ProjectDto project, String projectid)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IList<Claim> claim = identity.Claims.ToList();
@@ -183,6 +187,23 @@ namespace SlicingPieAPI.Controllers
             var isDelete = _company.deleteProjectSV(projectid);
             if (isDelete == true) return Ok(id);
             else return NotFound();
+        }
+
+        [HttpPost("{companyID}/StakeHoler/{shID}/Contribution")]
+        public async Task<ActionResult> CreateProject(String companyID, String shID, SliceAssetDetailDto asset)
+        {
+            try
+            {
+                bool check = await _slice.addSliceSV(companyID,shID,asset);
+                if (check)
+                    return NoContent();
+                else return BadRequest();
+            }
+            catch (DbUpdateException)
+            {
+                return Conflict();
+            }
+
         }
 
         //// GET: api/Accounts/5
