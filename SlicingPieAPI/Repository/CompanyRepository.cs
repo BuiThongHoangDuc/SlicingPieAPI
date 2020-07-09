@@ -75,6 +75,7 @@ namespace SlicingPieAPI.Repository
                                             ComapnyIcon = company.ComapnyIcon,
                                             CashMultiplier = company.CashMultiplier,
                                             NonCashMultiplier = company.NonCashMultiplier,
+                                            CashPerSlice = company.CashPerSlice,
                                         }).FirstOrDefaultAsync();
             return companyInfo;
         }
@@ -87,6 +88,7 @@ namespace SlicingPieAPI.Repository
             dto.ComapnyIcon = company.ComapnyIcon;
             dto.NonCashMultiplier = company.NonCashMultiplier;
             dto.CashMultiplier = company.CashMultiplier;
+            dto.CashPerSlice = company.CashPerSlice;
 
             _context.Entry(dto).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -101,6 +103,7 @@ namespace SlicingPieAPI.Repository
             companyModel.ComapnyIcon = company.ComapnyIcon;
             companyModel.NonCashMultiplier = company.NonCashMultiplier;
             companyModel.CashMultiplier = company.CashMultiplier;
+            companyModel.CashPerSlice = company.CashPerSlice;
             companyModel.Status = Status.ACTIVE;
 
             _context.Companies.Add(companyModel);
@@ -136,8 +139,6 @@ namespace SlicingPieAPI.Repository
     public interface ICompanyRepository
     {
         Task<string> GetCompany(string email);
-
-
         Task<CompanyDetailDto> getDetailCompany(string companyId);
         IQueryable<Company> Search(string search);
 
@@ -152,5 +153,6 @@ namespace SlicingPieAPI.Repository
         Task<CompanyDetailDto> CreateCompany(CompanyDetailDto company);
         string getLastIDCompany();
         bool deleteCompany(string id);
+
     }
 }
