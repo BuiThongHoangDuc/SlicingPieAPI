@@ -134,6 +134,24 @@ namespace SlicingPieAPI.Repository
                 return true;
             }
         }
+
+        public async Task<double> GetMoneyPerSlice(string companyID)
+        {
+            var cashperslice = await _context.Companies.Where(cp => cp.CompanyId == companyID).Select(cp => cp.CashPerSlice).FirstOrDefaultAsync();
+            return (double)cashperslice;
+        }
+
+        public async Task<int> GetNonCashMP(string companyID)
+        {
+            var nonCashMP = await _context.Companies.Where(cp => cp.CompanyId == companyID).Select(cp => cp.NonCashMultiplier).FirstOrDefaultAsync();
+            return nonCashMP;
+        }
+
+        public async Task<int> GetCashMP(string companyID)
+        {
+            var cashMP = await _context.Companies.Where(cp => cp.CompanyId == companyID).Select(cp => cp.CashMultiplier).FirstOrDefaultAsync();
+            return cashMP;
+        }
     }
 
     public interface ICompanyRepository
@@ -153,6 +171,8 @@ namespace SlicingPieAPI.Repository
         Task<CompanyDetailDto> CreateCompany(CompanyDetailDto company);
         string getLastIDCompany();
         bool deleteCompany(string id);
-
+        Task<double> GetMoneyPerSlice(String companyID);
+        Task<int> GetNonCashMP(String companyID);
+        Task<int> GetCashMP(String companyID);
     }
 }

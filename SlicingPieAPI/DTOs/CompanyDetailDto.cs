@@ -12,6 +12,6 @@ namespace SlicingPieAPI.DTOs
         public string ComapnyIcon { get; set; }
         public int NonCashMultiplier { get; set; }
         public int CashMultiplier { get; set; }
-        public int? CashPerSlice { get; set; }
+        public double? CashPerSlice { get; set; }
     }
 }

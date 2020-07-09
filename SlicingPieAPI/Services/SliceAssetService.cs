@@ -14,12 +14,14 @@ namespace SlicingPieAPI.Services
         private readonly ISliceAssetRepository _sliceRepository;
         private readonly IStakeHolderRepository _shRepository;
         private readonly ITypeAssetRepo _typeRepository;
+        private readonly ICompanyRepository _cpRepository;
 
-        public SliceAssetService(ISliceAssetRepository sliceRepository, IStakeHolderRepository shRepository, ITypeAssetRepo typeRepository)
+        public SliceAssetService(ISliceAssetRepository sliceRepository, IStakeHolderRepository shRepository, ITypeAssetRepo typeRepository, ICompanyRepository cpRepository)
         {
             _sliceRepository = sliceRepository;
             _shRepository = shRepository;
             _typeRepository = typeRepository;
+            _cpRepository = cpRepository;
         }
 
         public async Task<bool> addSliceSV(String companyID, String userID, SliceAssetDetailDto asset)
@@ -27,9 +29,10 @@ namespace SlicingPieAPI.Services
             string lastid = await _sliceRepository.getLastIDAsset(companyID);
             string[] splitString = lastid.Split(' ');
 
-            SalaryGapDto salary = _shRepository.GetSalaryGap(userID, companyID).Result;
+            SalaryGapDto salary = await _shRepository.GetSalaryGap(userID, companyID);
             double? SalaryGap = salary.ShmarketSalary - salary.Shsalary;
 
+            double cashPerSlice = await _cpRepository.GetMoneyPerSlice(companyID);
 
             if (lastid == null || splitString.Length == 1)
             {
@@ -47,7 +50,10 @@ namespace SlicingPieAPI.Services
 
                 asset.AssetId = splitString[0] + " " + alphaPart + numberProject;
 
-                int multiplierInTime = Convert.ToInt32(_typeRepository.GetMultiplierById(Convert.ToInt32(asset.TypeAssetId)).Result);
+                String multiplier = await _typeRepository.GetMultiplierById(Convert.ToInt32(asset.TypeAssetId));
+                int multiplierInTime;
+                if (multiplier == "NC") multiplierInTime = await _cpRepository.GetNonCashMP(companyID);
+                else multiplierInTime = await _cpRepository.GetCashMP(companyID);
 
                 asset.MultiplierInTime = multiplierInTime;
                 switch (asset.TypeAssetId)
@@ -55,17 +61,29 @@ namespace SlicingPieAPI.Services
                     case 1:
                         {
                             double ManMonth = asset.Quantity / 160;
-                            double Slice = Convert.ToDouble(SalaryGap) / ManMonth * multiplierInTime;
+                            double Slice = ManMonth * Convert.ToDouble(SalaryGap) / cashPerSlice * multiplierInTime;
                             asset.AssetSlice = Slice;
                             break;
                         }
                     case 2:
                         {
-
+                            double Slice = asset.Quantity / cashPerSlice * multiplierInTime;
+                            asset.AssetSlice = Slice;
+                            break;
+                        }
+                    case 3:
+                        {
+                            double Slice = asset.Quantity / 500000 * multiplierInTime;
+                            asset.AssetSlice = Slice;
+                            break;
+                        }
+                    case 4:
+                        {
+                            double Slice = asset.Quantity / 500000;
+                            asset.AssetSlice = Slice;
                             break;
                         }
                 };
-                //double ManMonth = 
 
             }
 

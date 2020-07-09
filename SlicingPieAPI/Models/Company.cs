@@ -20,7 +20,7 @@ namespace SlicingPieAPI.Models
         public int NonCashMultiplier { get; set; }
         public int CashMultiplier { get; set; }
         public string Status { get; set; }
-        public int? CashPerSlice { get; set; }
+        public double? CashPerSlice { get; set; }
 
         public virtual ICollection<Project> Projects { get; set; }
         public virtual ICollection<SliceAsset> SliceAssets { get; set; }
