@@ -133,7 +133,7 @@ namespace SlicingPieAPI.Repository
                                     .Where(us => us.AccountId == userID && us.CompanyId == companyID && us.Shstatus == Status.ACTIVE)
                                     .Select(us => new SalaryGapDto{
                                         ShmarketSalary = us.ShmarketSalary,
-                                        Shsalary = us.ShmarketSalary,
+                                        Shsalary = us.Shsalary,
                                     })
                                     .FirstOrDefaultAsync();
             return salary;

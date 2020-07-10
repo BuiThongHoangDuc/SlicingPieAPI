@@ -18,7 +18,7 @@ namespace SlicingPieAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class StackHoldersController : ControllerBase
     {
 
@@ -51,9 +51,13 @@ namespace SlicingPieAPI.Controllers
         }
 
         [HttpGet("list")]
-        public IActionResult getType(String companyid, int typeid)
+        public async Task<IActionResult> getType(String companyid, int typeid)
         {
-            return Ok(_sliceService.getType(companyid, typeid));
+            var multiplier = await _context.TypeAssets
+                                            .Where(tp => tp.TypeAssetId == typeid)
+                                            .Select(ty => ty.MultiplierType)
+                                            .FirstOrDefaultAsync();
+            return Ok(multiplier);
         }
 
 

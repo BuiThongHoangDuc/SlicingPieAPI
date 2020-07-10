@@ -49,43 +49,42 @@ namespace SlicingPieAPI.Services
                 int numberProject = Int32.Parse(numberPart) + 1;
 
                 asset.AssetId = splitString[0] + " " + alphaPart + numberProject;
-
-                String multiplier = await _typeRepository.GetMultiplierById(Convert.ToInt32(asset.TypeAssetId));
-                int multiplierInTime;
-                if (multiplier == "NC") multiplierInTime = await _cpRepository.GetNonCashMP(companyID);
-                else multiplierInTime = await _cpRepository.GetCashMP(companyID);
-
-                asset.MultiplierInTime = multiplierInTime;
-                switch (asset.TypeAssetId)
-                {
-                    case 1:
-                        {
-                            double ManMonth = asset.Quantity / 160;
-                            double Slice = ManMonth * Convert.ToDouble(SalaryGap) / cashPerSlice * multiplierInTime;
-                            asset.AssetSlice = Slice;
-                            break;
-                        }
-                    case 2:
-                        {
-                            double Slice = asset.Quantity / cashPerSlice * multiplierInTime;
-                            asset.AssetSlice = Slice;
-                            break;
-                        }
-                    case 3:
-                        {
-                            double Slice = asset.Quantity / 500000 * multiplierInTime;
-                            asset.AssetSlice = Slice;
-                            break;
-                        }
-                    case 4:
-                        {
-                            double Slice = asset.Quantity / 500000;
-                            asset.AssetSlice = Slice;
-                            break;
-                        }
-                };
-
             }
+
+            String multiplier = await _typeRepository.GetMultiplierById(Convert.ToInt32(asset.TypeAssetId));
+            int multiplierInTime;
+            if (multiplier == "NC") multiplierInTime = await _cpRepository.GetNonCashMP(companyID);
+            else multiplierInTime = await _cpRepository.GetCashMP(companyID);
+
+            asset.MultiplierInTime = multiplierInTime;
+            switch (asset.TypeAssetId)
+            {
+                case 1:
+                    {
+                        double ManMonth = asset.Quantity / 160;
+                        double Slice = ManMonth * Convert.ToDouble(SalaryGap) / cashPerSlice * multiplierInTime;
+                        asset.AssetSlice = Slice;
+                        break;
+                    }
+                case 2:
+                    {
+                        double Slice = asset.Quantity / cashPerSlice * multiplierInTime;
+                        asset.AssetSlice = Slice;
+                        break;
+                    }
+                case 3:
+                    {
+                        double Slice = asset.Quantity / 500000 * multiplierInTime;
+                        asset.AssetSlice = Slice;
+                        break;
+                    }
+                case 4:
+                    {
+                        double Slice = asset.Quantity / 500000;
+                        asset.AssetSlice = Slice;
+                        break;
+                    }
+            };
 
             try
             {

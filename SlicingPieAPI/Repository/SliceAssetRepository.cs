@@ -4,6 +4,7 @@ using SlicingPieAPI.Enums;
 using SlicingPieAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -42,8 +43,9 @@ namespace SlicingPieAPI.Repository
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException e)
             {
+                Debug.WriteLine(e.InnerException.Message);
                 throw;
             }
         }
