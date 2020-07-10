@@ -96,15 +96,9 @@ namespace SlicingPieAPI.Services
                 return false;
             }
         }
-
-        public Task<IEnumerable<TypeAssetCompany>> getType(string companyid, int typeid)
-        {
-            return _sliceRepository.getType(companyid, typeid);
-        }
     }
     public interface ISliceAssetService
     {
         Task<bool> addSliceSV(String companyID, String userID, SliceAssetDetailDto asset);
-        Task<IEnumerable<TypeAssetCompany>> getType(String companyid, int typeid);
     }
 }

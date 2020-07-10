@@ -50,16 +50,6 @@ namespace SlicingPieAPI.Controllers
             else return Ok(list);
         }
 
-        [HttpGet("list")]
-        public async Task<IActionResult> getType(String companyid, int typeid)
-        {
-            var multiplier = await _context.TypeAssets
-                                            .Where(tp => tp.TypeAssetId == typeid)
-                                            .Select(ty => ty.MultiplierType)
-                                            .FirstOrDefaultAsync();
-            return Ok(multiplier);
-        }
-
 
         //// GET: api/StackHolders/5
         //[HttpGet("{id}")]

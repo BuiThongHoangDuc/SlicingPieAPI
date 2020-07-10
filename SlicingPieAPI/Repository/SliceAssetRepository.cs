@@ -63,18 +63,11 @@ namespace SlicingPieAPI.Repository
                                             .Select(slice => slice.AssetSlice).Sum();
             return totalSlice.Value;
         }
-
-        public async Task<IEnumerable<TypeAssetCompany>> getType(string companyid, int typeid)
-        {
-            var type = await _context.TypeAssetCompanies.Where(tp => tp.TypeAssetId == typeid && tp.CompanyId == companyid).ToListAsync();
-            return type;
-        }
     }
     public interface ISliceAssetRepository
     {
         double getTotalSliceSH(string companyID, string shID);
         Task<bool> addSlice(SliceAssetDetailDto asset);
         Task<string> getLastIDAsset(String companyID);
-        Task<IEnumerable<TypeAssetCompany>> getType(String companyid, int typeid);
     }
 }

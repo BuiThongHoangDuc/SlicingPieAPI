@@ -62,7 +62,9 @@ namespace SlicingPieAPI.Repository
                                         {
                                             ProjectId = pj.ProjectId,
                                             ProjectName = pj.ProjectName,
-                                        });
+                                            CompanyId = pj.CompanyId,
+                                            ProjectStatus = pj.ProjectStatus,
+                                        }) ;
             return listProject;
         }
 
