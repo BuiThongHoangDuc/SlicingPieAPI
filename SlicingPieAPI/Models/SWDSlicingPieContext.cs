@@ -110,6 +110,7 @@ namespace SlicingPieAPI.Models
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.CompanyId)
+                    .IsRequired()
                     .HasColumnName("CompanyID")
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -127,6 +128,7 @@ namespace SlicingPieAPI.Models
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.Projects)
                     .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Project__Company__5CD6CB2B");
             });
 
@@ -178,6 +180,8 @@ namespace SlicingPieAPI.Models
                 entity.Property(e => e.AssetStatus)
                     .HasMaxLength(1)
                     .IsUnicode(false);
+
+                entity.Property(e => e.CashPerSlice).HasColumnName("cashPerSlice");
 
                 entity.Property(e => e.CompanyId)
                     .HasColumnName("CompanyID")

@@ -10,6 +10,7 @@ namespace SlicingPieAPI.Enums
         public static readonly string ACTIVE = "1";
         public static readonly String INACTIVE = "2";
         public static readonly String OUTCOMPANY = "3";
+        public static readonly String WAITTOCONFIRM = "4";
     }
 
 }

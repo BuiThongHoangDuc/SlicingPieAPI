@@ -206,6 +206,21 @@ namespace SlicingPieAPI.Controllers
 
         }
 
+        [HttpGet("{companyID}/Contribution")]
+        public async Task<ActionResult> GetListContribution(String companyID)
+        {
+            var ListContribution = await _slice.GetListSlice(companyID);
+            if (ListContribution == null) return NotFound();
+            else return Ok(ListContribution);
+        }
+        [HttpGet("{companyID}/StakeHoler/{shID}/Contribution")]
+        public async Task<ActionResult> GetListContributionSH(String companyID, String shID)
+        {
+            var ListContribution = await _slice.GetListSliceSHSV(companyID, shID);
+            if (ListContribution == null) return NotFound();
+            else return Ok(ListContribution);
+        }
+
         //// GET: api/Accounts/5
         //[HttpGet("{id}")]
         //public async Task<ActionResult<Account>> GetAccount(string id)

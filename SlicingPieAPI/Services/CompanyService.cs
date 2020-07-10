@@ -153,6 +153,5 @@ namespace SlicingPieAPI.Services
         Task AddProjectSV(String companyID, ProjectDto project);
         Task<String> udpateProjectSV(String id, ProjectDto project);
         bool deleteProjectSV(string projectid);
-
     }
 }
