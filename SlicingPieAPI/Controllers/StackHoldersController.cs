@@ -50,28 +50,13 @@ namespace SlicingPieAPI.Controllers
             else return Ok(list);
         }
         [HttpGet("list")]
-        public async Task<IActionResult> getContribute(String assetID)
+        public async Task<ActionResult> getContribute(String companyID)
         {
 
-            //var Contribution = await _context.SliceAssets
-            //                                .Where(asset => asset.AssetStatus == Status.ACTIVE && asset.AssetId == assetID)
-            //                                .Select(asset => new SliceAssetDetailStringDto
-            //                                {
-            //                                    AssetId = asset.AssetId,
-            //                                    AccountName = asset.Account.StakeHolders
-            //                                                   .Where(sh => sh.CompanyId == asset.CompanyId && sh.AccountId == asset.AccountId)
-            //                                                   .Select(sh => sh.ShnameForCompany).FirstOrDefault(),
-            //                                    AssetSlice = asset.AssetSlice,
-            //                                    CompanyName = asset.Company.CompanyName,
-            //                                    Description = asset.Description,
-            //                                    MultiplierInTime = asset.MultiplierInTime,
-            //                                    ProjectName = asset.Project.ProjectName,
-            //                                    Quantity = asset.Quantity,
-            //                                    TermName = asset.Term.TermName,
-            //                                    TimeAsset = asset.TimeAsset,
-            //                                    TypeAssetName = asset.TypeAsset.NameAsset,
-            //                                }).FirstOrDefaultAsync();
-            return Ok();
+            var listType = await _context.TypeAssetCompanies
+                                            .Where(type => type.CompanyId == companyID)
+                                            .Select(type => type.TypeAsset.NameAsset).ToListAsync();
+            return Ok(listType);
         }
 
 

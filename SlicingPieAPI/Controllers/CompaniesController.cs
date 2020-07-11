@@ -73,6 +73,14 @@ namespace SlicingPieAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("{companyID}/stake-holder/{userID}")]
+        public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> GetListSHCompany(string companyID, String userID)
+        {
+            var Name = await _company.GetNameStakeHolderSV(userID,companyID);
+            if (Name == null) return NotFound();
+            else return Ok(Name);
+        }
+
         // GET: api/Companies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CompanyDetailDto>> GetCompany(string id)
@@ -213,6 +221,7 @@ namespace SlicingPieAPI.Controllers
             if (ListContribution == null) return NotFound();
             else return Ok(ListContribution);
         }
+
         [HttpGet("{companyID}/StakeHoler/{shID}/Contribution")]
         public async Task<ActionResult> GetListContributionSH(String companyID, String shID)
         {
@@ -220,6 +229,15 @@ namespace SlicingPieAPI.Controllers
             if (ListContribution == null) return NotFound();
             else return Ok(ListContribution);
         }
+        
+        [HttpGet("{companyID}/TypeAsset")]
+        public async Task<ActionResult> GetListTypeAsset(String companyID)
+        {
+            var ListAsset = await _company.GetListTypeAssetByCompanyIDSV(companyID);
+            if (ListAsset == null) return NotFound();
+            else return Ok(ListAsset);
+        }
+
 
         //// GET: api/Accounts/5
         //[HttpGet("{id}")]

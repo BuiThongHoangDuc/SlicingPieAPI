@@ -138,6 +138,12 @@ namespace SlicingPieAPI.Repository
                                     .FirstOrDefaultAsync();
             return salary;
         }
+
+        public async Task<string> GetNameStakeHolder(string userID, string companyID)
+        {
+            var Name = await _context.StakeHolders.Where(sh => sh.AccountId == userID && sh.CompanyId == companyID).Select(sh => sh.ShnameForCompany).FirstOrDefaultAsync();
+            return Name;
+        }
     }
 
     public interface IStakeHolderRepository
@@ -157,5 +163,6 @@ namespace SlicingPieAPI.Repository
         IQueryable<StakeHolerDetailDto> getStakeHolerDetail(String SHId);
 
         Task<SalaryGapDto> GetSalaryGap(String userID,String companyID);
+        Task<String> GetNameStakeHolder(String userID, String companyID);
     }
 }
