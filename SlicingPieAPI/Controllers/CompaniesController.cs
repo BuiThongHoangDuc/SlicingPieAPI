@@ -144,6 +144,22 @@ namespace SlicingPieAPI.Controllers
             else return Ok(listProject);
         }
 
+        [HttpGet("term/{id}/project")]
+        public async Task<ActionResult<IEnumerable<ProjectDto>>> GetTermProjectCompany(int id)
+        {
+            var listTerm = await _company.getTermProjectCompanySV(id);
+            if (listTerm == null) return NotFound();
+            else return Ok(listTerm);
+        }
+
+        [HttpGet("{id}/list-term")]
+        public async Task<ActionResult<IEnumerable<ProjectDto>>> GetTermCompany(String id)
+        {
+            var listTerm = await _company.GetListTermCompanySV(id);
+            if (listTerm == null) return NotFound();
+            else return Ok(listTerm);
+        }
+
         [HttpPost("{id}/project")]
         public async Task<ActionResult> CreateProject(String id, ProjectDto project)
         {

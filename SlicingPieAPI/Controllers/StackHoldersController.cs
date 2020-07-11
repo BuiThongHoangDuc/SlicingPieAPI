@@ -53,10 +53,8 @@ namespace SlicingPieAPI.Controllers
         public async Task<ActionResult> getContribute(String companyID)
         {
 
-            var listType = await _context.TypeAssetCompanies
-                                            .Where(type => type.CompanyId == companyID)
-                                            .Select(type => type.TypeAsset.NameAsset).ToListAsync();
-            return Ok(listType);
+            var termProject = await _context.ProjectDetails.Where(pj => pj.ProjectId == pj.ProjectId).Select(pj => pj.Term.TermName).ToListAsync();
+            return Ok(termProject);
         }
 
 
