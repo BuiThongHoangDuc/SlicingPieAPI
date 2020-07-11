@@ -14,10 +14,10 @@ namespace SlicingPieAPI.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly SWD_SlicingPieContext _context;
+        private readonly SWDSlicingPieContext _context;
         private readonly IAccountService _accountService;
         private const int ITEM_PER_PAGE = 5;
-        public AccountsController(SWD_SlicingPieContext context, IAccountService accountService)
+        public AccountsController(SWDSlicingPieContext context, IAccountService accountService)
         {
             _context = context;
             _accountService = accountService;

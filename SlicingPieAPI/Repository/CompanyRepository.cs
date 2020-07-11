@@ -11,8 +11,8 @@ namespace SlicingPieAPI.Repository
 {
     public class CompanyRepository : ICompanyRepository
     {
-        private readonly SWD_SlicingPieContext _context;
-        public CompanyRepository(SWD_SlicingPieContext context)
+        private readonly SWDSlicingPieContext _context;
+        public CompanyRepository(SWDSlicingPieContext context)
         {
             _context = context;
         }

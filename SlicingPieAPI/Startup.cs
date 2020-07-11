@@ -87,7 +87,7 @@ namespace SlicingPieAPI
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                     };
                 });
-            services.AddDbContext<SWD_SlicingPieContext>(opt => 
+            services.AddDbContext<SWDSlicingPieContext>(opt => 
                 opt.UseSqlServer(Configuration.GetConnectionString("SWD_SlicingPieDB")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
@@ -110,6 +110,7 @@ namespace SlicingPieAPI
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<ITypeAssetRepo, TypeAssetRepo>();
             services.AddScoped<ITypeAssetCompanyRepo, TypeAssetCompanyRepo>();
+            services.AddScoped<ITermProjectCompanyRepo, TermProjectCompanyRepo>();
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ICompanyService, CompanyService>();

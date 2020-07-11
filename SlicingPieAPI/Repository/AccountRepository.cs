@@ -12,8 +12,8 @@ namespace SlicingPieAPI.Repository
     public class AccountRepository : IAccountRepository
     {
 
-        private readonly SWD_SlicingPieContext _context;
-        public AccountRepository(SWD_SlicingPieContext context) {
+        private readonly SWDSlicingPieContext _context;
+        public AccountRepository(SWDSlicingPieContext context) {
             _context = context;
         }
 

@@ -17,12 +17,14 @@ namespace SlicingPieAPI.Services
         private readonly IProjectRepository _projectRepository;
         private readonly ITypeAssetRepo _typeAssetRepo;
         private readonly ITypeAssetCompanyRepo _typeAssetCompanyRepo;
+        private readonly ITermProjectCompanyRepo _termProjectRepo;
         public CompanyService(ICompanyRepository company,
                                 IStakeHolderRepository stakeHolder,
                                 ISliceAssetRepository sliceRepository,
                                 IProjectRepository projectRepository,
                                 ITypeAssetRepo typeAssetRepo,
-                                ITypeAssetCompanyRepo typeAssetCompanyRepo)
+                                ITypeAssetCompanyRepo typeAssetCompanyRepo,
+                                ITermProjectCompanyRepo termProjectRepo)
         {
             _company = company;
             _stakeHolder = stakeHolder;
@@ -30,6 +32,7 @@ namespace SlicingPieAPI.Services
             _projectRepository = projectRepository;
             _typeAssetRepo = typeAssetRepo;
             _typeAssetCompanyRepo = typeAssetCompanyRepo;
+            _termProjectRepo = termProjectRepo;
         }
 
         public List<object> getListCompany(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected)
@@ -138,6 +141,26 @@ namespace SlicingPieAPI.Services
         {
             return _projectRepository.deleteProject(projectid);
         }
+
+        public Task<IEnumerable<TypeAssetDto>> GetListTypeAssetByCompanyIDSV(string companyID)
+        {
+            return _typeAssetCompanyRepo.GetListTypeAssetByCompanyID(companyID);
+        }
+
+        public Task<string> GetNameStakeHolderSV(string userID, string companyID)
+        {
+            return _stakeHolder.GetNameStakeHolder(userID, companyID);
+        }
+
+        public Task<IEnumerable<ProjectDto>> getTermProjectCompanySV(int termID)
+        {
+            return _termProjectRepo.getTermProjectCompany(termID);
+        }
+
+        public Task<IEnumerable<TermDto>> GetListTermCompanySV(string companyID)
+        {
+            return _termProjectRepo.GetListTermCompany(companyID);
+        }
     }
 
     public interface ICompanyService
@@ -153,6 +176,11 @@ namespace SlicingPieAPI.Services
         Task AddProjectSV(String companyID, ProjectDto project);
         Task<String> udpateProjectSV(String id, ProjectDto project);
         bool deleteProjectSV(string projectid);
+        Task<IEnumerable<TypeAssetDto>> GetListTypeAssetByCompanyIDSV(String companyID);
+        Task<String> GetNameStakeHolderSV(String userID, String companyID);
+        Task<IEnumerable<ProjectDto>> getTermProjectCompanySV(int termID);
+        Task<IEnumerable<TermDto>> GetListTermCompanySV(String companyID);
+
 
     }
 }

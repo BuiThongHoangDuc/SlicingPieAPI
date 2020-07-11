@@ -73,6 +73,14 @@ namespace SlicingPieAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("{companyID}/stake-holder/{userID}")]
+        public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> GetListSHCompany(string companyID, String userID)
+        {
+            var Name = await _company.GetNameStakeHolderSV(userID,companyID);
+            if (Name == null) return NotFound();
+            else return Ok(Name);
+        }
+
         // GET: api/Companies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CompanyDetailDto>> GetCompany(string id)
@@ -134,6 +142,22 @@ namespace SlicingPieAPI.Controllers
             var listProject = await _company.getListProject(id).ToListAsync();
             if (listProject == null) return NotFound();
             else return Ok(listProject);
+        }
+
+        [HttpGet("term/{id}/project")]
+        public async Task<ActionResult<IEnumerable<ProjectDto>>> GetTermProjectCompany(int id)
+        {
+            var listTerm = await _company.getTermProjectCompanySV(id);
+            if (listTerm == null) return NotFound();
+            else return Ok(listTerm);
+        }
+
+        [HttpGet("{id}/list-term")]
+        public async Task<ActionResult<IEnumerable<TermDto>>> GetTermCompany(String id)
+        {
+            var listTerm = await _company.GetListTermCompanySV(id);
+            if (listTerm == null) return NotFound();
+            else return Ok(listTerm);
         }
 
         [HttpPost("{id}/project")]
@@ -205,6 +229,31 @@ namespace SlicingPieAPI.Controllers
             }
 
         }
+
+        [HttpGet("{companyID}/Contribution")]
+        public async Task<ActionResult> GetListContribution(String companyID)
+        {
+            var ListContribution = await _slice.GetListSlice(companyID);
+            if (ListContribution == null) return NotFound();
+            else return Ok(ListContribution);
+        }
+
+        [HttpGet("{companyID}/StakeHoler/{shID}/Contribution")]
+        public async Task<ActionResult> GetListContributionSH(String companyID, String shID)
+        {
+            var ListContribution = await _slice.GetListSliceSHSV(companyID, shID);
+            if (ListContribution == null) return NotFound();
+            else return Ok(ListContribution);
+        }
+        
+        [HttpGet("{companyID}/TypeAsset")]
+        public async Task<ActionResult> GetListTypeAsset(String companyID)
+        {
+            var ListAsset = await _company.GetListTypeAssetByCompanyIDSV(companyID);
+            if (ListAsset == null) return NotFound();
+            else return Ok(ListAsset);
+        }
+
 
         //// GET: api/Accounts/5
         //[HttpGet("{id}")]

@@ -18,16 +18,16 @@ namespace SlicingPieAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class StackHoldersController : ControllerBase
     {
 
         private const int ITEM_PER_PAGE = 5;
-        private readonly SWD_SlicingPieContext _context;
+        private readonly SWDSlicingPieContext _context;
         private readonly IStakeHolderService _shService;
         private readonly ISliceAssetService _sliceService;
 
-        public StackHoldersController(IStakeHolderService shService, SWD_SlicingPieContext context, ISliceAssetService sliceService)
+        public StackHoldersController(IStakeHolderService shService, SWDSlicingPieContext context, ISliceAssetService sliceService)
         {
             _shService = shService;
             _context = context;
@@ -49,12 +49,14 @@ namespace SlicingPieAPI.Controllers
             if (list.Count == 0) { return NotFound(); }
             else return Ok(list);
         }
-
         [HttpGet("list")]
-        public IActionResult getType(String companyid, int typeid)
+        public async Task<ActionResult> getContribute(String companyID)
         {
-            return Ok(_sliceService.getType(companyid, typeid));
+
+            var termProject = await _context.ProjectDetails.Where(pj => pj.ProjectId == pj.ProjectId).Select(pj => pj.Term.TermName).ToListAsync();
+            return Ok(termProject);
         }
+
 
 
         //// GET: api/StackHolders/5

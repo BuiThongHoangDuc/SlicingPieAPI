@@ -9,9 +9,9 @@ namespace SlicingPieAPI.Repository
 {
     public class TypeAssetRepo : ITypeAssetRepo
     {
-        private readonly SWD_SlicingPieContext _context;
+        private readonly SWDSlicingPieContext _context;
 
-        public TypeAssetRepo(SWD_SlicingPieContext context)
+        public TypeAssetRepo(SWDSlicingPieContext context)
         {
             _context = context;
         }

@@ -13,9 +13,9 @@ namespace SlicingPieAPI.Repository
     public class StakeHolderRepository : IStakeHolderRepository
     {
         
-        private readonly SWD_SlicingPieContext _context;
+        private readonly SWDSlicingPieContext _context;
 
-        public StakeHolderRepository(SWD_SlicingPieContext context)
+        public StakeHolderRepository(SWDSlicingPieContext context)
         {
             _context = context;
         }
@@ -133,10 +133,16 @@ namespace SlicingPieAPI.Repository
                                     .Where(us => us.AccountId == userID && us.CompanyId == companyID && us.Shstatus == Status.ACTIVE)
                                     .Select(us => new SalaryGapDto{
                                         ShmarketSalary = us.ShmarketSalary,
-                                        Shsalary = us.ShmarketSalary,
+                                        Shsalary = us.Shsalary,
                                     })
                                     .FirstOrDefaultAsync();
             return salary;
+        }
+
+        public async Task<string> GetNameStakeHolder(string userID, string companyID)
+        {
+            var Name = await _context.StakeHolders.Where(sh => sh.AccountId == userID && sh.CompanyId == companyID).Select(sh => sh.ShnameForCompany).FirstOrDefaultAsync();
+            return Name;
         }
     }
 
@@ -157,5 +163,6 @@ namespace SlicingPieAPI.Repository
         IQueryable<StakeHolerDetailDto> getStakeHolerDetail(String SHId);
 
         Task<SalaryGapDto> GetSalaryGap(String userID,String companyID);
+        Task<String> GetNameStakeHolder(String userID, String companyID);
     }
 }

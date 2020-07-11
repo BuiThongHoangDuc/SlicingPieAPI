@@ -17,6 +17,8 @@ namespace SlicingPieAPI.Models
         public string AssetStatus { get; set; }
         public double? AssetSlice { get; set; }
         public string CompanyId { get; set; }
+        public double? SalaryGapInTime { get; set; }
+        public double? CashPerSlice { get; set; }
 
         public virtual Account Account { get; set; }
         public virtual Company Company { get; set; }
