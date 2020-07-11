@@ -11,7 +11,7 @@ namespace SlicingPieAPI.DTOs
         public double Quantity { get; set; }
         public string Description { get; set; }
         public DateTime TimeAsset { get; set; }
-        public string ProjectId { get; set; }
+        public string Project { get; set; }
         public String NamePerson { get; set; }
         public String TypeAsset { get; set; }
     }

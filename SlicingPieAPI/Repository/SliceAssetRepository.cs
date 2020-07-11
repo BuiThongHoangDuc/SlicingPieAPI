@@ -90,7 +90,7 @@ namespace SlicingPieAPI.Repository
                                                                .Select(sh => sh.ShnameForCompany).FirstOrDefault(),
                                                Quantity = asset.Quantity,
                                                Description = asset.Description,
-                                               ProjectId = asset.ProjectId,
+                                               Project = asset.Project.ProjectName,
                                                TimeAsset = asset.TimeAsset,
                                                TypeAsset = asset.TypeAsset.NameAsset,
                                            }).ToListAsync();
@@ -109,7 +109,7 @@ namespace SlicingPieAPI.Repository
                                                                .Select(sh => sh.ShnameForCompany).FirstOrDefault(),
                                                Quantity = asset.Quantity,
                                                Description = asset.Description,
-                                               ProjectId = asset.ProjectId,
+                                               Project = asset.Project.ProjectName,
                                                TimeAsset = asset.TimeAsset,
                                                TypeAsset = asset.TypeAsset.NameAsset,
                                            }).ToListAsync();
