@@ -152,7 +152,7 @@ namespace SlicingPieAPI.Services
             return _stakeHolder.GetNameStakeHolder(userID, companyID);
         }
 
-        public Task<IEnumerable<string>> getTermProjectCompanySV(int termID)
+        public Task<IEnumerable<ProjectDto>> getTermProjectCompanySV(int termID)
         {
             return _termProjectRepo.getTermProjectCompany(termID);
         }
@@ -178,7 +178,7 @@ namespace SlicingPieAPI.Services
         bool deleteProjectSV(string projectid);
         Task<IEnumerable<String>> GetListTypeAssetByCompanyIDSV(String companyID);
         Task<String> GetNameStakeHolderSV(String userID, String companyID);
-        Task<IEnumerable<String>> getTermProjectCompanySV(int termID);
+        Task<IEnumerable<ProjectDto>> getTermProjectCompanySV(int termID);
         Task<IEnumerable<TermDto>> GetListTermCompanySV(String companyID);
 
 

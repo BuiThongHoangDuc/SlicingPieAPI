@@ -153,7 +153,7 @@ namespace SlicingPieAPI.Controllers
         }
 
         [HttpGet("{id}/list-term")]
-        public async Task<ActionResult<IEnumerable<ProjectDto>>> GetTermCompany(String id)
+        public async Task<ActionResult<IEnumerable<TermDto>>> GetTermCompany(String id)
         {
             var listTerm = await _company.GetListTermCompanySV(id);
             if (listTerm == null) return NotFound();
