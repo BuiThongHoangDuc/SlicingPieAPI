@@ -142,7 +142,7 @@ namespace SlicingPieAPI.Services
             return _projectRepository.deleteProject(projectid);
         }
 
-        public Task<IEnumerable<string>> GetListTypeAssetByCompanyIDSV(string companyID)
+        public Task<IEnumerable<TypeAssetDto>> GetListTypeAssetByCompanyIDSV(string companyID)
         {
             return _typeAssetCompanyRepo.GetListTypeAssetByCompanyID(companyID);
         }
@@ -176,7 +176,7 @@ namespace SlicingPieAPI.Services
         Task AddProjectSV(String companyID, ProjectDto project);
         Task<String> udpateProjectSV(String id, ProjectDto project);
         bool deleteProjectSV(string projectid);
-        Task<IEnumerable<String>> GetListTypeAssetByCompanyIDSV(String companyID);
+        Task<IEnumerable<TypeAssetDto>> GetListTypeAssetByCompanyIDSV(String companyID);
         Task<String> GetNameStakeHolderSV(String userID, String companyID);
         Task<IEnumerable<ProjectDto>> getTermProjectCompanySV(int termID);
         Task<IEnumerable<TermDto>> GetListTermCompanySV(String companyID);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SlicingPieAPI.DTOs;
 using SlicingPieAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -33,18 +34,22 @@ namespace SlicingPieAPI.Repository
                 throw;
             }
         }
-        public async Task<IEnumerable<string>> GetListTypeAssetByCompanyID(string companyID)
+        public async Task<IEnumerable<TypeAssetDto>> GetListTypeAssetByCompanyID(string companyID)
         {
             var listType = await _context.TypeAssetCompanies
                                             .Where(type => type.CompanyId == companyID)
-                                            .Select(type => type.TypeAsset.NameAsset).ToListAsync();
+                                            .Select(type => new TypeAssetDto { 
+                                                TypeAssetId = type.TypeAssetId,
+                                                NameAsset = type.TypeAsset.NameAsset,
+                                                MultiplierType = type.TypeAsset.MultiplierType,
+                                            }).ToListAsync();
             return listType;
         }
     }
     public interface ITypeAssetCompanyRepo
     {
         Task CreateAssetCompany(int typeAssetID, String companyID);
-        Task<IEnumerable<String>> GetListTypeAssetByCompanyID(String companyID);
+        Task<IEnumerable<TypeAssetDto>> GetListTypeAssetByCompanyID(String companyID);
 
     }
 }
