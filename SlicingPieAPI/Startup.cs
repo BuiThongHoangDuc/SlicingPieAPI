@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using SlicingPieAPI.Models;
 using SlicingPieAPI.Repository;
 using SlicingPieAPI.Services;
+using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace SlicingPieAPI
@@ -103,6 +104,14 @@ namespace SlicingPieAPI
                     });
             });
 
+
+            // Add redis cache
+            IConnectionMultiplexer redis = ConnectionMultiplexer.Connect(Configuration.GetConnectionString("Redis"));
+            services.AddScoped(s => redis.GetDatabase());
+
+                
+
+            // Dependency Injection
             services.AddScoped<IStakeHolderRepository, StakeHolderRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();

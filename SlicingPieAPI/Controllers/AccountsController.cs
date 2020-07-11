@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using System.Drawing.Printing;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
+using SlicingPieAPI.DTOs;
+using SlicingPieAPI.Helper;
 using SlicingPieAPI.Models;
 using SlicingPieAPI.Services;
+using StackExchange.Redis;
 
 namespace SlicingPieAPI.Controllers
 {
@@ -16,11 +19,15 @@ namespace SlicingPieAPI.Controllers
     {
         private readonly SWDSlicingPieContext _context;
         private readonly IAccountService _accountService;
+        private IDatabase _redisCache;
         private const int ITEM_PER_PAGE = 5;
-        public AccountsController(SWDSlicingPieContext context, IAccountService accountService)
+
+
+        public AccountsController(SWDSlicingPieContext context, IAccountService accountService, IDatabase redisCache)
         {
             _context = context;
             _accountService = accountService;
+            _redisCache = redisCache;
         }
 
         // GET: api/Accounts
@@ -30,12 +37,46 @@ namespace SlicingPieAPI.Controllers
             int page_index = -1,
             string field_selected = "")
         {
+            List<Object> list;
             if (string.IsNullOrEmpty(sort_type)) sort_type = "asc";
             if (string.IsNullOrEmpty(field_selected)) field_selected = "AccountId, NameAccount, EmailAccount, PhoneAccount, StatusId, RoleId";
 
-            var list = _accountService.getAccount(name, sort_type, page_index, ITEM_PER_PAGE, field_selected);
-            if (list.Count == 0) { return NotFound(); }
-            else return Ok(list);
+            if(name == "" && sort_type == "asc" && page_index == -1 && field_selected == "AccountId, NameAccount, EmailAccount, PhoneAccount, StatusId, RoleId")
+            {
+                var result = RedisCacheHelper.Get("ListAccounts", _redisCache);
+
+                if (result == null)
+                {
+                    list = _accountService.getAccount(name, sort_type, page_index, ITEM_PER_PAGE, field_selected);
+                    
+                    
+                    if(list == null)
+                    {
+                        return NotFound();
+                    } else
+                    {
+                        var data = JsonConvert.SerializeObject(list);
+                        List<AccountDto> listDto = JsonConvert.DeserializeObject<List<AccountDto>>(data);
+
+                        RedisCacheHelper.Set("ListAccounts", listDto, _redisCache);
+
+                        return Ok(list);
+                    }
+
+                } else
+                {        
+                    return Ok(result);
+                }
+            } else
+            {
+                list = _accountService.getAccount(name, sort_type, page_index, ITEM_PER_PAGE, field_selected);
+                if (list.Count == 0) { return NotFound(); }
+                else return Ok(list);
+            }
+
+
+            
+        
         }
 
         //// GET: api/Accounts/5
