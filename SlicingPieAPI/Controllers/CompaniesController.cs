@@ -60,7 +60,7 @@ namespace SlicingPieAPI.Controllers
             var shID = claim[0].Value;
             var role = Convert.ToInt32(claim[1].Value);
 
-            if (role == Role.MANAGER)
+            if (role == Role.MANAGER && role == Role.ADMIN)
             {
                 var info = await _company.getListSHComapny(id);
                 if (info.ToList().Count == 0) return NotFound();
