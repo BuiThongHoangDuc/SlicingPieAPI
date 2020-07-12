@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SlicingPieAPI.Repository
@@ -72,9 +73,13 @@ namespace SlicingPieAPI.Repository
         }
 
         public async Task<string> getLastIDAsset(String companyID)
-
         {
-            var lastID = await _context.SliceAssets.Where(asset => asset.AssetStatus == Status.ACTIVE && asset.CompanyId == companyID).OrderByDescending(asset => asset.AssetId).Select(asset => asset.AssetId).FirstOrDefaultAsync();
+            Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
+            var lastID = await _context.SliceAssets
+                .Where(asset => asset.AssetStatus == Status.ACTIVE && asset.CompanyId == companyID)
+                .OrderBy(asset => asset.AssetId)
+                .Select(asset => asset.AssetId)
+                .FirstOrDefaultAsync();
             return lastID;
         }
 
