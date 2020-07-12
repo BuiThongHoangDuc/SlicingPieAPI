@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "slicingpieproject",
+  "private_key_id": "9b006e535ee5ac42def6391e8d2eb6c3ef80b874",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEugIBADANBgkqhkiG9w0BAQEFAASCBKQwggSgAgEAAoIBAQCVB/ftdWMp3fZ0\ndfrIqeHBFwizvdzCQhp4+H+xc+67REC7x3TZuE0QdJaOf6aVT0Fwpbk3Rtaos6mw\nRUbtFPMunuD7P+5q/9ZdSSSk7fckCyU66M1Fsi4QQK41ELPwFbHxfp3mA9jMPx82\nubaK0bZlMK17+8ZBSSsIMg5oPLY36Inx5mDb4q7BEnqiZZLlXAOXcaFYTu72bcmJ\nD0/otYhlAnG8tq1ZCz1IJU9OYogn+G4RwflRttm4imLQmzOZR2jJYIKrfNVcdw7C\no2hgkUkPC2hj9qACcFE/Abq/0Lrw+m3KUlR1BJtlfP4rF8q+O5kFg1RTK2CnRO6g\nZbBOThKFAgMBAAECggEAJE8XsWvbKBUi+YbQ/did3uxcu2XzhgSS7IwmmDZVoJxl\nZRqYNn83j13IXJlvHYt8txQ5RuVkYR+8pOyL9jEXenFNAQm3baw9LucmHWS4xLhO\nbsbPVD6wCFep2dXi8QhoHR0rHSIszL5IPY4LklC7rnWonr9dswQ/jrSbW/wGrSIE\nZEaY9nsqVm67PP21NRXJI+r8KF0my3A3J6CpbZvj1iW12KgX6C2hKYdXc3pR2D11\n/qfqw+m+XYaase8jywzu3uuVm1ePl4IcNbNLrhqmUCO7JcdrSb73VxPHAnNqyrJe\nPaOKaR+q5axNCR617kYeZk/7C4T8cdaXEQ1r17qBAQKBgQDEE0IwGWdzIV27a5ma\nomd4XXGVO+q/tlpoOH6SSV/+NBnnXAvrIoJp08FHWZUqP4anfOiWcpK+UFvZUrCX\nJMWziViraRFJvFWFYGBQFmhdsDpsw4Vqed6Wf59u/AhAA3cVaQuIV6QgW+RZXbPb\nWGD4gi3qU/jzFO0xWpiErcgvxQKBgQDClAYNcAVw3C6B4EBJWBZB/gS6TfoG7wdE\nAj8t+lETUj+Vi/kq1ylDcW690n7AY+DNCngbWdFjU7VCaJx0TiTYglola/28abxO\n8kNUS4iMy3COMV9AQcd4j/jowcWrpoQdppdMbsqinh+ZSKgbYHdSyzhGt1H7TonP\n6KhT/vPDwQKBgBECLqqneX7WNSBN7CwqzFj3miO859crhVonFGuyK76MXHbiWDJU\ncwWlFc4Pqk3Y5uBeiHqMg8g4hk8qyiDCUtgJIQT1f0drK+v++TvZRcJiyB6pM0iS\nO8nIVlc1S63p3wmfbB2upJEeB4ftBe4QE5FbEYqTMDQ963lth29y97uVAn9eP1Sv\nLZN1FzFvty9sVz5wuJmRpDN3KFBcoLn5i0W6Fhy2UxZdqdpS0J7TUyISDk7VAj0r\nAlZpxiIGCKW/sBooxPrlJWnB2XVcx/vU2MFLcT8ToNaCSVpVC2eFVlZozj8wHYEr\nhH6iRfUISikjGZayg7y+hA0xrNkT252tEdEBAoGAVZlrxwSr6+vWQq2QJJBqoC/U\nkVBFx7QrF1rpuH3b3R8poaryMHRilgQ6YrqvsXoslirz1XBT8qdE0BdzUMAELwSU\nW79T3MW53Ja8CeuOgHsheYK8uOMG9+Lgq5sYtX53EisESVGVQ33y9R/6oYuC7Ngh\nbvcuI4ojkAGp2bOmpGA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "sheets@slicingpieproject.iam.gserviceaccount.com",
+  "client_id": "100937504446905859068",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sheets%40slicingpieproject.iam.gserviceaccount.com"
+}

@@ -168,6 +168,12 @@ namespace SlicingPieAPI.Repository
             }
 
         }
+
+        public async Task<SliceAsset> GetAssetForUpdate(String assetID)
+        {
+            return await _context.SliceAssets.FindAsync(assetID);
+        }
+
     }
     public interface ISliceAssetRepository
     {
@@ -179,5 +185,6 @@ namespace SlicingPieAPI.Repository
         Task<SliceAssetDetailStringDto> GetSliceByID(String assetID);
         Task UpdateAsset(String assetID, SliceAssetDetailStringDto asset);
         Task<bool> DeleteAsset(String asssetID);
+        Task<SliceAsset> GetAssetForUpdate(String assetID);
     }
 }

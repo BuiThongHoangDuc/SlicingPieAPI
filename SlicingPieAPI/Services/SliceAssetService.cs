@@ -134,24 +134,25 @@ namespace SlicingPieAPI.Services
 
         public async Task<bool> UpdateAssetSV(string assetID, SliceAssetDetailStringDto asset)
         {
+            var assetBeforUpdate = _sliceRepository.GetAssetForUpdate(assetID).Result;
             switch (asset.TypeAssetId)
             {
                 case 1:
                     {
                         double ManMonth = asset.Quantity / 160;
-                        double Slice = ManMonth * Convert.ToDouble(asset.SalaryGapInTime) / (double)asset.CashPerSlice * asset.MultiplierInTime;
+                        double Slice = ManMonth * Convert.ToDouble(asset.SalaryGapInTime) / (double)assetBeforUpdate.CashPerSlice * assetBeforUpdate.MultiplierInTime;
                         asset.AssetSlice = Slice;
                         break;
                     }
                 case 2:
                     {
-                        double Slice = asset.Quantity / (double)asset.CashPerSlice * asset.MultiplierInTime;
+                        double Slice = asset.Quantity / (double)assetBeforUpdate.CashPerSlice * assetBeforUpdate.MultiplierInTime;
                         asset.AssetSlice = Slice;
                         break;
                     }
                 case 3:
                     {
-                        double Slice = asset.Quantity / 500000 * asset.MultiplierInTime;
+                        double Slice = asset.Quantity / 500000 * assetBeforUpdate.MultiplierInTime;
                         asset.AssetSlice = Slice;
                         break;
                     }

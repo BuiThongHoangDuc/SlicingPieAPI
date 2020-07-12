@@ -16,12 +16,14 @@ namespace SlicingPieAPI.Controllers
         private readonly SWDSlicingPieContext _context;
         private readonly IStakeHolderService _shService;
         private readonly ISliceAssetService _sliceService;
+        private readonly SheetsAPI _sheet;
 
-        public SliceAssetController(IStakeHolderService shService, SWDSlicingPieContext context, ISliceAssetService sliceService)
+        public SliceAssetController(IStakeHolderService shService, SWDSlicingPieContext context, ISliceAssetService sliceService, SheetsAPI sheet)
         {
             _shService = shService;
             _context = context;
             _sliceService = sliceService;
+            _sheet = sheet;
         }
 
         // GET: api/Slice/5
@@ -46,7 +48,8 @@ namespace SlicingPieAPI.Controllers
             try
             {
                 bool check = await _sliceService.UpdateAssetSV(id, asset);
-                if (check) return NoContent();
+                if (check)
+                { await _sheet.UpdateEntry("BS101"); return NoContent(); }
                 else return NotFound();
             }
             catch (Exception)

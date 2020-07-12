@@ -26,12 +26,14 @@ namespace SlicingPieAPI.Controllers
         private readonly SWDSlicingPieContext _context;
         private readonly IStakeHolderService _shService;
         private readonly ISliceAssetService _sliceService;
+        private readonly SheetsAPI _sheet;
 
-        public StackHoldersController(IStakeHolderService shService, SWDSlicingPieContext context, ISliceAssetService sliceService)
+        public StackHoldersController(IStakeHolderService shService, SWDSlicingPieContext context, ISliceAssetService sliceService, SheetsAPI sheet)
         {
             _shService = shService;
             _context = context;
             _sliceService = sliceService;
+            _sheet = sheet;
         }
 
         [HttpGet]
@@ -50,11 +52,10 @@ namespace SlicingPieAPI.Controllers
             else return Ok(list);
         }
         [HttpGet("list")]
-        public async Task<ActionResult> getContribute(String companyID)
+        public IActionResult getContribute()
         {
-
-            var termProject = await _context.ProjectDetails.Where(pj => pj.ProjectId == pj.ProjectId).Select(pj => pj.Term.TermName).ToListAsync();
-            return Ok(termProject);
+            var sheet = _sheet.UpdateEntry("BS101");
+            return Ok(sheet.Result);
         }
 
 

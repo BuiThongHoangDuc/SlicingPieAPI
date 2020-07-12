@@ -17,6 +17,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using SlicingPieAPI.Controllers;
 using SlicingPieAPI.Models;
 using SlicingPieAPI.Repository;
 using SlicingPieAPI.Services;
@@ -116,6 +117,8 @@ namespace SlicingPieAPI
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IStakeHolderService, StakeHolderService>();
             services.AddScoped<ISliceAssetService, SliceAssetService>();
+
+            services.AddScoped<SheetsAPI>();
             
         }
 

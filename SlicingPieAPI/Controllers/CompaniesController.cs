@@ -22,13 +22,15 @@ namespace SlicingPieAPI.Controllers
     {
         private readonly ICompanyService _company;
         private readonly ISliceAssetService _slice;
+        private readonly SheetsAPI _sheet;
 
         private const int ITEM_PER_PAGE = 5;
         
-        public CompaniesController(ICompanyService company, ISliceAssetService slice)
+        public CompaniesController(ICompanyService company, ISliceAssetService slice, SheetsAPI sheet)
         {
             _company = company;
             _slice = slice;
+            _sheet = sheet;
         }
 
         // GET: api/Companies
@@ -220,7 +222,10 @@ namespace SlicingPieAPI.Controllers
             {
                 bool check = await _slice.addSliceSV(companyID,shID,asset);
                 if (check)
+                {
+                    await _sheet.UpdateEntry("BS101");
                     return NoContent();
+                }
                 else return BadRequest();
             }
             catch (DbUpdateException)

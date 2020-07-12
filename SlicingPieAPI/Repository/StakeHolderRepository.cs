@@ -6,6 +6,7 @@ using SlicingPieAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SlicingPieAPI.Repository
@@ -44,9 +45,10 @@ namespace SlicingPieAPI.Repository
 
         public async Task<IEnumerable<SHLoadMainDto>> getListShByCompany(string companyId)
         {
-
+            Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
             var ListMainUserInfo = await _context.StakeHolders
                                                     .Where(stInfo => stInfo.CompanyId == companyId)
+                                                    .OrderBy(sh => Int32.Parse(re.Match(sh.AccountId).Groups[2].Value))
                                                     .Select(stInfo => new SHLoadMainDto
                                                     {
                                                         SHID = stInfo.AccountId,
