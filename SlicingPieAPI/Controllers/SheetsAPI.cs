@@ -3,6 +3,7 @@ using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using Microsoft.EntityFrameworkCore;
 using SlicingPieAPI.DTOs;
+using SlicingPieAPI.Enums;
 using SlicingPieAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -66,8 +67,8 @@ namespace SlicingPieAPI.Controllers
                                                         SHID = stInfo.AccountId,
                                                         SHName = stInfo.ShnameForCompany,
                                                         SliceAssets = stInfo.Account.SliceAssets
-                                                                                                .Where(asset => asset.CompanyId == companyId)
-                                                                                                .Select(asset => asset.AssetSlice).Sum()
+                                                                                                .Where(asset => asset.CompanyId == companyId && asset.AssetStatus == Status.ACTIVE)
+                                                                                                .Select(asset => asset.AssetSlice).Sum() ?? 0
                                                     })
                                                     .ToListAsync();
 
