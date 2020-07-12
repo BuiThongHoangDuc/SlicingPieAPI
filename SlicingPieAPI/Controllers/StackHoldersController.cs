@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -52,10 +53,18 @@ namespace SlicingPieAPI.Controllers
             else return Ok(list);
         }
         [HttpGet("list")]
-        public IActionResult getContribute()
+        public async Task<ActionResult> getContribute(String companyID)
         {
-            var sheet = _sheet.UpdateEntry("BS101");
-            return Ok(sheet.Result);
+            Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
+            Regex re1 = new Regex(@" [^ ]+");
+            var lastID = await _context.SliceAssets
+                .Where(asset => asset.AssetStatus == Status.ACTIVE && asset.CompanyId == companyID)
+                .OrderByDescending(asset => Int32.Parse(re.Match(re1.Match(asset.AssetId).Value).Groups[2].Value))
+                .Select(asset => asset.AssetId)
+                .FirstOrDefaultAsync();
+            return Ok(lastID);
+            //var sheet = _sheet.UpdateEntry("BS101");
+            //return Ok(sheet.Result);
         }
 
 
