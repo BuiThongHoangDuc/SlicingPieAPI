@@ -22,8 +22,6 @@ namespace SlicingPieAPI.Controllers
 
         static readonly String SpreadSheetID = "1zp82P1kPLHTUzMo6LCF5YO9768CdSGPIOC9mbTIVKXM";
 
-        static readonly String Sheet = "Trang tính1";
-
         static SheetsService service;
 
         private readonly SWDSlicingPieContext _context;
@@ -45,7 +43,7 @@ namespace SlicingPieAPI.Controllers
             });
         }
 
-        public void CreateEntry() {
+        public void CreateEntry(String Sheet) {
             var range = $"{Sheet}!A:C";
             var valueRange = new ValueRange();
 
@@ -57,7 +55,7 @@ namespace SlicingPieAPI.Controllers
             var appendRespone = appendRequest.Execute();
         }
 
-        public async Task<IEnumerable<SheetDto>> UpdateEntry(String companyId) {
+        public async Task<IEnumerable<SheetDto>> UpdateEntry(String Sheet, String companyId) {
             Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
             var ListMainUserInfo = await _context.StakeHolders
                                                     .Where(stInfo => stInfo.CompanyId == companyId)

@@ -49,7 +49,7 @@ namespace SlicingPieAPI.Controllers
             {
                 bool check = await _sliceService.UpdateAssetSV(id, asset);
                 if (check)
-                { await _sheet.UpdateEntry("BS101"); return NoContent(); }
+                { await _sheet.UpdateEntry(asset.CompanyId,asset.CompanyId); return NoContent(); }
                 else return NotFound();
             }
             catch (Exception)

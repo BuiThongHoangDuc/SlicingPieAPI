@@ -16,6 +16,7 @@ namespace SlicingPieAPI.DTOs
         public int? TypeAssetId { get; set; }
         public int? TermId { get; set; }
         public double? AssetSlice { get; set; }
+        public string CompanyId { get; set; }
         public double? SalaryGapInTime { get; set; }
         public double? CashPerSlice { get; set; }
     }

@@ -223,7 +223,7 @@ namespace SlicingPieAPI.Controllers
                 bool check = await _slice.addSliceSV(companyID,shID,asset);
                 if (check)
                 {
-                    await _sheet.UpdateEntry("BS101");
+                    await _sheet.UpdateEntry(companyID,companyID);
                     return NoContent();
                 }
                 else return BadRequest();
