@@ -76,6 +76,7 @@ namespace SlicingPieAPI.Repository
                                             CashMultiplier = company.CashMultiplier,
                                             NonCashMultiplier = company.NonCashMultiplier,
                                             CashPerSlice = company.CashPerSlice,
+                                            CompanyChart = company.CompanyChart,
                                         }).FirstOrDefaultAsync();
             return companyInfo;
         }
@@ -89,6 +90,7 @@ namespace SlicingPieAPI.Repository
             dto.NonCashMultiplier = company.NonCashMultiplier;
             dto.CashMultiplier = company.CashMultiplier;
             dto.CashPerSlice = company.CashPerSlice;
+            dto.CompanyChart = company.CompanyChart;
 
             _context.Entry(dto).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -104,6 +106,7 @@ namespace SlicingPieAPI.Repository
             companyModel.NonCashMultiplier = company.NonCashMultiplier;
             companyModel.CashMultiplier = company.CashMultiplier;
             companyModel.CashPerSlice = company.CashPerSlice;
+            companyModel.CompanyChart = company.CompanyChart;
             companyModel.Status = Status.ACTIVE;
 
             _context.Companies.Add(companyModel);

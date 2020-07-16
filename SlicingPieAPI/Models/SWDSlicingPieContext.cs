@@ -73,10 +73,6 @@ namespace SlicingPieAPI.Models
             {
                 entity.ToTable("Company");
 
-                entity.HasIndex(e => e.CompanyName)
-                    .HasName("UQ__Company__9BCE05DC38A2856E")
-                    .IsUnique();
-
                 entity.Property(e => e.CompanyId)
                     .HasColumnName("CompanyID")
                     .HasMaxLength(50)
@@ -296,7 +292,9 @@ namespace SlicingPieAPI.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.TermName).HasMaxLength(50);
+                entity.Property(e => e.TermName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.TermTimeFrom).HasColumnType("datetime");
 

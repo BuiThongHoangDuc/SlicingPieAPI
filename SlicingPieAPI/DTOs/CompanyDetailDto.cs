@@ -13,5 +13,6 @@ namespace SlicingPieAPI.DTOs
         public int NonCashMultiplier { get; set; }
         public int CashMultiplier { get; set; }
         public double? CashPerSlice { get; set; }
+        public string CompanyChart { get; set; }
     }
 }
