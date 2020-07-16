@@ -140,7 +140,7 @@ namespace SlicingPieAPI.Services
                 case 1:
                     {
                         double ManMonth = asset.Quantity / 160;
-                        double Slice = ManMonth * Convert.ToDouble(asset.SalaryGapInTime) / (double)assetBeforUpdate.CashPerSlice * assetBeforUpdate.MultiplierInTime;
+                        double Slice = ManMonth * Convert.ToDouble(assetBeforUpdate.SalaryGapInTime) / (double)assetBeforUpdate.CashPerSlice * assetBeforUpdate.MultiplierInTime;
                         asset.AssetSlice = Slice;
                         break;
                     }
