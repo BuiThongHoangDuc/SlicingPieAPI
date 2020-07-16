@@ -42,7 +42,7 @@ namespace SlicingPieAPI.Controllers
             string field_selected = "")
         {
             if (string.IsNullOrEmpty(sort_type)) sort_type = "asc";
-            if (string.IsNullOrEmpty(field_selected)) field_selected = "CompanyID, CompanyName, Comapnyicon, NonCashMultiplier, CashMultiplier";
+            if (string.IsNullOrEmpty(field_selected)) field_selected = "CompanyID, CompanyName, Comapnyicon, NonCashMultiplier, CashMultiplier,CashPerSlice";
 
             var list = _company.getListCompany(name, sort_type, page_index, ITEM_PER_PAGE, field_selected);
             if (list.Count == 0) { return NotFound(); }
