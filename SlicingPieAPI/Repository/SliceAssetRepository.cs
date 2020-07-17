@@ -132,11 +132,11 @@ namespace SlicingPieAPI.Repository
                                                 AssetSlice = asset.AssetSlice,
                                                 Description = asset.Description,
                                                 MultiplierInTime = asset.MultiplierInTime,
-                                                ProjectId = asset.ProjectId,
+                                                ProjectId = asset.Project.ProjectName,
                                                 Quantity = asset.Quantity,
-                                                TermId = asset.TermId,
+                                                TermId = asset.Term.TermName,
                                                 TimeAsset = asset.TimeAsset,
-                                                TypeAssetId = asset.TypeAssetId,
+                                                TypeAssetId = asset.TypeAsset.NameAsset,
                                                 CompanyId = asset.CompanyId,
                                             }).FirstOrDefaultAsync();
             return Contribution;
@@ -155,12 +155,8 @@ namespace SlicingPieAPI.Repository
             SliceAsset assetModel = await _context.SliceAssets.FindAsync(assetID);
             if (assetModel == null) return;
             assetModel.Quantity = asset.Quantity;
-            assetModel.ProjectId = asset.ProjectId;
             assetModel.Description = asset.Description;
             assetModel.TimeAsset = asset.TimeAsset;
-            assetModel.ProjectId = asset.ProjectId;
-            assetModel.TypeAssetId = asset.TypeAssetId;
-            assetModel.TermId = asset.TermId;
             assetModel.AssetSlice = asset.AssetSlice;
 
             _context.Entry(assetModel).State = EntityState.Modified;
