@@ -1,4 +1,5 @@
-﻿using SlicingPieAPI.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using SlicingPieAPI.DTOs;
 using SlicingPieAPI.Models;
 using SlicingPieAPI.Repository;
 using System;
@@ -16,6 +17,25 @@ namespace SlicingPieAPI.Services
             _account = account;
         }
 
+        public async Task<bool> CreateAccountSV(AddAccountDto addModel)
+        {
+            return await _account.CreateAccount(addModel);
+        }
+
+        public async Task<bool> DeleteAccountSV(String id)
+        {
+            try
+            {
+                bool check = await _account.DeleteAccount(id);
+                if (check == true) return true;
+                else return false;
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+        }
+
         public List<object> getAccount(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected)
         {
             var accounts = _account.Search(name);
@@ -30,7 +50,15 @@ namespace SlicingPieAPI.Services
                             .GetLoginInfo(email);
         }
 
+        public IQueryable<AccountDetailDto> GetDetailAccountSV(string id)
+        {
+            return _account.GetDetailAccount(id);
+        }
 
+        public Task<string> UpdateScenarioSV(string id, AccountDetailDto account)
+        {
+            return _account.UpdateScenario(id, account);
+        }
     }
 
     public interface IAccountService
@@ -38,5 +66,11 @@ namespace SlicingPieAPI.Services
         Task<UserLoginDto> getAccountInfo(string email);
 
         List<Object> getAccount(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected);
+        Task<bool> CreateAccountSV(AddAccountDto addModel);
+        Task<bool> DeleteAccountSV(String id);
+        IQueryable<AccountDetailDto> GetDetailAccountSV(String id);
+        Task<String> UpdateScenarioSV(String id, AccountDetailDto account);
+
+
     }
 }

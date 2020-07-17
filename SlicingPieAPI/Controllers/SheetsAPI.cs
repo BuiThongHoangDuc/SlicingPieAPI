@@ -43,11 +43,11 @@ namespace SlicingPieAPI.Controllers
             });
         }
 
-        public void CreateEntry(String Sheet) {
+        public void CreateEntry(String Sheet,String shID,String shName, double shSlice) {
             var range = $"{Sheet}!A:C";
             var valueRange = new ValueRange();
 
-            var objectList = new List<object>() { "6", "Shit", "500" };
+            var objectList = new List<object>() { shID, shName, shSlice };
             valueRange.Values = new List<IList<object>> { objectList };
 
             var appendRequest = service.Spreadsheets.Values.Append(valueRange, SpreadSheetID, range);
@@ -84,8 +84,40 @@ namespace SlicingPieAPI.Controllers
             }
 
             return ListMainUserInfo;
-
         }
+
+        public async Task<bool> DeleteEntry(String Sheet, String companyId,String accountID)
+        {
+            Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
+            var ListMainUserInfo = await _context.StakeHolders
+                                                    .Where(stInfo => stInfo.CompanyId == companyId)
+                                                    .OrderBy(sh => Int32.Parse(re.Match(sh.AccountId).Groups[2].Value))
+                                                    .Select(stInfo => new SheetDto
+                                                    {
+                                                        SHID = stInfo.AccountId,
+                                                        SHName = stInfo.ShnameForCompany,
+                                                        SliceAssets = stInfo.Account.SliceAssets
+                                                                                                .Where(asset => asset.CompanyId == companyId && asset.AssetStatus == Status.ACTIVE)
+                                                                                                .Select(asset => asset.AssetSlice).Sum() ?? 0
+                                                    })
+                                                    .ToListAsync();
+
+            for (int i = 2; i < ListMainUserInfo.Count + 2; i++)
+            {    
+                if(String.Compare(accountID, ListMainUserInfo[i - 2].SHID, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    int row = i;
+                    var range = $"{Sheet}!A{i}:C";
+                    var requestBody = new ClearValuesRequest();
+
+                    var deleteRequest = service.Spreadsheets.Values.Clear(requestBody, SpreadSheetID, range);
+                    var deleteReponse = deleteRequest.Execute();
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
     }
 }

@@ -22,15 +22,17 @@ namespace SlicingPieAPI.Controllers
     {
         private readonly ICompanyService _company;
         private readonly ISliceAssetService _slice;
+        private readonly IStakeHolderService _shSV;
         private readonly SheetsAPI _sheet;
 
         private const int ITEM_PER_PAGE = 5;
         
-        public CompaniesController(ICompanyService company, ISliceAssetService slice, SheetsAPI sheet)
+        public CompaniesController(ICompanyService company, ISliceAssetService slice, SheetsAPI sheet, IStakeHolderService shSV)
         {
             _company = company;
             _slice = slice;
             _sheet = sheet;
+            _shSV = shSV;
         }
 
         // GET: api/Companies
@@ -73,6 +75,31 @@ namespace SlicingPieAPI.Controllers
                 else return Ok(UserInfo);
             }
             return NotFound();
+        }
+
+        // GET: api/Companies/5/List Stake holder
+        [HttpPost("{id}/stake-holder")]
+        public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> AddSHCompany(string id, AddStakeHolderDto addModel)
+        {
+            if (id != addModel.CompanyId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var check = await _shSV.AddStakeHolderSV(addModel);
+                if (check == true)
+                {
+                    _sheet.CreateEntry(id, addModel.AccountId, addModel.ShnameForCompany, 0);
+                    return NoContent(); 
+                }
+                else return BadRequest();
+            }
+            catch (Exception)
+            {
+                return Conflict();
+            }
         }
 
         [HttpGet("{companyID}/stake-holder/{userID}")]

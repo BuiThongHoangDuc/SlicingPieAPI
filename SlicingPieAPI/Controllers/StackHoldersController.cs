@@ -52,19 +52,62 @@ namespace SlicingPieAPI.Controllers
             if (list.Count == 0) { return NotFound(); }
             else return Ok(list);
         }
-        [HttpGet("list")]
-        public async Task<ActionResult> getContribute(String companyID)
+
+        [HttpGet("{ComapnyID}/{AccountID}")]
+        public async Task<ActionResult<AddStakeHolderDto>> GetListEquipmentInSC(String ComapnyID, String AccountID)
         {
-            Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
-            Regex re1 = new Regex(@" [^ ]+");
-            var lastID = await _context.SliceAssets
-                .Where(asset => asset.AssetStatus == Status.ACTIVE && asset.CompanyId == companyID)
-                .OrderByDescending(asset => Int32.Parse(re.Match(re1.Match(asset.AssetId).Value).Groups[2].Value))
-                .Select(asset => asset.AssetId)
-                .FirstOrDefaultAsync();
-            return Ok(lastID);
-            //var sheet = _sheet.UpdateEntry("BS101");
-            //return Ok(sheet.Result);
+            var sh = await _shService.GetShSV(ComapnyID, AccountID).FirstOrDefaultAsync();
+
+            if (sh == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(sh);
+        }
+
+        //PUT: api/Scenarios/5
+        [HttpPut("{ComapnyID}/{AccountID}")]
+        public async Task<ActionResult> PutScenarioStatus(String ComapnyID, String AccountID, AddStakeHolderDto editModel)
+        {
+            if (ComapnyID != editModel.CompanyId && AccountID != editModel.AccountId) return BadRequest();
+
+
+            try
+            {
+                bool check = await _shService.UpdateShByIDSV(editModel);
+                if (check == false) return NotFound();
+                else return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        //PUT: api/Scenarios/5
+        [HttpDelete("{ComapnyID}/{AccountID}")]
+        public async Task<ActionResult<int>> DeleteSh(String ComapnyID, String AccountID)
+        {
+            try
+            {
+                var check = await _shService.DeleteShByID(ComapnyID, AccountID);
+                if (check == false) return NotFound();
+                else
+                {
+                    bool check2 = await _sheet.DeleteEntry(ComapnyID, ComapnyID, AccountID);
+                    if (check2 == true)
+                    {
+                        return NoContent();
+                    }
+                    else return BadRequest();
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
         }
 
 

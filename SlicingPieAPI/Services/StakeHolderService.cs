@@ -38,6 +38,26 @@ namespace SlicingPieAPI.Services
             List<Object> list = _stakeHolder.Filter(stakeHolder, field_Selected);
             return list;
         }
+
+        public async Task<bool> AddStakeHolderSV(AddStakeHolderDto addModel)
+        {
+            return await _stakeHolder.AddStakeHolder(addModel);
+        }
+
+        public IQueryable<AddStakeHolderDto> GetShSV(string companyID, string accountID)
+        {
+            return _stakeHolder.GetSh(companyID, accountID);
+        }
+
+        public Task<bool> UpdateShByIDSV(AddStakeHolderDto editModel)
+        {
+            return _stakeHolder.UpdateShByID(editModel);
+        }
+
+        public Task<bool> DeleteShByID(string companyID, string accountID)
+        {
+            return _stakeHolder.DeleteShByID(companyID, accountID);
+        }
     }
 
     public interface IStakeHolderService
@@ -47,5 +67,12 @@ namespace SlicingPieAPI.Services
         Task<SHLoadMainDto> getSHByCompany(string companyId, string shId);
 
         List<Object> getStakeHolder(string name, string sort_Type, int page_Index, int itemPerPage, string field_Selected);
+        Task<bool> AddStakeHolderSV(AddStakeHolderDto addModel);
+        IQueryable<AddStakeHolderDto> GetShSV(String companyID, String accountID);
+        Task<bool> UpdateShByIDSV(AddStakeHolderDto editModel);
+        Task<bool> DeleteShByID(String companyID, String accountID);
+
+
+
     }
 }

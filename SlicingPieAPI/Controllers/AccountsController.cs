@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SlicingPieAPI.DTOs;
 using SlicingPieAPI.Models;
 using SlicingPieAPI.Services;
 
@@ -38,18 +39,84 @@ namespace SlicingPieAPI.Controllers
             else return Ok(list);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> PostAccount(AddAccountDto addModel)
+        {
+            try
+            {
+                var check = await _accountService.CreateAccountSV(addModel);
+                if (check == true) return NoContent();
+                else return BadRequest();
+            }
+            catch (Exception)
+            {
+                return Conflict();
+            }
+            
+        }
+
+        //DELETE: api/Scenarios/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteScenario(String id)
+        {
+            try
+            {
+                var isDelete = await _accountService.DeleteAccountSV(id);
+                if (isDelete) return NoContent();
+                else return NotFound();
+            }
+            catch (Exception) { return BadRequest(); }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AccountDetailDto>> GetAccount(String id)
+        {
+            var account = await _accountService.GetDetailAccountSV(id).FirstOrDefaultAsync();
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(account);
+        }
+
+        //PUT: api/Scenarios/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult<String>> PutScenario(String id, AccountDetailDto account)
+        {
+            if (id != account.AccountId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                String idUpdate = await _accountService.UpdateScenarioSV(id, account);
+                if (idUpdate == null) return NotFound();
+                else return Ok(id);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+        }
+
+
+
         //// GET: api/Accounts/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Account>> GetAccount(string id)
+        //[HttpGet("list")]
+        //public async Task<ActionResult> GetAccountlist(string id)
         //{
-        //    var account = await _context.Accounts.FindAsync(id);
+        //    var account = await _context.StakeHolders.Where(sh => sh.CompanyId == id).Select((r,i) => new {count = i, name = r.AccountId }).ToListAsync();
 
         //    if (account == null)
         //    {
         //        return NotFound();
         //    }
 
-        //    return account;
+        //    return Ok(account);
         //}
 
         //    // PUT: api/Accounts/5
@@ -82,29 +149,8 @@ namespace SlicingPieAPI.Controllers
         //        return NoContent();
         //    }
 
-        //    // POST: api/Accounts
-        //    [HttpPost]
-        //    public async Task<ActionResult<Account>> PostAccount(Account account)
-        //    {
-        //        _context.Accounts.Add(account);
-        //        try
-        //        {
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateException)
-        //        {
-        //            if (AccountExists(account.AccountId))
-        //            {
-        //                return Conflict();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
+        // POST: api/Accounts 
 
-        //        return CreatedAtAction("GetAccount", new { id = account.AccountId }, account);
-        //    }
 
         //    // DELETE: api/Accounts/5
         //    [HttpDelete("{id}")]
@@ -126,6 +172,6 @@ namespace SlicingPieAPI.Controllers
         //    {
         //        return _context.Accounts.Any(e => e.AccountId == id);
         //    }
-        }
+    }
     }
 

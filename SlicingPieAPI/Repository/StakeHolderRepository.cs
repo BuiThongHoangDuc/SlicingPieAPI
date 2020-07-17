@@ -5,6 +5,7 @@ using SlicingPieAPI.Enums;
 using SlicingPieAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -34,10 +35,12 @@ namespace SlicingPieAPI.Repository
         {
             var shInfo = await _context.StakeHolders
                                     .Where(sh => sh.AccountId == id && sh.Shstatus == Status.ACTIVE)
-                                    .Select(sh => new StakeHolderDto { 
+                                    .Select(sh => new StakeHolderDto {
                                         SHID = sh.AccountId,
                                         CompanyID = sh.CompanyId,
-                                        RoleID = sh.Shrole
+                                        RoleID = sh.Shrole,
+                                        CompanyName = sh.Company.CompanyName,
+                                        Shimage = sh.Shimage,
                                     })
                                     .FirstOrDefaultAsync();
             return shInfo;
@@ -146,6 +149,97 @@ namespace SlicingPieAPI.Repository
             var Name = await _context.StakeHolders.Where(sh => sh.AccountId == userID && sh.CompanyId == companyID).Select(sh => sh.ShnameForCompany).FirstOrDefaultAsync();
             return Name;
         }
+
+        public async Task<bool> AddStakeHolder(AddStakeHolderDto addModel)
+        {
+            StakeHolder shModel = new StakeHolder();
+            shModel.AccountId = addModel.AccountId;
+            shModel.CompanyId = addModel.CompanyId;
+            shModel.ShmarketSalary = addModel.ShmarketSalary;
+            shModel.Shsalary = addModel.Shsalary;
+            shModel.Shjob = addModel.Shjob;
+            shModel.ShnameForCompany = addModel.ShnameForCompany;
+            shModel.Shimage = addModel.Shimage;
+            shModel.ShnameForCompany = addModel.ShnameForCompany;
+            shModel.Shstatus = Status.ACTIVE;
+            shModel.Shrole = Role.MANAGER;
+
+            _context.StakeHolders.Add(shModel);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException e)
+            {
+                Debug.WriteLine(e.InnerException.Message);
+                throw;
+            }
+        }
+
+        public IQueryable<AddStakeHolderDto> GetSh(string companyID, string accountID)
+        {
+            var scenario = _context.StakeHolders
+                                    .Where(sh => sh.CompanyId == companyID && sh.AccountId == accountID)
+                                    .Select(sh => new AddStakeHolderDto
+                                    {
+                                        AccountId = sh.AccountId,
+                                        CompanyId = sh.CompanyId,
+                                        ShmarketSalary = sh.ShmarketSalary,
+                                        Shsalary = sh.Shsalary,
+                                        Shjob = sh.Shjob,
+                                        ShnameForCompany = sh.ShnameForCompany,
+                                        Shimage = sh.Shimage,
+                                    });
+            return scenario;
+        }
+
+        public async Task<bool> UpdateShByID(AddStakeHolderDto editModel)
+        {
+            StakeHolder shModel = await getShbyid(editModel.CompanyId, editModel.AccountId);
+            if (shModel == null) return false;
+            shModel.ShmarketSalary = editModel.ShmarketSalary;
+            shModel.Shsalary = editModel.Shsalary;
+            shModel.Shjob = editModel.Shjob;
+            shModel.ShnameForCompany = editModel.ShnameForCompany;
+            shModel.Shimage = editModel.Shimage;
+
+            _context.Entry(shModel).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+        }
+
+        private async Task<StakeHolder> getShbyid(String companyId, String accountID)
+        {
+            return await _context.StakeHolders.Where(sh => sh.CompanyId == companyId && sh.AccountId == accountID).FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> DeleteShByID(string companyID, string accountID)
+        {
+            StakeHolder shModel = await getShbyid(companyID, accountID);
+            if (shModel == null) return false;
+            shModel.Shstatus = Status.INACTIVE;
+
+            _context.Entry(shModel).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+        }
     }
 
     public interface IStakeHolderRepository
@@ -166,5 +260,9 @@ namespace SlicingPieAPI.Repository
 
         Task<SalaryGapDto> GetSalaryGap(String userID,String companyID);
         Task<String> GetNameStakeHolder(String userID, String companyID);
+        Task<bool> AddStakeHolder(AddStakeHolderDto addModel);
+        IQueryable<AddStakeHolderDto> GetSh(String companyID, String accountID);
+        Task<bool> UpdateShByID(AddStakeHolderDto editModel);
+        Task<bool> DeleteShByID(String companyID, String accountID);
     }
 }

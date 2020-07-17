@@ -10,5 +10,8 @@ namespace SlicingPieAPI.DTOs
         public string SHID { get; set; }
         public string CompanyID { get; set; }
         public int? RoleID { get; set; }
+        public string CompanyName { get; set; }
+        public string Shimage { get; set; }
+
     }
 }
