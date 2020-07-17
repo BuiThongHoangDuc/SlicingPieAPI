@@ -136,7 +136,7 @@ namespace SlicingPieAPI.Repository
                                                 Quantity = asset.Quantity,
                                                 TermId = asset.Term.TermName,
                                                 TimeAsset = asset.TimeAsset,
-                                                TypeAssetId = asset.TypeAsset.NameAsset,
+                                                TypeAssetId = asset.TypeAssetId,
                                                 CompanyId = asset.CompanyId,
                                             }).FirstOrDefaultAsync();
             return Contribution;
