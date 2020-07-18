@@ -13,7 +13,7 @@ namespace SlicingPieAPI.DTOs
         public DateTime TimeAsset { get; set; }
         public int MultiplierInTime { get; set; }
         public string ProjectId { get; set; }
-        public int? TypeAssetId { get; set; }
+        public string TypeAssetId { get; set; }
         public string TermId { get; set; }
         public double? AssetSlice { get; set; }
         public string CompanyId { get; set; }
