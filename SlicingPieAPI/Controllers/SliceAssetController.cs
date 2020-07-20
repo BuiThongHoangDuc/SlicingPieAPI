@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SlicingPieAPI.DTOs;
 using SlicingPieAPI.Models;
 using SlicingPieAPI.Services;
@@ -69,6 +70,26 @@ namespace SlicingPieAPI.Controllers
                 else return NotFound();
             }
             catch (Exception) { return BadRequest(); }
+        }
+
+        [HttpPost("company/{companyid}/stake-holer/{shid}/contribution")]
+        public async Task<ActionResult> CreateProject(String companyid, String shid, SliceAssetDetailDto asset)
+        {
+            try
+            {
+                bool check = await _sliceService.addSliceSV(companyid, shid, asset);
+                if (check)
+                {
+                    await _sheet.UpdateEntry(companyid, companyid);
+                    return NoContent();
+                }
+                else return BadRequest();
+            }
+            catch (DbUpdateException)
+            {
+                return Conflict();
+            }
+
         }
 
         //// POST: api/StackHolders

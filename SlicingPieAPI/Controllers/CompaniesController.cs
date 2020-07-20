@@ -217,26 +217,6 @@ namespace SlicingPieAPI.Controllers
             else return NotFound();
         }
 
-        [HttpPost("{companyid}/stake-holer/{shid}/contribution")]
-        public async Task<ActionResult> CreateProject(String companyid, String shid, SliceAssetDetailDto asset)
-        {
-            try
-            {
-                bool check = await _slice.addSliceSV(companyid, shid, asset);
-                if (check)
-                {
-                    await _sheet.UpdateEntry(companyid, companyid);
-                    return NoContent();
-                }
-                else return BadRequest();
-            }
-            catch (DbUpdateException)
-            {
-                return Conflict();
-            }
-
-        }
-
         [HttpGet("{companyid}/contribution")]
         public async Task<ActionResult> GetListContribution(String companyid)
         {
