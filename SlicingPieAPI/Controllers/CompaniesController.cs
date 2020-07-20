@@ -26,7 +26,7 @@ namespace SlicingPieAPI.Controllers
         private readonly SheetsAPI _sheet;
 
         private const int ITEM_PER_PAGE = 5;
-        
+
         public CompaniesController(ICompanyService company, ISliceAssetService slice, SheetsAPI sheet, IStakeHolderService shSV)
         {
             _company = company;
@@ -77,35 +77,10 @@ namespace SlicingPieAPI.Controllers
             return NotFound();
         }
 
-        // GET: api/Companies/5/List Stake holder
-        [HttpPost("{id}/stake-holder")]
-        public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> AddSHCompany(string id, AddStakeHolderDto addModel)
+        [HttpGet("{companyid}/stake-holder/{userid}")]
+        public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> GetListSHCompany(string companyid, String userid)
         {
-            if (id != addModel.CompanyId)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                var check = await _shSV.AddStakeHolderSV(addModel);
-                if (check == true)
-                {
-                    _sheet.CreateEntry(id, addModel.AccountId, addModel.ShnameForCompany, 0);
-                    return NoContent(); 
-                }
-                else return BadRequest();
-            }
-            catch (Exception)
-            {
-                return Conflict();
-            }
-        }
-
-        [HttpGet("{companyID}/stake-holder/{userID}")]
-        public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> GetListSHCompany(string companyID, String userID)
-        {
-            var Name = await _company.GetNameStakeHolderSV(userID,companyID);
+            var Name = await _company.GetNameStakeHolderSV(userid, companyid);
             if (Name == null) return NotFound();
             else return Ok(Name);
         }
@@ -242,15 +217,15 @@ namespace SlicingPieAPI.Controllers
             else return NotFound();
         }
 
-        [HttpPost("{companyID}/StakeHoler/{shID}/Contribution")]
-        public async Task<ActionResult> CreateProject(String companyID, String shID, SliceAssetDetailDto asset)
+        [HttpPost("{companyid}/stake-holer/{shid}/contribution")]
+        public async Task<ActionResult> CreateProject(String companyid, String shid, SliceAssetDetailDto asset)
         {
             try
             {
-                bool check = await _slice.addSliceSV(companyID,shID,asset);
+                bool check = await _slice.addSliceSV(companyid, shid, asset);
                 if (check)
                 {
-                    await _sheet.UpdateEntry(companyID,companyID);
+                    await _sheet.UpdateEntry(companyid, companyid);
                     return NoContent();
                 }
                 else return BadRequest();
@@ -262,28 +237,73 @@ namespace SlicingPieAPI.Controllers
 
         }
 
-        [HttpGet("{companyID}/Contribution")]
-        public async Task<ActionResult> GetListContribution(String companyID)
+        [HttpGet("{companyid}/contribution")]
+        public async Task<ActionResult> GetListContribution(String companyid)
         {
-            var ListContribution = await _slice.GetListSlice(companyID);
+            var ListContribution = await _slice.GetListSlice(companyid);
             if (ListContribution == null) return NotFound();
             else return Ok(ListContribution);
         }
 
-        [HttpGet("{companyID}/StakeHoler/{shID}/Contribution")]
-        public async Task<ActionResult> GetListContributionSH(String companyID, String shID)
+        [HttpGet("{companyid}/stake-holer/{shid}/contribution")]
+        public async Task<ActionResult> GetListContributionSH(String companyid, String shid)
         {
-            var ListContribution = await _slice.GetListSliceSHSV(companyID, shID);
+            var ListContribution = await _slice.GetListSliceSHSV(companyid, shid);
             if (ListContribution == null) return NotFound();
             else return Ok(ListContribution);
         }
-        
-        [HttpGet("{companyID}/TypeAsset")]
-        public async Task<ActionResult> GetListTypeAsset(String companyID)
+
+        [HttpGet("{companyid}/type-asset")]
+        public async Task<ActionResult> GetListTypeAsset(String companyid)
         {
-            var ListAsset = await _company.GetListTypeAssetByCompanyIDSV(companyID);
+            var ListAsset = await _company.GetListTypeAssetByCompanyIDSV(companyid);
             if (ListAsset == null) return NotFound();
             else return Ok(ListAsset);
+        }
+
+        [HttpPost("{companyid}/create-term")]
+        public async Task<ActionResult> CreateTerm(String companyid, AddTermDto term)
+        {
+            if (companyid != term.CompanyId)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                try
+                {
+                    bool check = await _company.addTermCompanySV(term);
+                    if (check)
+                    {
+                        return NoContent();
+                    }
+                    else return BadRequest();
+                }
+                catch (DbUpdateException)
+                {
+                    return Conflict();
+                }
+
+            }
+        }
+
+        [HttpPost("term/{termid}/project/{projectid}")]
+        public async Task<ActionResult> AddProjectToTerm(int termid, string projectid)
+        {
+            try
+            {
+                bool check = await _company.AddProjectToTermSV(termid, projectid);
+                if (check)
+                {
+                    return NoContent();
+                }
+                else return BadRequest();
+            }
+            catch (DbUpdateException)
+            {
+                return Conflict();
+            }
+
         }
 
 

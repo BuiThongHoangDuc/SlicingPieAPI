@@ -4,6 +4,7 @@ using SlicingPieAPI.Enums;
 using SlicingPieAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,57 @@ namespace SlicingPieAPI.Repository
         public TermProjectCompanyRepo(SWDSlicingPieContext context)
         {
             _context = context;
+        }
+
+        public async Task<bool> AddProjectToTerm(int termID, string projectID)
+        {
+            ProjectDetail pjdt = new ProjectDetail();
+            pjdt.TermId = termID;
+            pjdt.ProjectId = projectID;
+            _context.ProjectDetails.Add(pjdt);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException e)
+            {
+                Debug.WriteLine(e.InnerException.Message);
+                throw;
+            }
+        }
+
+        public async Task<bool> addTermCompany(AddTermDto term)
+        {
+            TermSlouse termModel = new TermSlouse();
+            termModel.TermName = term.TermName;
+            termModel.TermTimeFrom = term.TermTimeFrom;
+            termModel.TermTimeTo = term.TermTimeTo;
+            termModel.CompanyId = term.CompanyId;
+
+
+            _context.TermSlice.Add(termModel);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException e)
+            {
+                Debug.WriteLine(e.InnerException.Message);
+                throw;
+            }
+        }
+
+        public async Task<DateTime> GetLatestTimeto(string companyID)
+        {
+            var listTerm = await _context.TermSlice
+                                        .Where(term => term.CompanyId == companyID)
+                                        .Select(term =>
+
+                                          term.TermTimeTo
+                                        ).LastOrDefaultAsync();
+            return listTerm;
         }
 
         public async Task<IEnumerable<TermDto>> GetListTermCompany(string companyID)
@@ -36,15 +88,20 @@ namespace SlicingPieAPI.Repository
         {
             var termProject = await _context.ProjectDetails
                                                         .Where(pj => pj.TermId == termID && pj.Project.ProjectStatus == Status.ACTIVE)
-                                                        .Select(pj => new ProjectDto {
+                                                        .Select(pj => new ProjectDto
+                                                        {
                                                             ProjectId = pj.ProjectId,
                                                             ProjectName = pj.Project.ProjectName,
                                                         }).ToListAsync();
             return termProject;
         }
     }
-    public interface ITermProjectCompanyRepo {
+    public interface ITermProjectCompanyRepo
+    {
         Task<IEnumerable<ProjectDto>> getTermProjectCompany(int termID);
         Task<IEnumerable<TermDto>> GetListTermCompany(String companyID);
+        Task<bool> addTermCompany(AddTermDto term);
+        Task<DateTime> GetLatestTimeto(String companyID);
+        Task<bool> AddProjectToTerm(int termID, string projectID);
     }
 }

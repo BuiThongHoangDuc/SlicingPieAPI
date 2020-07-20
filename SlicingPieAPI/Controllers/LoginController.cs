@@ -93,7 +93,7 @@ namespace SlicingPieAPI.Controllers
                 new Claim("CompanyID", userInfo.CompanyID),
             };
 
-            var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Issuer"], claims, expires: DateTime.Now.AddMinutes(120), signingCredentials: credentials);
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Issuer"], claims, expires: DateTime.Now.AddDays(60), signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
@@ -107,7 +107,7 @@ namespace SlicingPieAPI.Controllers
                 new Claim("RoleID", userInfo.RoleID + ""),
             };
 
-            var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Issuer"], claims, expires: DateTime.Now.AddMinutes(120), signingCredentials: credentials);
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Issuer"], claims, expires: DateTime.Now.AddDays(60), signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

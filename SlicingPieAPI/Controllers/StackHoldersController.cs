@@ -28,13 +28,15 @@ namespace SlicingPieAPI.Controllers
         private readonly IStakeHolderService _shService;
         private readonly ISliceAssetService _sliceService;
         private readonly SheetsAPI _sheet;
+        private readonly IStakeHolderService _shSV;
 
-        public StackHoldersController(IStakeHolderService shService, SWDSlicingPieContext context, ISliceAssetService sliceService, SheetsAPI sheet)
+        public StackHoldersController(IStakeHolderService shService, SWDSlicingPieContext context, ISliceAssetService sliceService, SheetsAPI sheet, IStakeHolderService shSV)
         {
             _shService = shService;
             _context = context;
             _sliceService = sliceService;
             _sheet = sheet;
+            _shSV = shSV;
         }
 
         [HttpGet]
@@ -53,10 +55,10 @@ namespace SlicingPieAPI.Controllers
             else return Ok(list);
         }
 
-        [HttpGet("{ComapnyID}/{AccountID}")]
-        public async Task<ActionResult<AddStakeHolderDto>> GetListEquipmentInSC(String ComapnyID, String AccountID)
+        [HttpGet("{comapnyid}/{accountid}")]
+        public async Task<ActionResult<AddStakeHolderDto>> GetListEquipmentInSC(String comapnyid, String accountid)
         {
-            var sh = await _shService.GetShSV(ComapnyID, AccountID).FirstOrDefaultAsync();
+            var sh = await _shService.GetShSV(comapnyid, accountid).FirstOrDefaultAsync();
 
             if (sh == null)
             {
@@ -67,10 +69,10 @@ namespace SlicingPieAPI.Controllers
         }
 
         //PUT: api/Scenarios/5
-        [HttpPut("{ComapnyID}/{AccountID}")]
-        public async Task<ActionResult> PutScenarioStatus(String ComapnyID, String AccountID, AddStakeHolderDto editModel)
+        [HttpPut("{comapnyid}/{accountid}")]
+        public async Task<ActionResult> PutScenarioStatus(String comapnyid, String accountid, AddStakeHolderDto editModel)
         {
-            if (ComapnyID != editModel.CompanyId && AccountID != editModel.AccountId) return BadRequest();
+            if (comapnyid != editModel.CompanyId && accountid != editModel.AccountId) return BadRequest();
 
 
             try
@@ -86,16 +88,16 @@ namespace SlicingPieAPI.Controllers
         }
 
         //PUT: api/Scenarios/5
-        [HttpDelete("{ComapnyID}/{AccountID}")]
-        public async Task<ActionResult<int>> DeleteSh(String ComapnyID, String AccountID)
+        [HttpDelete("{comapnyid}/{accountid}")]
+        public async Task<ActionResult<int>> DeleteSh(String comapnyid, String accountid)
         {
             try
             {
-                var check = await _shService.DeleteShByID(ComapnyID, AccountID);
+                var check = await _shService.DeleteShByID(comapnyid, accountid);
                 if (check == false) return NotFound();
                 else
                 {
-                    bool check2 = await _sheet.DeleteEntry(ComapnyID, ComapnyID, AccountID);
+                    bool check2 = await _sheet.DeleteEntry(comapnyid, comapnyid, accountid);
                     if (check2 == true)
                     {
                         return NoContent();
@@ -110,6 +112,29 @@ namespace SlicingPieAPI.Controllers
 
         }
 
+        [HttpPost("company/{id}")]
+        public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> AddSHCompany(string id, AddStakeHolderDto addModel)
+        {
+            if (id != addModel.CompanyId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var check = await _shSV.AddStakeHolderSV(addModel);
+                if (check == true)
+                {
+                    _sheet.CreateEntry(id, addModel.AccountId, addModel.ShnameForCompany, 0);
+                    return NoContent();
+                }
+                else return BadRequest();
+            }
+            catch (Exception)
+            {
+                return Conflict();
+            }
+        }
 
 
         //// GET: api/StackHolders/5

@@ -161,6 +161,37 @@ namespace SlicingPieAPI.Services
         {
             return _termProjectRepo.GetListTermCompany(companyID);
         }
+
+        public async Task<bool> addTermCompanySV(AddTermDto term)
+        {
+            int length = _termProjectRepo.GetListTermCompany(term.CompanyId).Result.ToList().Count;
+            if (length == 0)
+            {
+                term.TermName = "Term 1";
+                DateTime date = DateTime.Now;
+                var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+                term.TermTimeFrom = firstDayOfMonth;
+                term.TermTimeTo = lastDayOfMonth;
+            }
+            else
+            {
+                term.TermName = "Term "+(length+1);
+                DateTime Lastest = await _termProjectRepo.GetLatestTimeto(term.CompanyId);
+                DateTime date = Lastest.AddDays(1);
+                var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+                term.TermTimeFrom = firstDayOfMonth;
+                term.TermTimeTo = lastDayOfMonth;
+            }
+
+            return await _termProjectRepo.addTermCompany(term);
+        }
+
+        public async Task<bool> AddProjectToTermSV(int termID, string projectID)
+        {
+            return await _termProjectRepo.AddProjectToTerm(termID, projectID);
+        }
     }
 
     public interface ICompanyService
@@ -180,7 +211,8 @@ namespace SlicingPieAPI.Services
         Task<String> GetNameStakeHolderSV(String userID, String companyID);
         Task<IEnumerable<ProjectDto>> getTermProjectCompanySV(int termID);
         Task<IEnumerable<TermDto>> GetListTermCompanySV(String companyID);
-
+        Task<bool> addTermCompanySV(AddTermDto term);
+        Task<bool> AddProjectToTermSV(int termID, string projectID);
 
     }
 }
