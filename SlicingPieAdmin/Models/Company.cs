@@ -12,11 +12,13 @@ namespace SlicingPieAdmin.Models
         public String CompanyId { get; set; }
         [JsonProperty("CompanyName")]
         public String CompanyName { get; set; }
-        [JsonProperty("CompanyIcon")]
-        public String? CompanyIcon { get; set; }
+        [JsonProperty("ComapnyIcon")]
+        public String? ComapnyIcon { get; set; }
         [JsonProperty("NonCashMultiplier")]
         public int NonCashMultiplier { get; set; }
         [JsonProperty("CashMultiplier")]
         public int CashMultiplier { get; set; }
+        [JsonProperty("CashPerSlice")]
+        public double CashPerSlice { get; set; }
     }
 }

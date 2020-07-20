@@ -24,13 +24,18 @@ namespace SlicingPieAdmin
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDistributedMemoryCache();
 
-            services.AddSession(options =>
+            services.AddDistributedRedisCache(options =>
             {
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
+                options.Configuration = Configuration.GetConnectionString("Redis");
+                options.InstanceName = "slicingpie";
             });
+
+            //services.AddSession(options =>
+            //{
+            //    options.Cookie.HttpOnly = true;
+            //    options.Cookie.IsEssential = true;
+            //});
 
         }
 
@@ -54,7 +59,7 @@ namespace SlicingPieAdmin
 
             app.UseAuthorization();
 
-            app.UseSession();
+            //app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

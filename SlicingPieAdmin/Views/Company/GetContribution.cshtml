@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SlicingPieAdmin.Models.ContributionViewModel>
+
+@{
+    ViewData["Title"] = "GetContribution";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Contribution History</h1>
+
+<div class="container">
+    <div class="row">
+
+
+        <div class="col-md-12">
+            <div class="table-responsive">
+
+
+                <table id="mytable" class="table table-bordred table-striped">
+
+                    <thead>
+                    <th>Name</th>
+                    <th>Type Asset</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Project</th>
+                    <th>Time Asset</th>
+
+                    </thead>
+                    <tbody>
+
+                        @foreach (var contribution in ViewData["Contribution"] as IList<ContributionViewModel>)
+                        {
+                            <tr>
+                                <td>@contribution.NamePerson</td>
+                                <td>@contribution.TypeAsset</td>
+                                <td>@contribution.Description</td>
+                                <td>@contribution.Quantity</td>
+                                <td>@contribution.Project</td>
+                                <td>@contribution.TimeAsset</td>
+                            </tr>
+
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+

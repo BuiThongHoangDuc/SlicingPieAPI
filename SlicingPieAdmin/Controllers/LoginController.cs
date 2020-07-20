@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using SlicingPieAdmin.Enums;
 using SlicingPieAdmin.Helper;
@@ -16,6 +17,12 @@ namespace SlicingPieAdmin.Controllers
     public class LoginController : Controller
     {
         SlicingPieApi _api = new SlicingPieApi();
+        private IDistributedCache redisCache;
+
+        public LoginController(IDistributedCache cache)
+        {
+            this.redisCache = cache;
+        }
 
         [Route("Login")]
         public async Task<IActionResult> Login(string token)
@@ -23,7 +30,9 @@ namespace SlicingPieAdmin.Controllers
             String action = "Error";
 
             HttpClient client = _api.Initial();
+
             client.DefaultRequestHeaders.Add("Authorization", token);
+      
             HttpResponseMessage res = await client.PostAsync("api/Login", null);
             if (res.IsSuccessStatusCode)
             {
@@ -31,7 +40,7 @@ namespace SlicingPieAdmin.Controllers
                 if(data.Role == (int) Role.ADMIN)
                 {
                     action = "HomePage";
-                    HttpContext.Session.SetString("token", data.Token);
+                    redisCache.SetString("token", data.Token);
                 }
 
             } else
@@ -48,9 +57,9 @@ namespace SlicingPieAdmin.Controllers
         }
 
         [Route("LogOut")]
-        public IActionResult LogOut()
+        public async Task<IActionResult> LogOutAsync()
         {
-            HttpContext.Session.Clear();
+            redisCache.Remove("token");
             return RedirectToAction("index", "Home");
         }
 
