@@ -58,8 +58,8 @@ namespace SlicingPieAPI.Controllers
         public async Task<IEnumerable<SheetDto>> UpdateEntry(String Sheet, String companyId) {
             Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
             var ListMainUserInfo = await _context.StakeHolders
-                                                    .Where(stInfo => stInfo.CompanyId == companyId)
-                                                    .OrderBy(sh => Int32.Parse(re.Match(sh.AccountId).Groups[2].Value))
+                                                    .Where(stInfo => stInfo.CompanyId == companyId && stInfo.Shstatus == Status.ACTIVE)
+                                                    .OrderBy(sh => sh.DateTimeAdd)
                                                     .Select(stInfo => new SheetDto
                                                     {
                                                         SHID = stInfo.AccountId,

@@ -149,18 +149,23 @@ namespace SlicingPieAPI.Controllers
         }
 
 
-        //// GET: api/StackHolders/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<StackHolder>> GetStackHolder(string id)
+        //GET: api/StackHolders/5
+        //[HttpGet("{CompanyID}")]
+        //public async Task<ActionResult> GetStackHolder(string CompanyID)
         //{
-        //    var stackHolder = await _context.StackHolders.FindAsync(id);
-
-        //    if (stackHolder == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return stackHolder;
+        //    var ListMainUserInfo = await _context.StakeHolders
+        //                                            .Where(stInfo => stInfo.CompanyId == CompanyID && stInfo.Shstatus == Status.ACTIVE)
+        //                                            .OrderBy(sh => sh.DateTimeAdd)
+        //                                            .Select(stInfo => new SheetDto
+        //                                            {
+        //                                                SHID = stInfo.AccountId,
+        //                                                SHName = stInfo.ShnameForCompany,
+        //                                                SliceAssets = stInfo.Account.SliceAssets
+        //                                                                                        .Where(asset => asset.CompanyId == CompanyID && asset.AssetStatus == Status.ACTIVE)
+        //                                                                                        .Select(asset => asset.AssetSlice).Sum() ?? 0
+        //                                            })
+        //                                            .ToListAsync();
+        //    return Ok(ListMainUserInfo);
         //}
 
 

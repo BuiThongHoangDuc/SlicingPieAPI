@@ -14,6 +14,7 @@ namespace SlicingPieAPI.Models
         public string Shimage { get; set; }
         public string Shstatus { get; set; }
         public int? Shrole { get; set; }
+        public DateTime? DateTimeAdd { get; set; }
 
         public virtual Account Account { get; set; }
         public virtual Company Company { get; set; }

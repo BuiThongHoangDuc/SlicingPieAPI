@@ -185,6 +185,7 @@ namespace SlicingPieAPI.Repository
             shModel.ShnameForCompany = addModel.ShnameForCompany;
             shModel.Shstatus = Status.ACTIVE;
             shModel.Shrole = Role.MANAGER;
+            shModel.DateTimeAdd = DateTime.Now;
 
             _context.StakeHolders.Add(shModel);
             try

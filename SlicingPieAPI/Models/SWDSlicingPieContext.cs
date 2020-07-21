@@ -242,6 +242,8 @@ namespace SlicingPieAPI.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.DateTimeAdd).HasColumnType("datetime");
+
                 entity.Property(e => e.Shimage)
                     .HasColumnName("SHImage")
                     .IsUnicode(false);
