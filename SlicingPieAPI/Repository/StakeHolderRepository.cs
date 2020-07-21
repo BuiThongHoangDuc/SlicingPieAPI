@@ -89,7 +89,7 @@ namespace SlicingPieAPI.Repository
 
         public IQueryable<StakeHolder> Search(string search)
         {
-          IQueryable<StakeHolder> stakeHolders = _context.StakeHolders.Where(q => q.ShnameForCompany.Contains(search));
+          IQueryable<StakeHolder> stakeHolders = _context.StakeHolders.Where(q => q.ShnameForCompany.Contains(search) && q.Shstatus == Status.ACTIVE);
             return stakeHolders;
         }
 
