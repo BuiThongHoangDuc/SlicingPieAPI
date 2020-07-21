@@ -44,6 +44,7 @@ namespace SlicingPieAPI.Repository
             termModel.TermTimeFrom = term.TermTimeFrom;
             termModel.TermTimeTo = term.TermTimeTo;
             termModel.CompanyId = term.CompanyId;
+            termModel.TermStatus = "1";
 
 
             _context.TermSlice.Add(termModel);
@@ -80,7 +81,8 @@ namespace SlicingPieAPI.Repository
                                             TermName = term.TermName,
                                             TermTimeFrom = term.TermTimeFrom,
                                             TermTimeTo = term.TermTimeTo,
-                                            TermSliceTotal = term.SliceAssets.Where(termSlice => term.TermId == termSlice.TermId).Select(termSlice => termSlice.AssetSlice).Sum() ?? 0
+                                            TermSliceTotal = term.SliceAssets.Where(termSlice => term.TermId == termSlice.TermId).Select(termSlice => termSlice.AssetSlice).Sum() ?? 0,
+                                            TermStatus = term.TermStatus,
                                         }).OrderByDescending(term => term.TermTimeTo).ToListAsync();
             return listTerm;
         }

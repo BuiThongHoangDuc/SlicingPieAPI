@@ -16,6 +16,7 @@ namespace SlicingPieAPI.Models
         public DateTime TermTimeTo { get; set; }
         public string CompanyId { get; set; }
         public string TermName { get; set; }
+        public string TermStatus { get; set; }
 
         public virtual Company Company { get; set; }
         public virtual ICollection<ProjectDetail> ProjectDetails { get; set; }

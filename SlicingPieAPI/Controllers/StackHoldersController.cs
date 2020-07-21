@@ -67,6 +67,18 @@ namespace SlicingPieAPI.Controllers
 
             return Ok(sh);
         }
+        [HttpGet("list-company/{companyid}/{accountid}")]
+        public async Task<ActionResult<AddStakeHolderDto>> GetListCompany(string companyid,String accountid)
+        {
+            var sh = await _shService.GetListCompanyStakeholder(companyid, accountid).ToListAsync();
+
+            if (sh.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(sh);
+        }
 
         //PUT: api/Scenarios/5
         [HttpPut("{comapnyid}/{accountid}")]

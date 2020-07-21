@@ -12,5 +12,7 @@ namespace SlicingPieAPI.DTOs
         public DateTime TermTimeTo { get; set; }
         public string TermName { get; set; }
         public double? TermSliceTotal { get; set; }
+        public string TermStatus { get; set; }
+
     }
 }

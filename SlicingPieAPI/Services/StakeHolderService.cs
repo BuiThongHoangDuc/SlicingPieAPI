@@ -58,10 +58,21 @@ namespace SlicingPieAPI.Services
         {
             return _stakeHolder.DeleteShByID(companyID, accountID);
         }
+
+        public Task<IEnumerable<SHLoadMainDto>> getListShByCompanyInactive(string companyId)
+        {
+            return _stakeHolder.getListShByCompanyInactive(companyId);
+        }
+
+        public IQueryable<CompanyListStakeholderDto> GetListCompanyStakeholder(string companyid, string shID)
+        {
+            return _stakeHolder.GetListCompanyStakeholder(companyid, shID);
+        }
     }
 
     public interface IStakeHolderService
     {
+        Task<IEnumerable<SHLoadMainDto>> getListShByCompanyInactive(string companyId);
         Task<string> getStakeHolderCompanyID(string id);
         Task<StakeHolderDto> getStakeHolderLoginInoByID(string id);
         Task<SHLoadMainDto> getSHByCompany(string companyId, string shId);
@@ -71,8 +82,7 @@ namespace SlicingPieAPI.Services
         IQueryable<AddStakeHolderDto> GetShSV(String companyID, String accountID);
         Task<bool> UpdateShByIDSV(AddStakeHolderDto editModel);
         Task<bool> DeleteShByID(String companyID, String accountID);
-
-
+        IQueryable<CompanyListStakeholderDto> GetListCompanyStakeholder(string companyid, string shID);
 
     }
 }

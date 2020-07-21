@@ -82,6 +82,52 @@ namespace SlicingPieAPI.Controllers
             return response;
         }
 
+        //// GET: api/Login
+        //[AllowAnonymous]
+        //[HttpPost("switch-account/{accountid}/{companyid}")]
+        //public async Task<IActionResult> GetStackHoldersSwitch(string accountid, string companyid)
+        //{
+        //    IActionResult response = Unauthorized();
+
+        //    FirebaseToken decodedToken = await FirebaseAuth.DefaultInstance
+        //        .VerifyIdTokenAsync(Request.Headers[HeaderNames.Authorization]);
+        //    string uid = decodedToken.Uid;
+
+        //    UserRecord userRecord = await FirebaseAuth.DefaultInstance.GetUserAsync(uid);
+        //    var user = userRecord.Email;
+
+        //    if (user != null)
+        //    {
+        //        var info = _accountService.getAccountInfo(user);
+        //        if (info.Result == null) return Unauthorized();
+        //        else
+        //        {
+        //            if (info.Result.RoleID.Equals(Role.ADMIN))
+        //            {
+        //                var tokenString = GenerateJSONWebTokenAdmin(info.Result);
+        //                return Ok(new { token = tokenString, Name = info.Result.NameAccount, Role = info.Result.RoleID });
+        //            }
+        //            else if (info.Result.RoleID.Equals(Role.USER))
+        //            {
+        //                string companyId = _shService.getStakeHolderCompanyID(info.Result.AccountID).Result;
+
+        //                if (companyId == null)
+        //                {
+        //                    response = Unauthorized();
+        //                }
+        //                else
+        //                {
+        //                    var shInfo = _shService.getStakeHolderLoginInoByID(info.Result.AccountID);
+        //                    var tokenString = GenerateJSONWebToken(shInfo.Result);
+
+        //                    response = Ok(new { token = tokenString, StakeHolderID = shInfo.Result.SHID, CompanyId = shInfo.Result.CompanyID, Role = shInfo.Result.RoleID, companyName = shInfo.Result.CompanyName, ShImage = shInfo.Result.Shimage, shName = shInfo.Result.SHName });
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return response;
+        //}
+
         private string GenerateJSONWebToken(StakeHolderDto userInfo)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));

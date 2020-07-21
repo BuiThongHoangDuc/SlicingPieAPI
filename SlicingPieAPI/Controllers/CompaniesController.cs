@@ -62,18 +62,43 @@ namespace SlicingPieAPI.Controllers
             var shID = claim[0].Value;
             var role = Convert.ToInt32(claim[1].Value);
 
-            if (role == Role.MANAGER || role == Role.ADMIN)
+            if (role == Role.MANAGER || role == Role.ADMIN || role == Role.EMPLOYEE)
             {
                 var info = await _company.getListSHComapny(id);
                 if (info.ToList().Count == 0) return NotFound();
                 else return Ok(info.ToList());
             }
-            else if (role == Role.EMPLOYEE)
+            //else if (role == Role.EMPLOYEE)
+            //{
+            //    var UserInfo = _company.getSHByCompany(id, shID).Result;
+            //    if (UserInfo == null) return NotFound();
+            //    else return Ok(UserInfo);
+            //}
+            return NotFound();
+        }
+        // GET: api/Companies/5/List Stake holder
+        [HttpGet("{id}/stake-holder-inactive")]
+        public async Task<ActionResult<IEnumerable<SHLoadMainDto>>> GetListSHCompanyInactive(string id)
+        {
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+
+            var shID = claim[0].Value;
+            var role = Convert.ToInt32(claim[1].Value);
+
+            if (role == Role.MANAGER || role == Role.ADMIN || role == Role.EMPLOYEE)
             {
-                var UserInfo = _company.getSHByCompany(id, shID).Result;
-                if (UserInfo == null) return NotFound();
-                else return Ok(UserInfo);
+                var info = await _shSV.getListShByCompanyInactive(id);
+                if (info.ToList().Count == 0) return NotFound();
+                else return Ok(info.ToList());
             }
+            //else if (role == Role.EMPLOYEE)
+            //{
+            //    var UserInfo = _company.getSHByCompany(id, shID).Result;
+            //    if (UserInfo == null) return NotFound();
+            //    else return Ok(UserInfo);
+            //}
             return NotFound();
         }
 

@@ -51,7 +51,28 @@ namespace SlicingPieAPI.Repository
         {
             Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
             var ListMainUserInfo = await _context.StakeHolders
-                                                    .Where(stInfo => stInfo.CompanyId == companyId)
+                                                    .Where(stInfo => stInfo.CompanyId == companyId && stInfo.Shstatus == Status.ACTIVE)
+                                                    .OrderBy(sh => Int32.Parse(re.Match(sh.AccountId).Groups[2].Value))
+                                                    .Select(stInfo => new SHLoadMainDto
+                                                    {
+                                                        SHID = stInfo.AccountId,
+                                                        SHName = stInfo.ShnameForCompany,
+                                                        SHImage = stInfo.Shimage,
+                                                        SHJob = stInfo.Shjob,
+                                                        CompanyID = stInfo.CompanyId,
+                                                        SliceAssets = stInfo.Account.SliceAssets
+                                                                                                .Where(asset => asset.CompanyId == companyId && asset.AssetStatus == Status.ACTIVE)
+                                                                                                .Select(asset => asset.AssetSlice).Sum() ?? 0
+                                                    })
+                                                    .ToListAsync();
+            return ListMainUserInfo;
+        }
+
+        public async Task<IEnumerable<SHLoadMainDto>> getListShByCompanyInactive(string companyId)
+        {
+            Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
+            var ListMainUserInfo = await _context.StakeHolders
+                                                    .Where(stInfo => stInfo.CompanyId == companyId && stInfo.Shstatus == Status.INACTIVE)
                                                     .OrderBy(sh => Int32.Parse(re.Match(sh.AccountId).Groups[2].Value))
                                                     .Select(stInfo => new SHLoadMainDto
                                                     {
@@ -241,6 +262,19 @@ namespace SlicingPieAPI.Repository
                 throw;
             }
         }
+
+        public IQueryable<CompanyListStakeholderDto> GetListCompanyStakeholder(string companyid,string shID)
+        {
+            var ListCompany = _context.StakeHolders
+                                    .Where(sh => sh.AccountId == shID && sh.Company.Status == Status.ACTIVE && sh.CompanyId != companyid)
+                                    .Select(sh => new CompanyListStakeholderDto
+                                    {
+                                        CompanyId = sh.Company.CompanyId,
+                                        ComapnyIcon = sh.Company.ComapnyIcon,
+                                        CompanyName = sh.Company.CompanyName,
+                                    });
+            return ListCompany;
+        }
     }
 
     public interface IStakeHolderRepository
@@ -249,7 +283,7 @@ namespace SlicingPieAPI.Repository
         Task<string> getStakeHolderCompany(string id);
         Task<IEnumerable<SHLoadMainDto>> getListShByCompany(string companyId);
         Task<SHLoadMainDto> getShByIDCompany(string companyId, string userId);
-
+        Task<IEnumerable<SHLoadMainDto>> getListShByCompanyInactive(string companyId);
         IQueryable<StakeHolder> Search(string search);
 
         IQueryable<StakeHolder> Paging(IQueryable<StakeHolder> stakeHolder, int pageIndex, int itemPerPage);
@@ -265,5 +299,7 @@ namespace SlicingPieAPI.Repository
         IQueryable<AddStakeHolderDto> GetSh(String companyID, String accountID);
         Task<bool> UpdateShByID(AddStakeHolderDto editModel);
         Task<bool> DeleteShByID(String companyID, String accountID);
+
+        IQueryable<CompanyListStakeholderDto> GetListCompanyStakeholder(string companyid,string shID);
     }
 }
