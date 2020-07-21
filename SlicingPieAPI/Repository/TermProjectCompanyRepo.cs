@@ -80,7 +80,8 @@ namespace SlicingPieAPI.Repository
                                             TermName = term.TermName,
                                             TermTimeFrom = term.TermTimeFrom,
                                             TermTimeTo = term.TermTimeTo,
-                                        }).ToListAsync();
+                                            TermSliceTotal = term.SliceAssets.Where(termSlice => term.TermId == termSlice.TermId).Select(termSlice => termSlice.AssetSlice).Sum() ?? 0
+                                        }).OrderByDescending(term => term.TermTimeTo).ToListAsync();
             return listTerm;
         }
 

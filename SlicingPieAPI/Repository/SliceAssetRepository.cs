@@ -99,7 +99,7 @@ namespace SlicingPieAPI.Repository
                                                Project = asset.Project.ProjectName,
                                                TimeAsset = asset.TimeAsset,
                                                TypeAsset = asset.TypeAsset.NameAsset,
-                                           }).ToListAsync();
+                                           }).OrderByDescending(asset => asset.TimeAsset).ToListAsync();
             return ListContribution;
         }
 
@@ -118,7 +118,7 @@ namespace SlicingPieAPI.Repository
                                                Project = asset.Project.ProjectName,
                                                TimeAsset = asset.TimeAsset,
                                                TypeAsset = asset.TypeAsset.NameAsset,
-                                           }).ToListAsync();
+                                           }).OrderByDescending(asset => asset.TimeAsset).ToListAsync();
             return ListContribution;
         }
 
