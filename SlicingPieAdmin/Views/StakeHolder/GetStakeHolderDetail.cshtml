@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewData["Title"] = "GetStakeHolderDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Stake Holder Detail</h1>
+
+
+<div class="container">
+
+    <div class="col-md-12">
+
+        <div class="table-responsive">
+
+            <table id="mytable" class="table table-bordred table-striped">
+
+                <thead>
+                <th>Name</th>
+                <th>Job</th>
+                <th>Image</th>
+                <th>Market Salary</th>
+                <th>Salary</th>
+                <th>Edit</th>
+
+                </thead>
+                <tbody>
+                    @{ var stakeholder = ViewData["StakeHolders"] as StakeHolderViewModel;}
+                    <tr>
+                        <td>@stakeholder.ShnameForCompany</td>
+                        <td>@stakeholder.Shjob</td>
+                        <td><img src=@stakeholder.Shimage width="50" height="50" /></td>
+                        <td>@stakeholder.ShmarketSalary</td>
+                        <td>@stakeholder.Shsalary</td>
+                        <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs editidentifyingClass" data-title="Detail" data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+        <!--Modal For Edit-->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="my_modalLabel">
+            <div class="modal-dialog" role="dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <form class="form-horizontal EditCompanyForm" role="form" method="post" action="/StakeHolders/@stakeholder.CompanyId/@stakeholder.AccountId">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="ShnameForCompany">Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control CompanyIDField"
+                                           id="ShnameForCompany" name="ShnameForCompany" placeholder="Name" value="@stakeholder.ShnameForCompany"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="Shjob">Job</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control CompanyNameField"
+                                           id="Shjob" name="Shjob" placeholder="Job" value="@stakeholder.Shjob"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="Shimage">Image</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control CompanyIconField"
+                                           id="Shimage" name="Shimage" placeholder="Image" value="@stakeholder.Shimage"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="ShmarketSalary">Market Salary</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control CompanyNonCashField"
+                                           id="ShmarketSalary" name="ShmarketSalary" placeholder="Market Salary" value="@stakeholder.ShmarketSalary"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="Shsalary">Salary</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control CompanyCashField"
+                                           id="Shsalary" name="Shsalary" placeholder="Salary" value="@stakeholder.Shsalary"/>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Save</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    </div>
+

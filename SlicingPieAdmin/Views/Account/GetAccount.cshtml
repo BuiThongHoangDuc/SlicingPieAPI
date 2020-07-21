@@ -4,74 +4,216 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
-    <div class="row">
+    <div class="container">
+        <div class="d-flex flex-row-reverse bd-highlight">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add"><span class="glyphicon glyphicon-plus"></span></button>
+        </div>
+        <div class="row">
 
 
-        <div class="col-md-12">
-
-            <div class="table-responsive">
+            <div class="col-md-12">
 
 
-                <table id="mytable" class="table table-bordred table-striped">
+                <div class="table-responsive">
 
-                    <thead>
-                    <th>Account ID</th>
-                    <th>Name Account</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Role</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                    </thead>
-                    <tbody>
 
-                        @foreach (var account in ViewData["Accounts"] as IList<AccountViewModel>)
-                        {
-                        <tr>
-                            <td>@account.AccountId</td>
-                            <td>@account.NameAccount</td>
-                            <td>@account.EmailAccount</td>
-                            <td>@account.PhoneAccount</td>
+                    <table id="mytable" class="table table-bordred table-striped">
 
-                            @if (account.RoleId == (int)SlicingPieAdmin.Enums.Role.ADMIN)
+                        <thead>
+                        <th>Account ID</th>
+                        <th>Name Account</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Role</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var account in ViewData["Accounts"] as IList<AccountViewModel>)
                             {
-                                <td>Admin</td>
+                                <tr>
+                                    <td class="ACI-@account.AccountId">@account.AccountId</td>
+                                    <td class="ACN-@account.AccountId">@account.NameAccount</td>
+                                    <td class="ACE-@account.AccountId">@account.EmailAccount</td>
+                                    <td class="ACP-@account.AccountId">@Convert.ToInt32(account.PhoneAccount)</td>
+
+                                    @if (account.RoleId == (int)SlicingPieAdmin.Enums.Role.ADMIN)
+                                    {
+                                        <td>Admin</td>
+                                    }
+                                    else if (account.RoleId == (int)SlicingPieAdmin.Enums.Role.MANAGER)
+                                    {
+                                        <td>Manager</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Employee</td>
+                                    }
+
+                                    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs editidentifyingClass" data-title="Edit" data-toggle="modal" data-target="#edit" data-id="@account.AccountId"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                                    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button onclick="window.location.href='/Accounts/delete/@account.AccountId'" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete"><span class="glyphicon glyphicon-trash"></span></button></p></td>
+                                </tr>
+
                             }
-                            else if (account.RoleId == (int)SlicingPieAdmin.Enums.Role.MANAGER)
-                            {
-                                <td>Manager</td>
-                            }
-                            else
-                            {
-                                <td>Employee</td>
-                            }
+                        </tbody>
 
-                            <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-                            <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete"><span class="glyphicon glyphicon-trash"></span></button></p></td>
-                        </tr>
+                    </table>
 
-                        }
-                    </tbody>
 
-                </table>
 
-                <div class="clearfix"></div>
-                <ul class="pagination pull-right">
-                    <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-                </ul>
+                </div>
 
             </div>
-
         </div>
+
+        <!----Modal for add-->
+        <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="my_modalLabel">
+            <div class="modal-dialog" role="dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <form class="form-horizontal" role="form" method="post" action="/Accounts">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="EmailAccount">Email</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"
+                                           id="EmailAccount" name="EmailAccount" placeholder="Email" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="Password">Password</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control"
+                                           id="Password" name="Password" placeholder="Password" required minlength="6" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="Name">Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"
+                                           id="NameAccount" name="NameAccount" placeholder="Name Account" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="Phone">Phone</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control CompanyNonCashField"
+                                           id="PhoneAccount" name="PhoneAccount" placeholder="Phone Account" required />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Create</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <!---Modal for edit-->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="my_modalLabel">
+            <div class="modal-dialog" role="dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <form class="form-horizontal EditAccountForm" role="form" method="post">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="Account ID">Account ID</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control AccountField"
+                                           id="AccountId" name="AccountId" placeholder="Account ID" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="EmailAccount">Email</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control EmailField"
+                                           id="EmailAccount" name="EmailAccount" placeholder="Email Account" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="NameAccount">Name Account</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control NameField"
+                                           id="NameAccount" name="NameAccount" placeholder="Name" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="PhoneAccount">Phone Account</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control PhoneField"
+                                           id="PhoneAccount" name="PhoneAccount" placeholder="Phone" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Save</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                        <script type="text/javascript">
+                                        $(function () {
+                                            $(".editidentifyingClass").click(function () {
+                                                var my_id_value = $(this).data('id');
+                                                $(".AccountField").val(my_id_value);
+                                                $(".EmailField").val($(".ACE-" + my_id_value).text());
+
+                                       
+
+                                                $(".PhoneField").val($(".ACP-" + my_id_value).text());
+                                                $(".NameField").val($(".ACN-" + my_id_value).text());
+                                       
+
+
+                                                $(".EditAccountForm").attr("action", "/Accounts/" + my_id_value);
+
+
+                                            })
+                                        });
+                        </script>
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
-</div>
 
 
 

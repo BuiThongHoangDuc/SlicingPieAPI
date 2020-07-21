@@ -101,6 +101,7 @@ namespace SlicingPieAdmin.Controllers
             if (res.IsSuccessStatusCode)
             {
                 ViewData["StakeHolders"] = JsonConvert.DeserializeObject<List<StakeHolderInCompany>>(res.Content.ReadAsStringAsync().Result);
+                ViewData["CompanyId"] = id;
             }
             else
             {
