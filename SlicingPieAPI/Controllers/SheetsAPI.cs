@@ -72,10 +72,10 @@ namespace SlicingPieAPI.Controllers
 
             for (int i = 2; i < ListMainUserInfo.Count + 2; i++)
             {
-                var range = $"{Sheet}!C{i}";
+                var range = $"{Sheet}!A{i}:C{i}";
                 var valueRange = new ValueRange();
 
-                var objectList = new List<object>() { ListMainUserInfo[i-2].SliceAssets };
+                var objectList = new List<object>() { ListMainUserInfo[i - 2].SHID, ListMainUserInfo[i - 2].SHName, ListMainUserInfo[i-2].SliceAssets };
                 valueRange.Values = new List<IList<object>> { objectList };
 
                 var updateRequest = service.Spreadsheets.Values.Update(valueRange, SpreadSheetID, range);
@@ -88,10 +88,11 @@ namespace SlicingPieAPI.Controllers
 
         public async Task<bool> DeleteEntry(String Sheet, String companyId,String accountID)
         {
+
             Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
             var ListMainUserInfo = await _context.StakeHolders
                                                     .Where(stInfo => stInfo.CompanyId == companyId)
-                                                    .OrderBy(sh => Int32.Parse(re.Match(sh.AccountId).Groups[2].Value))
+                                                    .OrderBy(sh => sh.DateTimeAdd)
                                                     .Select(stInfo => new SheetDto
                                                     {
                                                         SHID = stInfo.AccountId,
@@ -116,6 +117,8 @@ namespace SlicingPieAPI.Controllers
                 }
             }
             return false;
+
+            
         }
 
 

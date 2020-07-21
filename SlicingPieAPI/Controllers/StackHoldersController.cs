@@ -109,9 +109,11 @@ namespace SlicingPieAPI.Controllers
                 if (check == false) return NotFound();
                 else
                 {
+                    //bool check2 = true;
                     bool check2 = await _sheet.DeleteEntry(comapnyid, comapnyid, accountid);
                     if (check2 == true)
                     {
+                        await _sheet.UpdateEntry(comapnyid, comapnyid);
                         return NoContent();
                     }
                     else return BadRequest();
@@ -149,23 +151,24 @@ namespace SlicingPieAPI.Controllers
         }
 
 
-        //GET: api/StackHolders/5
+        ////GET: api/StackHolders/5
         //[HttpGet("{CompanyID}")]
         //public async Task<ActionResult> GetStackHolder(string CompanyID)
         //{
-        //    var ListMainUserInfo = await _context.StakeHolders
-        //                                            .Where(stInfo => stInfo.CompanyId == CompanyID && stInfo.Shstatus == Status.ACTIVE)
-        //                                            .OrderBy(sh => sh.DateTimeAdd)
-        //                                            .Select(stInfo => new SheetDto
-        //                                            {
-        //                                                SHID = stInfo.AccountId,
-        //                                                SHName = stInfo.ShnameForCompany,
-        //                                                SliceAssets = stInfo.Account.SliceAssets
-        //                                                                                        .Where(asset => asset.CompanyId == CompanyID && asset.AssetStatus == Status.ACTIVE)
-        //                                                                                        .Select(asset => asset.AssetSlice).Sum() ?? 0
-        //                                            })
-        //                                            .ToListAsync();
-        //    return Ok(ListMainUserInfo);
+        //    //var ListMainUserInfo = await _context.StakeHolders
+        //    //                                        .Where(stInfo => stInfo.CompanyId == CompanyID)
+        //    //                                        .OrderBy(sh => sh.DateTimeAdd)
+        //    //                                        .Select(stInfo => new SheetDto
+        //    //                                        {
+        //    //                                            SHID = stInfo.AccountId,
+        //    //                                            SHName = stInfo.ShnameForCompany,
+        //    //                                            SliceAssets = stInfo.Account.SliceAssets
+        //    //                                                                                    .Where(asset => asset.CompanyId == CompanyID && asset.AssetStatus == Status.ACTIVE)
+        //    //                                                                                    .Select(asset => asset.AssetSlice).Sum() ?? 0
+        //    //                                        })
+        //    //                                        .ToListAsync();
+        //    await _sheet.DeleteEntry("BS101", "BS101", "ab");
+        //    return Ok();
         //}
 
 
