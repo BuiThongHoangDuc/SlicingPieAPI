@@ -74,7 +74,7 @@ namespace SlicingPieAPI.Controllers
                             var shInfo = _shService.getStakeHolderLoginInoByID(info.Result.AccountID);
                             var tokenString = GenerateJSONWebToken(shInfo.Result);
 
-                            response = Ok(new { token = tokenString , StakeHolderID = shInfo.Result.SHID, CompanyId = shInfo.Result.CompanyID, Role = shInfo.Result.RoleID, companyName = shInfo.Result.CompanyName, ShImage = shInfo.Result.Shimage});
+                            response = Ok(new { token = tokenString , StakeHolderID = shInfo.Result.SHID, CompanyId = shInfo.Result.CompanyID, Role = shInfo.Result.RoleID, companyName = shInfo.Result.CompanyName, ShImage = shInfo.Result.Shimage, shName = shInfo.Result.SHName});
                         }
                     }
                 }

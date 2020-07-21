@@ -41,6 +41,7 @@ namespace SlicingPieAPI.Repository
                                         RoleID = sh.Shrole,
                                         CompanyName = sh.Company.CompanyName,
                                         Shimage = sh.Shimage,
+                                        SHName = sh.ShnameForCompany,
                                     })
                                     .FirstOrDefaultAsync();
             return shInfo;
