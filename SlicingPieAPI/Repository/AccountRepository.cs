@@ -90,7 +90,7 @@ namespace SlicingPieAPI.Repository
 
         public IQueryable<Account> Search(string search)
         {
-            IQueryable<Account> account = _context.Accounts.Where(q => q.NameAccount.Contains(search));
+            IQueryable<Account> account = _context.Accounts.Where(q => q.NameAccount.Contains(search) && q.StatusId == Status.ACTIVE);
             return account;
         }
 
