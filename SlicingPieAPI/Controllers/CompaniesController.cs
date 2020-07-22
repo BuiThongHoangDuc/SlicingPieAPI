@@ -109,6 +109,13 @@ namespace SlicingPieAPI.Controllers
             if (Name == null) return NotFound();
             else return Ok(Name);
         }
+        [HttpGet("{companyid}/chart-company")]
+        public async Task<ActionResult<string>> GetChartCompany(string companyid)
+        {
+            var chart = await _company.GetChartCompanySV(companyid).FirstOrDefaultAsync();
+            if (chart == null) return NotFound();
+            else return Ok(chart);
+        }
 
         // GET: api/Companies/5
         [HttpGet("{id}")]

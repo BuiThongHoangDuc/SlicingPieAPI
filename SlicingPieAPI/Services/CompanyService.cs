@@ -192,6 +192,11 @@ namespace SlicingPieAPI.Services
         {
             return await _termProjectRepo.AddProjectToTerm(termID, projectID);
         }
+
+        public IQueryable<string> GetChartCompanySV(string companyid)
+        {
+            return _company.GetChartCompany(companyid);
+        }
     }
 
     public interface ICompanyService
@@ -213,6 +218,7 @@ namespace SlicingPieAPI.Services
         Task<IEnumerable<TermDto>> GetListTermCompanySV(String companyID);
         Task<bool> addTermCompanySV(AddTermDto term);
         Task<bool> AddProjectToTermSV(int termID, string projectID);
+        IQueryable<string> GetChartCompanySV(string companyid);
 
     }
 }
