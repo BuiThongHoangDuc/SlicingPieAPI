@@ -188,6 +188,23 @@ namespace SlicingPieAPI.Controllers
             else return Ok(listTerm);
         }
 
+        [HttpPut("term-done/{id}")]
+        public async Task<IActionResult> UpdateAsset(int id)
+        {
+
+            try
+            {
+                bool check = await _company.UpdateDoneTermSV(id);
+                if (check)
+                {return NoContent(); }
+                else return NotFound();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            };
+        }
+
         [HttpGet("{id}/list-term")]
         public async Task<ActionResult<IEnumerable<TermDto>>> GetTermCompany(String id)
         {

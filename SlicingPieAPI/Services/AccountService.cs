@@ -55,9 +55,9 @@ namespace SlicingPieAPI.Services
             return _account.GetDetailAccount(id);
         }
 
-        public Task<string> UpdateScenarioSV(string id, AccountDetailDto account)
+        public Task<string> UpdateAccountSV(string id, AccountDetailDto account)
         {
-            return _account.UpdateScenario(id, account);
+            return _account.UpdateAccount(id, account);
         }
     }
 
@@ -69,7 +69,7 @@ namespace SlicingPieAPI.Services
         Task<bool> CreateAccountSV(AddAccountDto addModel);
         Task<bool> DeleteAccountSV(String id);
         IQueryable<AccountDetailDto> GetDetailAccountSV(String id);
-        Task<String> UpdateScenarioSV(String id, AccountDetailDto account);
+        Task<String> UpdateAccountSV(String id, AccountDetailDto account);
 
 
     }

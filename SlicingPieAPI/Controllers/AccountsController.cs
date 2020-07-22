@@ -92,7 +92,7 @@ namespace SlicingPieAPI.Controllers
 
             try
             {
-                String idUpdate = await _accountService.UpdateScenarioSV(id, account);
+                String idUpdate = await _accountService.UpdateAccountSV(id, account);
                 if (idUpdate == null) return NotFound();
                 else return Ok(id);
             }

@@ -98,6 +98,25 @@ namespace SlicingPieAPI.Repository
                                                         }).ToListAsync();
             return termProject;
         }
+
+        public async Task<bool> UpdateDoneTerm(int termID)
+        {
+            TermSlouse termModel = await _context.TermSlice.FindAsync(termID);
+            if (termModel == null) return false;
+            termModel.TermStatus = Status.INACTIVE;
+
+            _context.Entry(termModel).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+        }
     }
     public interface ITermProjectCompanyRepo
     {
@@ -106,5 +125,6 @@ namespace SlicingPieAPI.Repository
         Task<bool> addTermCompany(AddTermDto term);
         Task<DateTime> GetLatestTimeto(String companyID);
         Task<bool> AddProjectToTerm(int termID, string projectID);
+        Task<bool> UpdateDoneTerm(int termID);
     }
 }

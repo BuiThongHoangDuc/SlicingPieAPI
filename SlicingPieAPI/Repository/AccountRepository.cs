@@ -138,7 +138,7 @@ namespace SlicingPieAPI.Repository
             return account;
         }
 
-        public async Task<String> UpdateScenario(String id, AccountDetailDto account)
+        public async Task<String> UpdateAccount(String id, AccountDetailDto account)
         {
             Account accountModel = await _context.Accounts.FindAsync(id);
             if (accountModel == null) return null;
@@ -173,7 +173,7 @@ namespace SlicingPieAPI.Repository
         Task<bool> CreateAccount(AddAccountDto addModel);
         Task<bool> DeleteAccount(String id);
         IQueryable<AccountDetailDto> GetDetailAccount(String id);
-        Task<String> UpdateScenario(String id, AccountDetailDto account);
+        Task<String> UpdateAccount(String id, AccountDetailDto account);
 
 
     }
