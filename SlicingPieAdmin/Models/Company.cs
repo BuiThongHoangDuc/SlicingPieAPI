@@ -20,5 +20,7 @@ namespace SlicingPieAdmin.Models
         public int CashMultiplier { get; set; }
         [JsonProperty("CashPerSlice")]
         public double CashPerSlice { get; set; }
+        [JsonProperty("CompanyChart")]
+        public String CompanyChart { get; set; }
     }
 }

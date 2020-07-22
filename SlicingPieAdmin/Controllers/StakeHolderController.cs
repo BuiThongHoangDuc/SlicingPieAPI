@@ -44,6 +44,25 @@ namespace SlicingPieAdmin.Controllers
             return View();
         }
 
+
+        [Route("StakeHolders/delete/{CompanyId}/{AccountId}")]
+        public async Task<IActionResult> DeleteStakeHolder(String CompanyId, String AccountId)
+        {
+
+            String token = redisCache.GetString("token");
+            String action = "Error";
+            HttpClient client = _api.Initial();
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+            HttpResponseMessage res = await client.DeleteAsync("api/StackHolders/" + CompanyId + "/" + AccountId);
+            if (!res.IsSuccessStatusCode)
+            {
+                return RedirectToAction(action, "Login");
+            }
+
+            return RedirectToAction("GetStakeHolder", "Company", new { id = CompanyId });
+        }
+
+
         [Route("StakeHolders/{CompanyId}/{AccountId}")]
         public async Task<IActionResult> GetStakeHolderDetail(String CompanyId, String AccountId)
         {
@@ -74,7 +93,6 @@ namespace SlicingPieAdmin.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateStakeHolder(String CompanyId, String AccountId, StakeHolderViewModel stakeholder)
         {
-
             stakeholder.CompanyId = CompanyId;
             stakeholder.AccountId = AccountId;
 

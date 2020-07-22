@@ -112,6 +112,28 @@ namespace SlicingPieAdmin.Controllers
         }
 
 
+        [Route("Companies/{id}/chart-company")]
+        public async Task<IActionResult> GetChart(String id)
+        {
+
+            String token = redisCache.GetString("token");
+            String action = "Error";
+            HttpClient client = _api.Initial();
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+            HttpResponseMessage res = await client.GetAsync("api/Companies/" + id + "/chart-company");
+            if (res.IsSuccessStatusCode)
+            {
+                ViewData["Chart"] = res.Content.ReadAsStringAsync().Result;
+            }
+            else
+            {
+                return RedirectToAction(action, "Login");
+            }
+
+            return View();
+        }
+
+
         [Route("Companies/{id}")]
         [HttpPost]
         public async Task<IActionResult> UpdateCompany([FromForm] Company companyModel, String id)
@@ -138,7 +160,7 @@ namespace SlicingPieAdmin.Controllers
         {
             companyModel.CompanyId = "";
 
-            String token = redisCache.GetString("token");
+                String token = redisCache.GetString("token");
             String action = "Error";
             HttpClient client = _api.Initial();
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);

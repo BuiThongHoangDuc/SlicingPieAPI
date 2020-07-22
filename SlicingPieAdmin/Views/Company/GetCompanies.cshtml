@@ -67,7 +67,7 @@
 
                                     <a class="btn btn-info" id="Contribution" role="button">Contribution History</a>
                                     <a class="btn btn-info" id="StakeHolder" role="button">List StakeHolder</a>
-
+                                    <a class="btn btn-info" id="CompanyChart" role="button">Chart</a>
                                     <input type="hidden" name="hiddenValue" id="hiddenValue" value="" />
                                 </div>
                                 <div class="modal-footer">
@@ -85,8 +85,10 @@
                                     $(".modal-body #hiddenValue").val(my_id_value);
                                     var linkToContributor = "/Companies/" + my_id_value + "/Contribution";
                                     var linkToStakeHolder = "/Companies/" + my_id_value + "/stake-holder";
+                                    var linkToChart = "/Companies/" + my_id_value + "/chart-company";
                                     document.getElementById("Contribution").setAttribute("href", linkToContributor);
                                     document.getElementById("StakeHolder").setAttribute("href", linkToStakeHolder);
+                                    document.getElementById("CompanyChart").setAttribute("href", linkToChart);
 
                                 })
                             });
@@ -96,7 +98,6 @@
 
 
                     </div>
-
 
 
                     <!--Modal For Edit-->
@@ -260,6 +261,16 @@
                                                        id="CashPerSlice" name="CashPerSlice" placeholder="Cash Per Slice" />
                                             </div>
                                         </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label"
+                                                   for="CompanyChart">Company Chart</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control"
+                                                       id="CompanyChart" name="CompanyChart" placeholder="Company Chart" />
+                                            </div>
+                                        </div>
+
 
 
 
