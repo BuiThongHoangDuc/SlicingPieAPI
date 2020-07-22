@@ -110,23 +110,15 @@ namespace SlicingPieAPI.Services
 
         public async Task AddProjectSV(String companyID, ProjectDto project)
         {
-            var lastid = await _projectRepository.getProjectLast(companyID);
-            string[] splitString = lastid.Split(' ');
-            if (lastid == null || splitString.Length == 1)
+            var lastid = _projectRepository.getProjectLast(companyID).Result.ToList().Count;
+            if (lastid == 0)
             {
                 project.ProjectId = companyID + " PJ1";
             }
             else
             {
-                Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
-                Match result = re.Match(splitString[1]);
 
-                string alphaPart = result.Groups[1].Value;
-                string numberPart = result.Groups[2].Value;
-
-                int numberProject = Int32.Parse(numberPart) + 1;
-
-                project.ProjectId = splitString[0] + " " + alphaPart + numberProject;
+                project.ProjectId = companyID + " PJ"+(lastid+1);
             }
 
             await _projectRepository.AddProject(project);

@@ -48,9 +48,9 @@ namespace SlicingPieAPI.Repository
             }
         }
 
-        public async Task<string> getProjectLast(string companyID)
+        public async Task<IEnumerable<string>> getProjectLast(string companyID)
         {
-            var lastID = await _context.Projects.Where(pj => pj.ProjectStatus == Status.ACTIVE && pj.CompanyId == companyID).OrderByDescending(pj => pj.ProjectId).Select(project => project.ProjectId).FirstOrDefaultAsync();
+            var lastID = await _context.Projects.Where(pj => pj.ProjectStatus == Status.ACTIVE && pj.CompanyId == companyID).OrderByDescending(pj => pj.ProjectId).Select(project => project.ProjectId).ToListAsync();
             return lastID;
         }
 
@@ -83,7 +83,7 @@ namespace SlicingPieAPI.Repository
     {
         IQueryable<ProjectDto> getProjectList(string companyID);
         Task AddProject(ProjectDto project);
-        Task<String> getProjectLast(String companyID);
+        Task<IEnumerable<string>> getProjectLast(String companyID);
         Task<String> udpateProject(ProjectDto project, String projectid);
         bool deleteProject(string projectid);
 
