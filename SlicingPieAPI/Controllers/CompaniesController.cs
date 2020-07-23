@@ -254,8 +254,10 @@ namespace SlicingPieAPI.Controllers
                 }
                 else
                 {
-                    var Id = await _company.udpateProjectSV(projectid, project);
-                    return Ok(Id);
+                    var check = await _company.udpateProjectSV(projectid, project);
+                    if (check)
+                        return NoContent();
+                    else return Conflict();
                 }
             }
         }

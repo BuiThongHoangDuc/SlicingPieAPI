@@ -74,14 +74,19 @@ namespace SlicingPieAPI.Repository
             return listProject;
         }
 
-        public async Task<string> udpateProject(ProjectDto project, String projectid)
+        public async Task<bool> udpateProject(ProjectDto project, String projectid)
         {
+            var listproject = await _context.Projects.ToListAsync();
+            for (int i = 0; i < listproject.Count; i++)
+            {
+                if (listproject[i].ProjectName.ToLower() == project.ProjectName.ToLower()) return false;
+            }
             Project dto = await _context.Projects.FindAsync(projectid);
             dto.ProjectName = project.ProjectName;
 
             _context.Entry(dto).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return dto.CompanyId;
+            return true;
         }
     }
 

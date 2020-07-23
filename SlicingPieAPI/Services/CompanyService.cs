@@ -124,7 +124,7 @@ namespace SlicingPieAPI.Services
             return await _projectRepository.AddProject(project);
         }
 
-        public Task<string> udpateProjectSV(string id, ProjectDto project)
+        public Task<bool> udpateProjectSV(string id, ProjectDto project)
         {
             return _projectRepository.udpateProject(project, id);
         }
@@ -207,7 +207,7 @@ namespace SlicingPieAPI.Services
         bool deleteCompany(string id);
         IQueryable<ProjectDto> getListProject(string companyId);
         Task<bool> AddProjectSV(String companyID, ProjectDto project);
-        Task<String> udpateProjectSV(String id, ProjectDto project);
+        Task<bool> udpateProjectSV(String id, ProjectDto project);
         bool deleteProjectSV(string projectid);
         Task<IEnumerable<TypeAssetDto>> GetListTypeAssetByCompanyIDSV(String companyID);
         Task<String> GetNameStakeHolderSV(String userID, String companyID);
