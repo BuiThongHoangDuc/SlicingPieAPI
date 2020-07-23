@@ -95,7 +95,7 @@ namespace SlicingPieAPI.Repository
         IQueryable<ProjectDto> getProjectList(string companyID);
         Task<bool> AddProject(ProjectDto project);
         Task<IEnumerable<string>> getProjectLast(String companyID);
-        Task<String> udpateProject(ProjectDto project, String projectid);
+        Task<bool> udpateProject(ProjectDto project, String projectid);
         bool deleteProject(string projectid);
 
     }
