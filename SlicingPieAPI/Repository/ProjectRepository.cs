@@ -17,8 +17,13 @@ namespace SlicingPieAPI.Repository
             _context = context;
         }
 
-        public async Task AddProject(ProjectDto project)
+        public async Task<bool> AddProject(ProjectDto project)
         {
+            var listproject = await _context.Projects.ToListAsync();
+            for (int i = 0; i < listproject.Count; i++)
+            {
+                if (listproject[i].ProjectName.ToLower() == project.ProjectName.ToLower()) return false;
+            }
             Project projectModel = new Project();
             projectModel.ProjectId = project.ProjectId;
             projectModel.ProjectName = project.ProjectName;
@@ -29,6 +34,7 @@ namespace SlicingPieAPI.Repository
             try
             {
                 await _context.SaveChangesAsync();
+                return true;
             }
             catch (DbUpdateException)
             {
@@ -82,7 +88,7 @@ namespace SlicingPieAPI.Repository
     public interface IProjectRepository
     {
         IQueryable<ProjectDto> getProjectList(string companyID);
-        Task AddProject(ProjectDto project);
+        Task<bool> AddProject(ProjectDto project);
         Task<IEnumerable<string>> getProjectLast(String companyID);
         Task<String> udpateProject(ProjectDto project, String projectid);
         bool deleteProject(string projectid);

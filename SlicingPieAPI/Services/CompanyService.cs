@@ -108,7 +108,7 @@ namespace SlicingPieAPI.Services
             return _projectRepository.getProjectList(companyId);
         }
 
-        public async Task AddProjectSV(String companyID, ProjectDto project)
+        public async Task<bool> AddProjectSV(String companyID, ProjectDto project)
         {
             var lastid = _projectRepository.getProjectLast(companyID).Result.ToList().Count;
             if (lastid == 0)
@@ -121,7 +121,7 @@ namespace SlicingPieAPI.Services
                 project.ProjectId = companyID + " PJ"+(lastid+1);
             }
 
-            await _projectRepository.AddProject(project);
+            return await _projectRepository.AddProject(project);
         }
 
         public Task<string> udpateProjectSV(string id, ProjectDto project)
@@ -206,7 +206,7 @@ namespace SlicingPieAPI.Services
         Task<CompanyDetailDto> CreateCompany(CompanyDetailDto company);
         bool deleteCompany(string id);
         IQueryable<ProjectDto> getListProject(string companyId);
-        Task AddProjectSV(String companyID, ProjectDto project);
+        Task<bool> AddProjectSV(String companyID, ProjectDto project);
         Task<String> udpateProjectSV(String id, ProjectDto project);
         bool deleteProjectSV(string projectid);
         Task<IEnumerable<TypeAssetDto>> GetListTypeAssetByCompanyIDSV(String companyID);

@@ -225,8 +225,10 @@ namespace SlicingPieAPI.Controllers
             {
                 try
                 {
-                    await _company.AddProjectSV(id, project);
-                    return NoContent();
+                    var check = await _company.AddProjectSV(id, project);
+                    if (check == true)
+                        return NoContent();
+                    else return Conflict();
                 }
                 catch (DbUpdateException)
                 {
