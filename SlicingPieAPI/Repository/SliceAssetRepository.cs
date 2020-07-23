@@ -84,10 +84,10 @@ namespace SlicingPieAPI.Repository
             return lastID;
         }
 
-        public async Task<IEnumerable<SliceAssetDto>> GetListSlice(string companyID)
+        public async Task<IEnumerable<SliceAssetDto>> GetListSlice(string companyID,int termid)
         {
             var ListContribution = await _context.SliceAssets
-                                           .Where(asset => asset.AssetStatus == Status.ACTIVE && asset.CompanyId == companyID)
+                                           .Where(asset => asset.AssetStatus == Status.ACTIVE && asset.CompanyId == companyID && asset.TermId == termid)
                                            .Select(asset => new SliceAssetDto
                                            {
                                                AssetId = asset.AssetId,
@@ -103,10 +103,10 @@ namespace SlicingPieAPI.Repository
             return ListContribution;
         }
 
-        public async Task<IEnumerable<SliceAssetDto>> GetListSliceSH(string companyID, string SHID)
+        public async Task<IEnumerable<SliceAssetDto>> GetListSliceSH(string companyID, string SHID, int termid)
         {
             var ListContribution = await _context.SliceAssets
-                                           .Where(asset => asset.AssetStatus == Status.ACTIVE && asset.CompanyId == companyID && asset.AccountId == SHID)
+                                           .Where(asset => asset.AssetStatus == Status.ACTIVE && asset.CompanyId == companyID && asset.AccountId == SHID && asset.TermId == termid)
                                            .Select(asset => new SliceAssetDto
                                            {
                                                AssetId = asset.AssetId,
@@ -183,8 +183,8 @@ namespace SlicingPieAPI.Repository
         double getTotalSliceSH(string companyID, string shID);
         Task<bool> addSlice(SliceAssetDetailDto asset);
         Task<string> getLastIDAsset(String companyID);
-        Task<IEnumerable<SliceAssetDto>> GetListSlice(String companyID);
-        Task<IEnumerable<SliceAssetDto>> GetListSliceSH(String companyID, String SHID);
+        Task<IEnumerable<SliceAssetDto>> GetListSlice(String companyID,int termid);
+        Task<IEnumerable<SliceAssetDto>> GetListSliceSH(String companyID, String SHID, int termid);
         Task<SliceAssetDetailStringDto> GetSliceByID(String assetID);
         Task UpdateAsset(String assetID, SliceAssetDetailStringDto asset);
         Task<bool> DeleteAsset(String asssetID);

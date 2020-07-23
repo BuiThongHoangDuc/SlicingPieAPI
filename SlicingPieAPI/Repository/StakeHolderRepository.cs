@@ -276,6 +276,22 @@ namespace SlicingPieAPI.Repository
                                     });
             return ListCompany;
         }
+
+        public IQueryable<StakeHolderDto> SwithcAccount(string accountid, string companyid)
+        {
+            var shInfo = _context.StakeHolders
+                                    .Where(sh => sh.AccountId == accountid && sh.Shstatus == Status.ACTIVE && sh.CompanyId == companyid)
+                                    .Select(sh => new StakeHolderDto
+                                    {
+                                        SHID = sh.AccountId,
+                                        CompanyID = sh.CompanyId,
+                                        RoleID = sh.Shrole,
+                                        CompanyName = sh.Company.CompanyName,
+                                        Shimage = sh.Shimage,
+                                        SHName = sh.ShnameForCompany,
+                                    });
+            return shInfo;
+        }
     }
 
     public interface IStakeHolderRepository
@@ -302,5 +318,6 @@ namespace SlicingPieAPI.Repository
         Task<bool> DeleteShByID(String companyID, String accountID);
 
         IQueryable<CompanyListStakeholderDto> GetListCompanyStakeholder(string companyid,string shID);
+        IQueryable<StakeHolderDto> SwithcAccount(string accountid, string companyid);
     }
 }

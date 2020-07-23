@@ -68,6 +68,11 @@ namespace SlicingPieAPI.Services
         {
             return _stakeHolder.GetListCompanyStakeholder(companyid, shID);
         }
+
+        public IQueryable<StakeHolderDto> SwithcAccountSV(string accountid, string companyid)
+        {
+            return _stakeHolder.SwithcAccount(accountid, companyid);
+        }
     }
 
     public interface IStakeHolderService
@@ -83,6 +88,8 @@ namespace SlicingPieAPI.Services
         Task<bool> UpdateShByIDSV(AddStakeHolderDto editModel);
         Task<bool> DeleteShByID(String companyID, String accountID);
         IQueryable<CompanyListStakeholderDto> GetListCompanyStakeholder(string companyid, string shID);
+        IQueryable<StakeHolderDto> SwithcAccountSV(string accountid, string companyid);
+
 
     }
 }

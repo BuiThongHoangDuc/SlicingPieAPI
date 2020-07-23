@@ -117,14 +117,14 @@ namespace SlicingPieAPI.Services
             }
         }
 
-        public Task<IEnumerable<SliceAssetDto>> GetListSlice(string companyID)
+        public Task<IEnumerable<SliceAssetDto>> GetListSlice(string companyID,int termid)
         {
-            return _sliceRepository.GetListSlice(companyID);
+            return _sliceRepository.GetListSlice(companyID, termid);
         }
 
-        public Task<IEnumerable<SliceAssetDto>> GetListSliceSHSV(string companyID, string SHID)
+        public Task<IEnumerable<SliceAssetDto>> GetListSliceSHSV(string companyID, string SHID,int termid)
         {
-            return _sliceRepository.GetListSliceSH(companyID, SHID);
+            return _sliceRepository.GetListSliceSH(companyID, SHID, termid);
         }
 
         public Task<SliceAssetDetailStringDto> GetSliceByIDSV(string assetID)
@@ -176,8 +176,8 @@ namespace SlicingPieAPI.Services
     public interface ISliceAssetService
     {
         Task<bool> addSliceSV(String companyID, String userID, SliceAssetDetailDto asset);
-        Task<IEnumerable<SliceAssetDto>> GetListSlice(String companyID);
-        Task<IEnumerable<SliceAssetDto>> GetListSliceSHSV(String companyID, String SHID);
+        Task<IEnumerable<SliceAssetDto>> GetListSlice(String companyID,int termid);
+        Task<IEnumerable<SliceAssetDto>> GetListSliceSHSV(String companyID, String SHID, int termid);
         Task<SliceAssetDetailStringDto> GetSliceByIDSV(String assetID);
         Task<bool> UpdateAssetSV(String assetID, SliceAssetDetailStringDto asset);
         Task<bool> DeleteAssetSV(String asssetID);
