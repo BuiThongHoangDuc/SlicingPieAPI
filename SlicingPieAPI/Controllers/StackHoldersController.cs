@@ -155,20 +155,16 @@ namespace SlicingPieAPI.Controllers
         //[HttpGet("{CompanyID}")]
         //public async Task<ActionResult> GetStackHolder(string CompanyID)
         //{
-        //    //var ListMainUserInfo = await _context.StakeHolders
-        //    //                                        .Where(stInfo => stInfo.CompanyId == CompanyID)
-        //    //                                        .OrderBy(sh => sh.DateTimeAdd)
-        //    //                                        .Select(stInfo => new SheetDto
-        //    //                                        {
-        //    //                                            SHID = stInfo.AccountId,
-        //    //                                            SHName = stInfo.ShnameForCompany,
-        //    //                                            SliceAssets = stInfo.Account.SliceAssets
-        //    //                                                                                    .Where(asset => asset.CompanyId == CompanyID && asset.AssetStatus == Status.ACTIVE)
-        //    //                                                                                    .Select(asset => asset.AssetSlice).Sum() ?? 0
-        //    //                                        })
-        //    //                                        .ToListAsync();
-        //    await _sheet.DeleteEntry("BS101", "BS101", "ab");
-        //    return Ok();
+        //    var companyOver = await _context.Companies.Where(cp => cp.CompanyId == CompanyID && cp.Status == Status.ACTIVE)
+        //                                    .Select(cp => new OverViewCompany
+        //                                    {
+        //                                        CompanyName = cp.CompanyName,
+        //                                        CashPerSlice = cp.CashPerSlice,
+        //                                        TotalSlice = cp.SliceAssets.Where(asset => asset.CompanyId == CompanyID && asset.AssetStatus == Status.ACTIVE).Select(asset => asset.AssetSlice).Sum() ?? 0,
+        //                                        TotalStakeholder = cp.StakeHolders.Where(sh => sh.CompanyId == CompanyID && sh.Shstatus == Status.ACTIVE).Count(),
+        //                                        TotalTerm = cp.TermSlice.Where(term => term.CompanyId == CompanyID).Count(),
+        //                                    }).FirstOrDefaultAsync();
+        //    return Ok(companyOver);
         //}
 
 

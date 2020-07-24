@@ -194,6 +194,11 @@ namespace SlicingPieAPI.Services
         {
             return _termProjectRepo.UpdateDoneTerm(termID);
         }
+
+        public IQueryable<OverViewCompany> GetOverViewCompanySV(string companyid)
+        {
+            return _company.GetOverViewCompany(companyid);
+        }
     }
 
     public interface ICompanyService
@@ -217,6 +222,8 @@ namespace SlicingPieAPI.Services
         Task<bool> AddProjectToTermSV(int termID, string projectID);
         IQueryable<string> GetChartCompanySV(string companyid);
         Task<bool> UpdateDoneTermSV(int termID);
+        IQueryable<OverViewCompany> GetOverViewCompanySV(string companyid);
+
 
     }
 }

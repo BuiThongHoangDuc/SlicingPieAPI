@@ -125,6 +125,15 @@ namespace SlicingPieAPI.Controllers
             return companyDetail;
         }
 
+        // GET: api/Companies/5
+        [HttpGet("{id}/over-view")]
+        public async Task<ActionResult<OverViewCompany>> GetCompanyOver(string id)
+        {
+            var companyOver = await _company.GetOverViewCompanySV(id).FirstOrDefaultAsync();
+            if (companyOver == null) return BadRequest();
+            else return Ok(companyOver);
+        }
+
 
         // PUT: api/Companies/5
         [HttpPut("{id}")]

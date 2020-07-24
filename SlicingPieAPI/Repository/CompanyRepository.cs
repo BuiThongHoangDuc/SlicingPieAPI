@@ -161,6 +161,20 @@ namespace SlicingPieAPI.Repository
             var chartString = _context.Companies.Where(cp => cp.CompanyId == companyid).Select(cp => cp.CompanyChart);
             return chartString;
         }
+
+        public IQueryable<OverViewCompany> GetOverViewCompany(string companyid)
+        {
+            var companyOver = _context.Companies.Where(cp => cp.CompanyId == companyid && cp.Status == Status.ACTIVE)
+                                            .Select(cp => new OverViewCompany
+                                            {
+                                                CompanyName = cp.CompanyName,
+                                                CashPerSlice = cp.CashPerSlice,
+                                                TotalSlice = cp.SliceAssets.Where(asset => asset.CompanyId == companyid && asset.AssetStatus == Status.ACTIVE).Select(asset => asset.AssetSlice).Sum() ?? 0,
+                                                TotalStakeholder = cp.StakeHolders.Where(sh => sh.CompanyId == companyid && sh.Shstatus == Status.ACTIVE).Count(),
+                                                TotalTerm = cp.TermSlice.Where(term => term.CompanyId == companyid).Count(),
+                                            });
+            return companyOver;
+        }
     }
 
     public interface ICompanyRepository
@@ -185,5 +199,6 @@ namespace SlicingPieAPI.Repository
         Task<int> GetCashMP(String companyID);
 
         IQueryable<string> GetChartCompany(string companyid);
+        IQueryable<OverViewCompany> GetOverViewCompany(string companyid);
     }
 }
