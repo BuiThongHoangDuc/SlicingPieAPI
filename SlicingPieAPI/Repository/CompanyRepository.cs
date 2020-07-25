@@ -167,12 +167,13 @@ namespace SlicingPieAPI.Repository
             var companyOver = _context.Companies.Where(cp => cp.CompanyId == companyid && cp.Status == Status.ACTIVE)
                                             .Select(cp => new OverViewCompany
                                             {
+                                                CompanyImage = cp.ComapnyIcon,
                                                 CompanyName = cp.CompanyName,
                                                 CashPerSlice = cp.CashPerSlice,
                                                 TotalSlice = cp.SliceAssets.Where(asset => asset.CompanyId == companyid && asset.AssetStatus == Status.ACTIVE).Select(asset => asset.AssetSlice).Sum() ?? 0,
                                                 TotalStakeholder = cp.StakeHolders.Where(sh => sh.CompanyId == companyid && sh.Shstatus == Status.ACTIVE).Count(),
                                                 TotalTerm = cp.TermSlice.Where(term => term.CompanyId == companyid).Count(),
-                                            });
+                                            }) ;
             return companyOver;
         }
     }
