@@ -91,7 +91,7 @@ namespace SlicingPieAPI.Controllers
 
             Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
             var ListMainUserInfo = await _context.StakeHolders
-                                                    .Where(stInfo => stInfo.CompanyId == companyId)
+                                                    .Where(stInfo => stInfo.CompanyId == companyId && stInfo.Shstatus == Status.ACTIVE)
                                                     .OrderBy(sh => sh.DateTimeAdd)
                                                     .Select(stInfo => new SheetDto
                                                     {

@@ -105,12 +105,15 @@ namespace SlicingPieAPI.Controllers
         {
             try
             {
+                bool check2 = await _sheet.DeleteEntry(comapnyid, comapnyid, accountid);
+
                 var check = await _shService.DeleteShByID(comapnyid, accountid);
+
                 if (check == false) return NotFound();
                 else
                 {
                     //bool check2 = true;
-                    bool check2 = await _sheet.DeleteEntry(comapnyid, comapnyid, accountid);
+                    
                     if (check2 == true)
                     {
                         await _sheet.UpdateEntry(comapnyid, comapnyid);
