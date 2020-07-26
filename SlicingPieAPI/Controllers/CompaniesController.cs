@@ -279,6 +279,15 @@ namespace SlicingPieAPI.Controllers
             else return NotFound();
         }
 
+        [HttpGet("{companyid}/contribution")]
+        public async Task<ActionResult> GetListContributionALL(String companyid)
+        {
+            var ListContribution = await _slice.GetListSliceAll(companyid);
+            if (ListContribution == null) return NotFound();
+            else return Ok(ListContribution);
+        }
+
+
         [HttpGet("{companyid}/term/{termid}/contribution")]
         public async Task<ActionResult> GetListContribution(String companyid, int termid)
         {

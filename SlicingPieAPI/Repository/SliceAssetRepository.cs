@@ -177,12 +177,31 @@ namespace SlicingPieAPI.Repository
             return await _context.SliceAssets.FindAsync(assetID);
         }
 
+        public async Task<IEnumerable<SliceAssetDto>> GetListSliceAll(string companyID)
+        {
+            var ListContribution = await _context.SliceAssets
+                                           .Where(asset => asset.AssetStatus == Status.ACTIVE && asset.CompanyId == companyID)
+                                           .Select(asset => new SliceAssetDto
+                                           {
+                                               AssetId = asset.AssetId,
+                                               NamePerson = asset.Account.StakeHolders
+                                                               .Where(sh => sh.CompanyId == companyID && sh.AccountId == asset.AccountId)
+                                                               .Select(sh => sh.ShnameForCompany).FirstOrDefault(),
+                                               Quantity = asset.Quantity,
+                                               Description = asset.Description,
+                                               Project = asset.Project.ProjectName,
+                                               TimeAsset = asset.TimeAsset,
+                                               TypeAsset = asset.TypeAsset.NameAsset,
+                                           }).OrderByDescending(asset => asset.TimeAsset).ToListAsync();
+            return ListContribution;
+        }
     }
     public interface ISliceAssetRepository
     {
         double getTotalSliceSH(string companyID, string shID);
         Task<bool> addSlice(SliceAssetDetailDto asset);
         Task<string> getLastIDAsset(String companyID);
+        Task<IEnumerable<SliceAssetDto>> GetListSliceAll (String companyID);
         Task<IEnumerable<SliceAssetDto>> GetListSlice(String companyID,int termid);
         Task<IEnumerable<SliceAssetDto>> GetListSliceSH(String companyID, String SHID, int termid);
         Task<SliceAssetDetailStringDto> GetSliceByID(String assetID);
