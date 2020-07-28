@@ -90,7 +90,6 @@ namespace SlicingPieAPI.Repository
             dto.NonCashMultiplier = company.NonCashMultiplier;
             dto.CashMultiplier = company.CashMultiplier;
             dto.CashPerSlice = company.CashPerSlice;
-            dto.CompanyChart = company.CompanyChart;
 
             _context.Entry(dto).State = EntityState.Modified;
             await _context.SaveChangesAsync();

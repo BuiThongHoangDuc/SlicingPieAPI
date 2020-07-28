@@ -267,7 +267,7 @@ namespace SlicingPieAPI.Repository
         public IQueryable<CompanyListStakeholderDto> GetListCompanyStakeholder(string companyid,string shID)
         {
             var ListCompany = _context.StakeHolders
-                                    .Where(sh => sh.AccountId == shID && sh.Company.Status == Status.ACTIVE && sh.CompanyId != companyid)
+                                    .Where(sh => sh.AccountId == shID && sh.Company.Status == Status.ACTIVE && sh.CompanyId != companyid && sh.Shstatus == Status.ACTIVE)
                                     .Select(sh => new CompanyListStakeholderDto
                                     {
                                         CompanyId = sh.Company.CompanyId,
